@@ -1,0 +1,284 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="소스 파일">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="헤더 파일">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;hm;inl;inc;ipp;xsd</Extensions>
+    </Filter>
+    <Filter Include="GameFramework">
+      <UniqueIdentifier>{5c1c8e69-725f-4625-846a-35e59cc197fd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GameFramework\매니져">
+      <UniqueIdentifier>{697a5ffe-2180-4241-ad13-f1e68849dc52}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MainGame">
+      <UniqueIdentifier>{5d4d24da-8f9a-4aa3-80ec-bacf421b7449}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GameFramework\총알">
+      <UniqueIdentifier>{1781a954-7fd4-4aba-90ab-492a016cb264}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GameFramework\체력바">
+      <UniqueIdentifier>{c3c08629-cb4b-49d7-b44c-710f7b47ce62}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GameFramework\TXT데이터">
+      <UniqueIdentifier>{400a7682-be7e-48d0-9c94-ade4a00295b4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GameFramework\매니져\이미지매니저">
+      <UniqueIdentifier>{cdb87302-be62-452c-8438-b2a78642f171}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GameFramework\매니져\키매니저">
+      <UniqueIdentifier>{e5cb3594-dbf1-42c0-8e68-f92b0e6f5c64}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GameFramework\매니져\씬매니저">
+      <UniqueIdentifier>{605f35f3-89b5-402b-853f-82696b8ca762}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GameFramework\매니져\이미지매니저\이미지">
+      <UniqueIdentifier>{40b3f173-5021-4f56-a654-e70378e74183}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MainGame\자주사용">
+      <UniqueIdentifier>{08248f69-1a5f-4e1c-a8a0-9a57a4e66c64}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MainGame\자주안사용">
+      <UniqueIdentifier>{1eb3886b-24f1-4efc-a24a-c88111a5ebb8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MainGame\자주안사용\WinMain">
+      <UniqueIdentifier>{d5dd4a43-d651-4b43-9a12-e303047044bd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MainGame\자주사용\카메라">
+      <UniqueIdentifier>{20302679-058b-45e4-abc8-6d034524da8b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MainGame\Scene들">
+      <UniqueIdentifier>{b036ac75-418e-4f9e-aaf3-da7fac0ee8e1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MainGame\Scene들\Loading Scene">
+      <UniqueIdentifier>{fe5c942b-a135-4a18-8bb7-c36b9ac8d767}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MainGame\Scene들\Loading Scene\로딩">
+      <UniqueIdentifier>{72b7d382-70e4-4ce5-ac3b-64d272058d01}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MainGame\Scene들\Stage1 Scene">
+      <UniqueIdentifier>{d3a4428e-9b79-4870-8009-e7a4e99f7dc3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MainGame\Scene들\BossStage Scene">
+      <UniqueIdentifier>{4b79e238-30d6-4f15-9934-c23fa2725ddd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MainGame\Scene들\Village Scene">
+      <UniqueIdentifier>{97601ad2-5e9b-43f0-8232-84580cd2b9c8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MainGame\Scene들\WorldMap Scene">
+      <UniqueIdentifier>{5d35411f-2c68-4d45-92f2-2cab939d11d6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MainGame\Scene들\Title Scene">
+      <UniqueIdentifier>{3a709223-f766-467e-9c10-bf184eeeea77}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GameFramework\매니져\사운드매니저">
+      <UniqueIdentifier>{3a2fdf2f-b4d0-4ce5-ab9b-9b8ba2f351d0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GameFramework\매니져\타임매니저">
+      <UniqueIdentifier>{b44b349c-eb8c-474b-b89f-e4f7409b7b0a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MainGame\자주사용\필드">
+      <UniqueIdentifier>{a738a333-8d1c-40db-8920-913e1cc49c2e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MainGame\자주사용\필드\타일">
+      <UniqueIdentifier>{0bf180af-0779-467d-bd10-e6ef7768c3f3}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="gameNode.h">
+      <Filter>MainGame\자주안사용\WinMain</Filter>
+    </ClInclude>
+    <ClInclude Include="singletonBase.h">
+      <Filter>GameFramework\매니져</Filter>
+    </ClInclude>
+    <ClInclude Include="image.h">
+      <Filter>GameFramework\매니져\이미지매니저\이미지</Filter>
+    </ClInclude>
+    <ClInclude Include="bullet.h">
+      <Filter>GameFramework\총알</Filter>
+    </ClInclude>
+    <ClInclude Include="progressBar.h">
+      <Filter>GameFramework\체력바</Filter>
+    </ClInclude>
+    <ClInclude Include="txtData.h">
+      <Filter>GameFramework\TXT데이터</Filter>
+    </ClInclude>
+    <ClInclude Include="loading.h">
+      <Filter>MainGame\Scene들\Loading Scene\로딩</Filter>
+    </ClInclude>
+    <ClInclude Include="CameraClass.h">
+      <Filter>MainGame\자주사용\카메라</Filter>
+    </ClInclude>
+    <ClInclude Include="Stage1Class.h">
+      <Filter>MainGame\Scene들\Stage1 Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="imageManager.h">
+      <Filter>GameFramework\매니져\이미지매니저</Filter>
+    </ClInclude>
+    <ClInclude Include="keyManager.h">
+      <Filter>GameFramework\매니져\키매니저</Filter>
+    </ClInclude>
+    <ClInclude Include="sceneManager.h">
+      <Filter>GameFramework\매니져\씬매니저</Filter>
+    </ClInclude>
+    <ClInclude Include="commonMacroFunction.h">
+      <Filter>GameFramework\매니져</Filter>
+    </ClInclude>
+    <ClInclude Include="loadingScene.h">
+      <Filter>MainGame\Scene들\Loading Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="mainGame.h">
+      <Filter>MainGame\자주안사용</Filter>
+    </ClInclude>
+    <ClInclude Include="EnemyManagerClass.h">
+      <Filter>MainGame\자주사용</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayerClass.h">
+      <Filter>MainGame\자주사용</Filter>
+    </ClInclude>
+    <ClInclude Include="stdafx.h">
+      <Filter>MainGame\자주안사용</Filter>
+    </ClInclude>
+    <ClInclude Include="EnemyClass.h">
+      <Filter>MainGame\자주사용</Filter>
+    </ClInclude>
+    <ClInclude Include="PetsClass.h">
+      <Filter>MainGame\자주사용</Filter>
+    </ClInclude>
+    <ClInclude Include="BossStageClass.h">
+      <Filter>MainGame\Scene들\BossStage Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="soundManager.h">
+      <Filter>GameFramework\매니져\사운드매니저</Filter>
+    </ClInclude>
+    <ClInclude Include="timeManager.h">
+      <Filter>GameFramework\매니져\타임매니저</Filter>
+    </ClInclude>
+    <ClInclude Include="TitleClass.h">
+      <Filter>MainGame\Scene들\Title Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="VillageClass.h">
+      <Filter>MainGame\Scene들\Village Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="WorldMapScene.h">
+      <Filter>MainGame\Scene들\WorldMap Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="CollisionClass.h">
+      <Filter>MainGame\자주사용</Filter>
+    </ClInclude>
+    <ClInclude Include="UIClass.h">
+      <Filter>MainGame\자주사용</Filter>
+    </ClInclude>
+    <ClInclude Include="LandmarkClass.h">
+      <Filter>MainGame\자주사용</Filter>
+    </ClInclude>
+    <ClInclude Include="FieldManagerClass.h">
+      <Filter>MainGame\자주사용\필드</Filter>
+    </ClInclude>
+    <ClInclude Include="BreakTileClass.h">
+      <Filter>MainGame\자주사용\필드\타일</Filter>
+    </ClInclude>
+    <ClInclude Include="ThorntrapClass.h">
+      <Filter>MainGame\자주사용\필드\타일</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="stdafx.cpp">
+      <Filter>MainGame\자주안사용\WinMain</Filter>
+    </ClCompile>
+    <ClCompile Include="winMain.cpp">
+      <Filter>MainGame\자주안사용\WinMain</Filter>
+    </ClCompile>
+    <ClCompile Include="gameNode.cpp">
+      <Filter>MainGame\자주안사용\WinMain</Filter>
+    </ClCompile>
+    <ClCompile Include="image.cpp">
+      <Filter>GameFramework\매니져\이미지매니저\이미지</Filter>
+    </ClCompile>
+    <ClCompile Include="bullet.cpp">
+      <Filter>GameFramework\총알</Filter>
+    </ClCompile>
+    <ClCompile Include="progressBar.cpp">
+      <Filter>GameFramework\체력바</Filter>
+    </ClCompile>
+    <ClCompile Include="txtData.cpp">
+      <Filter>GameFramework\TXT데이터</Filter>
+    </ClCompile>
+    <ClCompile Include="loading.cpp">
+      <Filter>MainGame\Scene들\Loading Scene\로딩</Filter>
+    </ClCompile>
+    <ClCompile Include="Stage1Class.cpp">
+      <Filter>MainGame\Scene들\Stage1 Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="imageManager.cpp">
+      <Filter>GameFramework\매니져\이미지매니저</Filter>
+    </ClCompile>
+    <ClCompile Include="keyManager.cpp">
+      <Filter>GameFramework\매니져\키매니저</Filter>
+    </ClCompile>
+    <ClCompile Include="sceneManager.cpp">
+      <Filter>GameFramework\매니져\씬매니저</Filter>
+    </ClCompile>
+    <ClCompile Include="loadingScene.cpp">
+      <Filter>MainGame\Scene들\Loading Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="EnemyManagerClass.cpp">
+      <Filter>MainGame\자주사용</Filter>
+    </ClCompile>
+    <ClCompile Include="PlayerClass.cpp">
+      <Filter>MainGame\자주사용</Filter>
+    </ClCompile>
+    <ClCompile Include="mainGame.cpp">
+      <Filter>MainGame</Filter>
+    </ClCompile>
+    <ClCompile Include="EnemyClass.cpp">
+      <Filter>MainGame\자주사용</Filter>
+    </ClCompile>
+    <ClCompile Include="CameraClass.cpp">
+      <Filter>MainGame\자주사용\카메라</Filter>
+    </ClCompile>
+    <ClCompile Include="PetsClass.cpp">
+      <Filter>MainGame\자주사용</Filter>
+    </ClCompile>
+    <ClCompile Include="BossStageClass.cpp">
+      <Filter>MainGame\Scene들\BossStage Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="soundManager.cpp">
+      <Filter>GameFramework\매니져\사운드매니저</Filter>
+    </ClCompile>
+    <ClCompile Include="timeManager.cpp">
+      <Filter>GameFramework\매니져\타임매니저</Filter>
+    </ClCompile>
+    <ClCompile Include="TitleClass.cpp">
+      <Filter>MainGame\Scene들\Title Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="VillageClass.cpp">
+      <Filter>MainGame\Scene들\Village Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="WorldMapScene.cpp">
+      <Filter>MainGame\Scene들\WorldMap Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="CollisionClass.cpp">
+      <Filter>MainGame\자주사용</Filter>
+    </ClCompile>
+    <ClCompile Include="UIClass.cpp">
+      <Filter>MainGame\자주사용</Filter>
+    </ClCompile>
+    <ClCompile Include="LandmarkClass.cpp">
+      <Filter>MainGame\자주사용</Filter>
+    </ClCompile>
+    <ClCompile Include="FieldManagerClass.cpp">
+      <Filter>MainGame\자주사용\필드</Filter>
+    </ClCompile>
+    <ClCompile Include="BreakTileClass.cpp">
+      <Filter>MainGame\자주사용\필드\타일</Filter>
+    </ClCompile>
+    <ClCompile Include="ThorntrapClass.cpp">
+      <Filter>MainGame\자주사용\필드\타일</Filter>
+    </ClCompile>
+  </ItemGroup>
+</Project>

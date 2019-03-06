@@ -1,0 +1,55 @@
+오른쪽충돌 - 왼쪽 파워
+
+
+			//반발력 점프
+			if (sensorLeft.isJump == true)		//왼쪽 센서의 점프 불변수가 true면
+			{
+				sensorRight.isJump = false;
+				rightPower = 7.5f;				//오른쪽으로 반발력 주기~
+			}
+			if (sensorRight.isJump == true)		//오른쪽 센서의 점프 불변수가 true면
+			{
+				sensorLeft.isJump = false;
+				sensorRight.isJump = false;
+				leftPower = 7.5f;				//왼쪽으로 반발력 주기~
+			}
+
+
+imgCount++;
+   if (imgCount % 5 == 0)
+   {
+      frameX++;
+      if (frameX > 19)
+      {
+         frameX = 0;
+      }
+      imgCount = 0;
+   }
+
+=====================================
+
+img->setFrameY(몇번째 줄 이미지를 선택할것인가);
+imgCount++;   //이미지 카운터
+if(imgCount % 5==0)
+{
+   imgIdex++;
+   if(imgIdex > 원래 프레임개수-1)
+   {
+      imgIdex=0;
+   }
+   img->setFrameX(imgIndex);
+}
+
+
+ - 기획서 - (winapi 게임 타이틀_aaa,bbb,ccc,ddd) 나오게 영상 찍기
+1.목차
+2.게임소개
+3.기능
+4.게임 FlowChart(흐름도)
+5.클래스 구조...(팀원들의 역할..) ★★★★★
+->각자 담당한 것들...?
+6.일정(기획서 올리는거부터 시작 - 주말에 작성(3/9~10))
+개발일정 하루 단위로 들어가는게 좋다
+기간 - 3/7(목) ~ 3/14(목)일까지
+발표 - 3/15(금)
+7.개발도구
