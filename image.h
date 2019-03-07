@@ -106,6 +106,11 @@ public:
 	void frameRender(HDC hdc, int destX, int destY, int currentFrameX, int currentFrameY);
 
 //=============================================================
+//	## 알파프레임렌더 ##
+//=============================================================
+	void alphaFrameRender(HDC hdc, int destX, int destY, int currentframeX, int currentframeY, int alpha);
+
+//=============================================================
 //	## 루프렌더 ##
 //=============================================================
 	void loopRender(HDC hdc, const LPRECT drawArea, int offsetX, int offsetY);

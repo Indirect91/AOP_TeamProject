@@ -1,13 +1,6 @@
 #pragma once
 #include "gameNode.h"
 
-enum PetsTypes
-{
-	bat = 1,
-	seal,
-	shark
-};
-
 class PetsClass : public gameNode
 {
 	image* petImage;		//동물 이미지
@@ -25,10 +18,19 @@ class PetsClass : public gameNode
 	int whichPet;			//어떤 펫을 선택했는가?
 
 public:
+	enum PetsTypes
+	{
+		bat = 1,
+		seal,
+		shark
+	};
+
 	HRESULT init(int _whichPet, float _petX, float _petY);
 	void release(void);
 	void update(void);
 	void render(void);
+
+	RECT getPetRc() { return petRc; }
 
 	float getPetX() { return petX; }
 	void setPetX(float _petX) { petX = _petX; }
@@ -39,6 +41,7 @@ public:
 	bool getIsPetCatch() { return isPetCatch; }
 	void setIsPetCatch(bool _isPetCatch) { isPetCatch = _isPetCatch; }
 
+	int getWhichPet() { return whichPet; }
 
 	PetsClass() {}
 	~PetsClass() {}

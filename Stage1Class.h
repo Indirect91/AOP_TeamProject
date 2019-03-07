@@ -26,7 +26,6 @@ private:
 	class FieldManagerClass* fieldPtr;
 
 	class savePoint* s1SaveMPtr;				//스테이지1에 있는 세이브포인터 클래스 포인터
-	vector <savePoint*> s1SaveMPtrV;			//스테이지1에 있는 세이브포인터 클래스 포인터를 담는 벡터
 
 	class treasureBox* s1TreasurePtr;			//스테이지1에 있는 보물상자 클래스 포인터
 	vector <treasureBox*> s1TreasurePtrV;		//스테이지1에 있는 보물상자 클래스 포인터를 담는 벡터

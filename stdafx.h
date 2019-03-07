@@ -34,6 +34,7 @@ using namespace std;
 #include "sceneManager.h"
 #include "CameraClass.h"
 #include "soundManager.h"
+#include "CollisionClass.h"
 
 
 #define KEYMANAGER keyManager::getSingleton()
@@ -42,14 +43,15 @@ using namespace std;
 #define SCENEMANAGER sceneManager::getSingleton()
 #define CAMERA CameraClass::getInstance()
 #define SOUNDMANAGER soundManager::getSingleton()
+#define COLLISION CollisionClass::getInstance()
 
 
 //▼윈도우 
-#define WINNAME (LPTSTR)(TEXT(" Adventure of Pip Practice : 1차 묶음 _ 하늘"))
+#define WINNAME (LPTSTR)(TEXT(" Adventure of Pip Practice : 2차 묶음 _ 하늘"))
 #define WINSTARTX	200
 #define WINSTARTY	200
 #define WINSIZEX		1366
-#define WINSIZEY	768
+#define WINSIZEY		768
 #define WINSTYLE	WS_CAPTION | WS_SYSMENU
 
 #define SAFE_DELETE(p)		{if(p) {delete (p); (p) = NULL;}}

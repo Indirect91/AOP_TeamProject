@@ -4,11 +4,11 @@
 
 //=============초기화=============
 //안움직이는 녀석은 스케일에 0,0만 넣자
-HRESULT EnemyManagerClass::init(int _which, int _x, int _y, int _scaleLeftX, int _scaleRightX)
+HRESULT EnemyManagerClass::init(EnemyKind _which, int _x, int _y, int _scaleLeftX, int _scaleRightX)
 {
 	whichEnemy = _which;
 
-	switch (_which)
+	switch (whichEnemy)
 	{
 	case octopus:
 		eEnemy1 = new flyOctopus;
@@ -19,18 +19,14 @@ HRESULT EnemyManagerClass::init(int _which, int _x, int _y, int _scaleLeftX, int
 
 	case bug:
 		eEnemy2 = new crawlBug;
-		eEnemy2->init();
-		eEnemy2->setEnemyX(_x);
-		eEnemy2->setEnemyY(_y);
+		eEnemy2->init(_x, _y);
 		eEnemy2->setScaleLeftX(_scaleLeftX);
 		eEnemy2->setScaleRightX(_scaleRightX);
 		break;
 
 	case crystal:
 		eEnemy3 = new flyCrystal;
-		eEnemy3->init();
-		eEnemy3->setEnemyX(_x);
-		eEnemy3->setEnemyY(_y);
+		eEnemy3->init(_x, _y);
 		eEnemy3->setScaleLeftX(_scaleLeftX);
 		eEnemy3->setScaleRightX(_scaleRightX);
 		break;

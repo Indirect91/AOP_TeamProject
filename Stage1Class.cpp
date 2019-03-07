@@ -25,7 +25,7 @@ HRESULT Stage1Class::init(void)
 
 	//플레이어 클래스 생성 및 초기화
 	playerPtr = new PlayerClass;
-	playerPtr->init();
+	playerPtr->init(100,400,"Stage1Collision");
 
 	//필드 클래스 생성 및 초기화
 	fieldPtr = new FieldManagerClass;
@@ -35,53 +35,65 @@ HRESULT Stage1Class::init(void)
 #pragma region 에너미
 	//1. 날으는 문어
 	s1EnemyMPtr = new EnemyManagerClass;
-	s1EnemyMPtr->init(1, 1844, 575, 0, 0);
+	s1EnemyMPtr->init(EnemyManagerClass::EnemyKind::octopus, 1844, 582, 0, 0);
 	s1EnemyMPtrV.push_back(s1EnemyMPtr);
 
 	s1EnemyMPtr = new EnemyManagerClass;
-	s1EnemyMPtr->init(1, 1959, 483, 0, 0);
+	s1EnemyMPtr->init(EnemyManagerClass::EnemyKind::octopus, 1959, 483, 0, 0);
 	s1EnemyMPtrV.push_back(s1EnemyMPtr);
 
 	//2. 기어다니는 애벌레
 	s1EnemyMPtr = new EnemyManagerClass;
-	s1EnemyMPtr->init(2, 2455, 630, 2000, 2600);
+	s1EnemyMPtr->init(EnemyManagerClass::EnemyKind::bug, 946, 630, 794, 1082);
 	s1EnemyMPtrV.push_back(s1EnemyMPtr);
 
 	s1EnemyMPtr = new EnemyManagerClass;
-	s1EnemyMPtr->init(2, 5618, 501, 5538, 5695);
+	s1EnemyMPtr->init(EnemyManagerClass::EnemyKind::bug, 1289, 545, 1158, 1409);
 	s1EnemyMPtrV.push_back(s1EnemyMPtr);
 
 	s1EnemyMPtr = new EnemyManagerClass;
-	s1EnemyMPtr->init(2, 7127, 586, 7029, 7194);
+	s1EnemyMPtr->init(EnemyManagerClass::EnemyKind::bug, 2455, 630, 2000, 2600);
 	s1EnemyMPtrV.push_back(s1EnemyMPtr);
 
 	s1EnemyMPtr = new EnemyManagerClass;
-	s1EnemyMPtr->init(2, 7166, 1570, 7122, 7273);
+	s1EnemyMPtr->init(EnemyManagerClass::EnemyKind::bug, 5618, 501, 5538, 5695);
 	s1EnemyMPtrV.push_back(s1EnemyMPtr);
 
 	s1EnemyMPtr = new EnemyManagerClass;
-	s1EnemyMPtr->init(2, 7500, 1228, 7416, 7607);
+	s1EnemyMPtr->init(EnemyManagerClass::EnemyKind::bug, 7127, 586, 7029, 7194);
 	s1EnemyMPtrV.push_back(s1EnemyMPtr);
 
 	s1EnemyMPtr = new EnemyManagerClass;
-	s1EnemyMPtr->init(2, 13813, 677, 13666, 13898);
+	s1EnemyMPtr->init(EnemyManagerClass::EnemyKind::bug, 7166, 1570, 7122, 7273);
 	s1EnemyMPtrV.push_back(s1EnemyMPtr);
 
 	s1EnemyMPtr = new EnemyManagerClass;
-	s1EnemyMPtr->init(2, 14064, 326, 13916, 14150);
+	s1EnemyMPtr->init(EnemyManagerClass::EnemyKind::bug, 7500, 1228, 7416, 7607);
+	s1EnemyMPtrV.push_back(s1EnemyMPtr);
+
+	s1EnemyMPtr = new EnemyManagerClass;
+	s1EnemyMPtr->init(EnemyManagerClass::EnemyKind::bug, 13813, 677, 13666, 13898);
+	s1EnemyMPtrV.push_back(s1EnemyMPtr);
+
+	s1EnemyMPtr = new EnemyManagerClass;
+	s1EnemyMPtr->init(EnemyManagerClass::EnemyKind::bug, 14064, 326, 13916, 14150);
 	s1EnemyMPtrV.push_back(s1EnemyMPtr);
 
 	//3.날아다니는 크리스탈
 	s1EnemyMPtr = new EnemyManagerClass;
-	s1EnemyMPtr->init(3, 7218, 2170, 7156, 7283);
+	s1EnemyMPtr->init(EnemyManagerClass::EnemyKind::crystal, 7218, 2170, 7156, 7283);
 	s1EnemyMPtrV.push_back(s1EnemyMPtr);
 
 	s1EnemyMPtr = new EnemyManagerClass;
-	s1EnemyMPtr->init(3, 8934, 640, 8846, 9096);
+	s1EnemyMPtr->init(EnemyManagerClass::EnemyKind::crystal, 8934, 640, 8846, 9096);
 	s1EnemyMPtrV.push_back(s1EnemyMPtr);
 
 	s1EnemyMPtr = new EnemyManagerClass;
-	s1EnemyMPtr->init(3, 10112, 630, 9880, 10320);
+	s1EnemyMPtr->init(EnemyManagerClass::EnemyKind::crystal, 10112, 630, 9880, 10320);
+	s1EnemyMPtrV.push_back(s1EnemyMPtr);
+
+	s1EnemyMPtr = new EnemyManagerClass;
+	s1EnemyMPtr->init(EnemyManagerClass::EnemyKind::crystal, WINSIZEX/2, 630, 600, 650);
 	s1EnemyMPtrV.push_back(s1EnemyMPtr);
 
 #pragma endregion 에너미
@@ -89,28 +101,45 @@ HRESULT Stage1Class::init(void)
 	//펫 생성 및 초기화
 	//박쥐
 	s1PetPtr = new PetsClass;
-	s1PetPtr->init(1, 7748, 1705);
+	s1PetPtr->init(PetsClass::PetsTypes::bat, 7748, 1705);
 	s1PetPtrV.push_back(s1PetPtr);
 
 	//물개
 	s1PetPtr = new PetsClass;
-	s1PetPtr->init(2, 3317, 607);
+	s1PetPtr->init(PetsClass::PetsTypes::seal, 3317, 607);
 	s1PetPtrV.push_back(s1PetPtr);
 
 	//상어
 	s1PetPtr = new PetsClass;
-	s1PetPtr->init(3, 13712, 249);
+	s1PetPtr->init(PetsClass::PetsTypes::shark, 13712, 249);
 	s1PetPtrV.push_back(s1PetPtr);
 
 	//세이브 포인트 클래스 생성 및 초기화
 	s1SaveMPtr = new savePoint;
 	s1SaveMPtr->init(9393, 365);
-	s1SaveMPtrV.push_back(s1SaveMPtr);
 
 	//보물상자 클래스 생성 및 초기화
 	s1TreasurePtr = new treasureBox;
-	s1TreasurePtr->init(WINSIZEX / 2, 500, true);
+	s1TreasurePtr->init(2189, 406, true, "Stage1Collision");
 	s1TreasurePtrV.push_back(s1TreasurePtr);
+	
+	s1TreasurePtr = new treasureBox;
+	s1TreasurePtr->init(4922, 620, false, "Stage1Collision");
+	s1TreasurePtrV.push_back(s1TreasurePtr);
+	
+	s1TreasurePtr = new treasureBox;
+	s1TreasurePtr->init(6890, 1261, true, "Stage1Collision");
+	s1TreasurePtrV.push_back(s1TreasurePtr);
+	
+	s1TreasurePtr = new treasureBox;
+	s1TreasurePtr->init(9591, 578, true, "Stage1Collision");
+	s1TreasurePtrV.push_back(s1TreasurePtr);
+
+	COLLISION.setPlayer(playerPtr);
+	COLLISION.setEnemyManagerClass(&s1EnemyMPtrV);
+	COLLISION.setPetsClass(&s1PetPtrV);
+	COLLISION.setSavePoint(s1SaveMPtr);
+	COLLISION.setTreasureBox(&s1TreasurePtrV);
 
 	return S_OK;
 }
@@ -140,11 +169,9 @@ void Stage1Class::release(void)
 	}
 
 	//세이브 포인트 해제
-	for (int i = 0; i < s1SaveMPtrV.size(); i++)
-	{
-		s1SaveMPtrV[i]->release();
-		SAFE_DELETE(s1SaveMPtrV[i]);
-	}
+	s1SaveMPtr->release();
+	SAFE_DELETE(s1SaveMPtr);
+	
 
 	//보물상자
 	for (int i = 0; i < s1TreasurePtrV.size(); i++)
@@ -175,10 +202,8 @@ void Stage1Class::update(void)
 	fieldPtr->update();
 
 	//세이브 포인터 업데이트
-	for (int i = 0; i < s1SaveMPtrV.size(); i++)
-	{
-		s1SaveMPtrV[i]->update();
-	}
+	s1SaveMPtr->update();
+	
 	
 	//보물상자 업데이트
 	for (int i = 0; i < s1TreasurePtrV.size(); i++)
@@ -197,8 +222,8 @@ void Stage1Class::update(void)
 	CAMERA.cameraRevision(6748, 0, 8114, 2436);
 	CAMERA.cameraRevision(8115, 0, 10990, WINSIZEY);
 	CAMERA.cameraRevision(10991, 0, 13212, WINSIZEY);
-	CAMERA.cameraRevision(13213, 0, 15770, WINSIZEY);
-	CAMERA.cameraRevision(15771, 0, 17520, WINSIZEY);
+	CAMERA.cameraRevision(13213, 0, 14579, WINSIZEY);
+	CAMERA.cameraRevision(14580, 0, 17520, WINSIZEY);
 
 	//숨은루트
 	//절벽 위 상자가는 길
@@ -211,6 +236,11 @@ void Stage1Class::update(void)
 	loopX4 = CAMERA.getCRc().left / 2;
 	loopY4 = CAMERA.getCRc().top / 2;
 
+	COLLISION.playerStepEnemy();
+	COLLISION.playerCrashedEnemy();
+	COLLISION.playerFindPets();
+	COLLISION.playerSavePoint();
+	COLLISION.playerFindTreasureBox();
 }
 
 //=============렌더=============
@@ -240,10 +270,8 @@ void Stage1Class::render(void)
 	playerPtr->render();
 
 	//세이브 포인트 렌더
-	for (int i = 0; i < s1SaveMPtrV.size(); i++)
-	{
-		s1SaveMPtrV[i]->render();
-	}
+	s1SaveMPtr->render();
+	
 	//보물상자 렌더
 	for (int i = 0; i < s1TreasurePtrV.size(); i++)
 	{
@@ -268,5 +296,4 @@ void Stage1Class::render(void)
 	TextOutfloat(getMemDC(), 10, 10, "마우스 X", _ptMouse.x + CAMERA.getCRc().left);
 	TextOutfloat(getMemDC(), 10, 30, "마우스 Y", _ptMouse.y + CAMERA.getCRc().top);
 	TextOutfloat(getMemDC(), 10, 50, "카메라 left", CAMERA.getCRc().left);
-
 }

@@ -560,6 +560,46 @@ void image::frameRender(HDC hdc, int destX, int destY, int currentFrameX, int cu
 	}
 }
 
+void image::alphaFrameRender(HDC hdc, int destX, int destY, int currentframeX, int currentframeY, int alpha)
+{
+	//RECT renderRC = RectMake(destX, destY, _imageInfo->frameWidth, _imageInfo->frameHeight);
+	//if (renderRC.right < 0 || renderRC.left > WINSIZEX || renderRC.top > WINSIZEY || renderRC.bottom < 0)
+	//   return;
+
+	if (!_blendImage) this->initForAlphaBlend();
+
+	_imageInfo->currentFrameX = currentframeX;
+	_imageInfo->currentFrameY = currentframeY;
+
+	//알파값 ( 0 - 255 ) 수가 클수록 선명하다.
+	_blendFunc.SourceConstantAlpha = alpha;
+
+	if (_isTrans)
+	{
+		BitBlt(_blendImage->hMemDC, 0, 0, _imageInfo->width, _imageInfo->height,
+			hdc, destX, destY, SRCCOPY);
+
+		GdiTransparentBlt(_blendImage->hMemDC, 0, 0, _imageInfo->frameWidth, _imageInfo->frameHeight,
+			_imageInfo->hMemDC,
+			_imageInfo->currentFrameX * _imageInfo->frameWidth,
+			_imageInfo->currentFrameY * _imageInfo->frameHeight,
+			_imageInfo->frameWidth, _imageInfo->frameHeight, _transColor);
+
+		AlphaBlend(hdc, destX, destY, _imageInfo->frameWidth, _imageInfo->frameHeight,
+			_blendImage->hMemDC,
+			0, 0
+			, _imageInfo->frameWidth, _imageInfo->frameHeight, _blendFunc);
+	}
+	else
+	{
+		AlphaBlend(hdc, destX, destY, _imageInfo->frameWidth, _imageInfo->frameHeight,
+			_imageInfo->hMemDC,
+			_imageInfo->currentFrameX * _imageInfo->frameWidth
+			, _imageInfo->currentFrameY * _imageInfo->frameHeight,
+			_imageInfo->frameWidth, _imageInfo->frameHeight, _blendFunc);
+	}
+}
+
 void image::loopRender(HDC hdc, const LPRECT drawArea, int offsetX, int offsetY)
 {
 	//offset 값이 음수인 경우 보정하기

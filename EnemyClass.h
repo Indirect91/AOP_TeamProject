@@ -12,6 +12,7 @@ class flyOctopus : public gameNode
 	float enemyX, enemyY;	//적 좌표
 	float enemySpeed;		//적 속도
 	bool isDie;				//적이 죽었는가? true->죽음
+	int reviveCount;		//다시 살아날 시간
 
 	int imgCount;			//이미지 카운트
 	int frameX;				//이미지 x프레임 카운트
@@ -23,6 +24,8 @@ public:
 	void release(void);
 	void update(void);
 	void render(void);
+
+	RECT getEnemyRc() { return enemyRc; }
 
 	float getEnemyX() { return enemyX; }
 	void setEnemyX(float _enemyX) { enemyX = _enemyX; }
@@ -46,9 +49,15 @@ class crawlBug : public gameNode
 	RECT enemyRc;			//적 렉트
 
 	float enemyX, enemyY;	//적 좌표
+	float saveX, saveY;		//받아온 적의 좌표를 저장해둘 
 	float enemySpeed;		//적 속도
 	bool isRight;			//적이 오른쪽을 보고 있는가? true->오른쪽
+
 	bool isDie;				//적이 죽었는가? true->죽음
+	float dieCount;			//죽었을때 이미지가 작아지며 사라지게 만들 카운트
+
+	int reviveCount;		//다시 살아날 시간
+	bool isRevive;			//죽고 다시 살아나는 모습을 보여줄 불변수
 
 	int imgCount;			//이미지 카운트
 	int frameX;				//이미지 x프레임 카운트
@@ -59,16 +68,18 @@ class crawlBug : public gameNode
 	int scaleRightX;		//움직일 범위의 오른쪽 끝
 
 public:
-	HRESULT init(void);
+	HRESULT init(float _x, float _y);
 	void release(void);
 	void update(void);
 	void render(void);
 
+	RECT getEnemyRc() { return enemyRc; }
+
 	float getEnemyX() { return enemyX; }
-	void setEnemyX(float _enemyX) { enemyX = _enemyX; }
+	//void setEnemyX(float _enemyX) { enemyX = _enemyX; }
 
 	float getEnemyY() { return enemyY; }
-	void setEnemyY(float _enemyY) { enemyY = _enemyY; }
+	//void setEnemyY(float _enemyY) { enemyY = _enemyY; }
 
 	bool getIsDie() { return isDie; }
 	void setIsDie(bool _isDie) { isDie = _isDie; }
@@ -92,30 +103,37 @@ class flyCrystal : public gameNode
 	RECT enemyRc;			//적 렉트
 
 	float enemyX, enemyY;	//적 좌표
+	float saveX, saveY;		//받아온 적의 좌표를 저장해둘 
 	float enemySpeed;		//적 속도
 	bool isRight;			//적이 오른쪽을 보고 있는가? true->오른쪽
+
 	bool isDie;				//적이 죽었는가? true->죽음
+	int dieAlpha;			//죽었을때 이미지가 작아지며 사라지게 만들 카운트
+
+	int reviveCount;		//다시 살아날 시간
+	bool isRevive;			//죽고 다시 살아나는 모습을 보여줄 불변수
 
 	int imgCount;			//이미지 카운트
 	int frameX;				//이미지 x프레임 카운트
 	int frameY;				//이미지 y프레임 카운트
-	int stayCount;			//이미지가 잠시 머무르게 하는 시간
 
 	//움직이는 적이라면 움직일 범위값을 넣어줄 변수
 	int scaleLeftX;			//움직일 범위의 왼쪽 끝
 	int scaleRightX;		//움직일 범위의 오른쪽 끝
 
 public:
-	HRESULT init(void);
+	HRESULT init(float _x, float _y);
 	void release(void);
 	void update(void);
 	void render(void);
 
+	RECT getEnemyRc() { return enemyRc; }
+
 	float getEnemyX() { return enemyX; }
-	void setEnemyX(float _enemyX) { enemyX = _enemyX; }
+	//void setEnemyX(float _enemyX) { enemyX = _enemyX; }
 
 	float getEnemyY() { return enemyY; }
-	void setEnemyY(float _enemyY) { enemyY = _enemyY; }
+	//void setEnemyY(float _enemyY) { enemyY = _enemyY; }
 
 	bool getIsDie() { return isDie; }
 	void setIsDie(bool _isDie) { isDie = _isDie; }

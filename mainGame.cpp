@@ -14,6 +14,8 @@ HRESULT mainGame::init(void)
 	/*씬추가*/
 	SCENEMANAGER->addScene("로딩화면", new loadingScene);
 	SCENEMANAGER->addScene("Stage1", new Stage1Class);
+	SCENEMANAGER->addScene("BossStage", new BossStageClass);
+	SCENEMANAGER->addScene("Title", new TitleClass);
 
 	//현재씬 설정
 	SCENEMANAGER->loadScene("로딩화면");

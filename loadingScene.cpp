@@ -29,7 +29,9 @@ void loadingScene::update(void)
 	//로딩완료후 화면(씬)변경
 	if (_loading->loadingDone())
 	{
-		SCENEMANAGER->loadScene("Stage1");
+		SCENEMANAGER->loadScene("BossStage");
+		//SCENEMANAGER->loadScene("Stage1");
+		//SCENEMANAGER->loadScene("Title");
 	}
 }
 
@@ -50,14 +52,27 @@ void loadingScene::render(void)
 
 void loadingScene::loadingImage()
 {
+	//스테이지 1번
 	_loading->loadImage("Stage1Collision", "(수정) 다만들어진 1스테이지.bmp", 17520, 2436, true, RGB(255, 0, 255));
 	_loading->loadImage("Stage1", "Stage1_Resized.bmp", 17520, 2436, true, RGB(255, 0, 255));
+	//보스 스테이지
+	_loading->loadImage("BossStage", "Boss_stage_Resized.bmp", 10976, 2436, true, RGB(255, 0, 255));
+	_loading->loadImage("BossStageCollision", "보스 스테이지.bmp", 10976, 2436, true, RGB(255, 0, 255));
+
+	//타이틀 씬
+	_loading->loadImage("titleBg", "titleBg.bmp", 1366, 768);
+	_loading->loadImage("titleLogo", "titleLogo.bmp", 665, 282, true, RGB(255, 0, 255));
+	_loading->loadImage("pip1", "pip1.bmp", 240, 228, true, RGB(255, 0, 255));
+	_loading->loadImage("pip2", "pip2.bmp", 503, 650, true, RGB(255, 0, 255));
+	_loading->loadImage("pip3", "pip3.bmp", 450, 472, true, RGB(255, 0, 255));
 
 	//핍
 	_loading->loadFrameImage("pipIdle", "image/핍 대기(49,76) 15장.bmp", 735, 152, 15, 2, true, RGB(255, 0, 255));
 	//_loading->loadFrameImage("pipIdleLeft", "image/핍 대기(Left)(49,76) 15장.bmp", 735, 152, 15, 1, true, RGB(255, 0, 255));
 	//_loading->loadFrameImage("pipIdleRight", "image/핍 대기(Right)(49,76) 15장.bmp", 735, 152, 15, 1, true, RGB(255, 0, 255));
-	_loading->loadFrameImage("pipAttack", "인간핍 공격(95,150) 12장.bmp", 1140, 150, 12, 2, true, RGB(255, 0, 255));
+	//_loading->loadFrameImage("pipAttack", "image/인간핍 공격(95,150) 12장.bmp", 1140, 150, 12, 2, true, RGB(255, 0, 255));
+	_loading->loadFrameImage("pipAttackLeft", "image/인간핍 공격(95,75)Left 12장.bmp", 1140, 75, 12, 1, true, RGB(255, 0, 255));
+	_loading->loadFrameImage("pipAttackRight", "image/인간핍 공격(95,75)오른쪽 12장.bmp", 1140, 75, 12, 1, true, RGB(255, 0, 255));
 	_loading->loadFrameImage("pipRun", "image/pipRun (73,71) 12장(new).bmp", 876, 142, 12, 2, true, RGB(255, 0, 255));
 	_loading->loadFrameImage("jellyStay", "image/네모핍 대기(46,37) 8장.bmp", 368, 37, 8, 1, true, RGB(255, 0, 255));
 	_loading->loadImage("pipGrab", "image/pipGrab.bmp", 54, 146, true, RGB(255, 0, 255));
@@ -90,14 +105,14 @@ void loadingScene::loadingImage()
 	_loading->loadFrameImage("세이브 포인트", "세이브 포인트.bmp", 390, 126, 13, 1, true, RGB(255, 0, 255));
 	_loading->loadFrameImage("세이브 빛", "세이브 빛.bmp", 1850, 105, 37, 1, true, RGB(255, 0, 255));
 	_loading->loadFrameImage("보물상자", "보물상자.bmp", 180, 88, 3, 2, true, RGB(255, 0, 255));
+	_loading->loadFrameImage("보석", "보석.bmp", 260, 20, 13, 1, true, RGB(255, 0, 255));
 
-	for (int i = 0; i < 50; i++)
-	{
-		char str[128];
-		sprintf(str, "Image/TestImage_%d", i + 1);
+	//지형
+	_loading->loadFrameImage("변신타일", "변신하면부서지는 타일.bmp", 1260, 45, 28, 1, true, RGB(255, 0, 255));
+	_loading->loadFrameImage("폭발", "변신타일 터지는모습.bmp", 540, 45, 12, 1, true, RGB(255, 0, 255));
 
-		_loading->loadImage(str, WINSIZEX, WINSIZEY);
-	}
+	//총알
+	_loading->loadImage("총알", "bullet.bmp", 21, 21, true, RGB(255, 0, 255));
 
 }
 

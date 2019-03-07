@@ -1,6 +1,6 @@
 #pragma once
 #include "FieldManagerClass.h"
-class BreakTileClass :	public FieldManagerClass
+class BreakTileClass : public FieldManagerClass
 {
 public:
 	enum class BreakTile

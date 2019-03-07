@@ -185,6 +185,12 @@
     <ClInclude Include="ThorntrapClass.h">
       <Filter>MainGame\자주사용\필드\타일</Filter>
     </ClInclude>
+    <ClInclude Include="FlowerClass.h">
+      <Filter>MainGame\자주사용\필드\타일</Filter>
+    </ClInclude>
+    <ClInclude Include="HideTileClass.h">
+      <Filter>MainGame\자주사용\필드\타일</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -278,6 +284,12 @@
       <Filter>MainGame\자주사용\필드\타일</Filter>
     </ClCompile>
     <ClCompile Include="ThorntrapClass.cpp">
+      <Filter>MainGame\자주사용\필드\타일</Filter>
+    </ClCompile>
+    <ClCompile Include="FlowerClass.cpp">
+      <Filter>MainGame\자주사용\필드\타일</Filter>
+    </ClCompile>
+    <ClCompile Include="HideTileClass.cpp">
       <Filter>MainGame\자주사용\필드\타일</Filter>
     </ClCompile>
   </ItemGroup>

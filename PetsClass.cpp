@@ -43,98 +43,100 @@ void PetsClass::release(void)
 //=============업데이트=============
 void PetsClass::update(void)
 {
-
-	//이미지 프레임
-	if (isPetRight == true)
+	if (isPetCatch == false)
 	{
-		frameY = 0;
-	}
-	else if (isPetRight == false)
-	{
-		frameY = 1;
-	}
-
-	petImgCount++;
-
-	switch (whichPet)
-	{
-	case bat:
-		if (petImgCount % 5 == 0)
+		//이미지 프레임
+		if (isPetRight == true)
 		{
-			frameX++;
-			if (isPetRight == true)
-			{
-				if (frameX > 9)
-				{
-					frameX = 0;
-				}
-			}
-			else
-			{
-				if (frameX < 0)
-				{
-					frameX = 9;
-				}
-			}
+			frameY = 0;
 		}
-		break;
-
-	case seal:
-		if (petImgCount % 5 == 0)
+		else if (isPetRight == false)
 		{
-			frameX++;
-			if (isPetRight == true)
-			{
-				if (frameX > 11)
-				{
-					frameX = 0;
-				}
-			}
-			else
-			{
-				if (frameX < 0)
-				{
-					frameX = 11;
-				}
-			}
+			frameY = 1;
 		}
-		break;
 
-	case shark:
-		if (petImgCount % 10 == 0)
+		petImgCount++;
+
+		switch (whichPet)
 		{
-			frameX++;
-			if (isPetRight == true)
+		case bat:
+			if (petImgCount % 5 == 0)
 			{
-				if (frameX > 3)
+				frameX++;
+				if (isPetRight == true)
 				{
-					frameX = 0;
+					if (frameX > 9)
+					{
+						frameX = 0;
+					}
+				}
+				else
+				{
+					if (frameX < 0)
+					{
+						frameX = 9;
+					}
 				}
 			}
-			else
+			break;
+
+		case seal:
+			if (petImgCount % 5 == 0)
 			{
-				if (frameX < 0)
+				frameX++;
+				if (isPetRight == true)
 				{
-					frameX = 3;
+					if (frameX > 11)
+					{
+						frameX = 0;
+					}
+				}
+				else
+				{
+					if (frameX < 0)
+					{
+						frameX = 11;
+					}
 				}
 			}
+			break;
+
+		case shark:
+			if (petImgCount % 10 == 0)
+			{
+				frameX++;
+				if (isPetRight == true)
+				{
+					if (frameX > 3)
+					{
+						frameX = 0;
+					}
+				}
+				else
+				{
+					if (frameX < 0)
+					{
+						frameX = 3;
+					}
+				}
+			}
+			break;
 		}
-		break;
-	}
 
-	switch (whichPet)
-	{
-	case bat:
-		petRc = RectMakeCenter(petX - CAMERA.getCRc().left, petY - CAMERA.getCRc().top, 84, 48);
-		break;
+		switch (whichPet)
+		{
+		case bat:
+			petRc = RectMakeCenter(petX, petY, 84, 48);
+			break;
 
-	case seal:
-		petRc = RectMakeCenter(petX - CAMERA.getCRc().left, petY - CAMERA.getCRc().top, 80, 65);
-		break;
+		case seal:
+			petRc = RectMakeCenter(petX, petY, 80, 65);
+			break;
 
-	case shark:
-		petRc = RectMakeCenter(petX - CAMERA.getCRc().left, petY - CAMERA.getCRc().top, 80, 52);
-		break;
+		case shark:
+			petRc = RectMakeCenter(petX, petY, 80, 52);
+			break;
+		}
 	}
 
 }
@@ -144,8 +146,12 @@ void PetsClass::render(void)
 {
 	if (KEYMANAGER->isToggleKey('T'))
 	{
-		Rectangle(getMemDC(), petRc);
+		Rectangle(getMemDC(), RelativeCameraRect(petRc));
 	}
 
-	petImage->frameRender(getMemDC(), petRc.left, petRc.top, frameX, frameY);
+	if (isPetCatch == false)
+	{
+		petImage->frameRender(getMemDC(), petRc.left - CAMERA.getCRc().left, petRc.top - CAMERA.getCRc().top, frameX, frameY);
+	}
+	
 }

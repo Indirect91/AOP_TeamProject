@@ -5,19 +5,34 @@
 //=============================================================
 HRESULT bullet::init(const char * imageName, int bulletMax, float range)
 {
-	//총알 이미지 초기화
-	_imageName = imageName;
-	//총알갯수 및 사거리 초기화
-	_bulletMax = bulletMax;
-	_range = range;
+	this->_bulletMax = bulletMax;
+	this->_range = range;
 
-	_isFrameImg = false;
+	for (int i = 0; i < bulletMax; i++)
+	{
+		//총알구조체 선언
+		tagBullet bullet;
+		//제로메모리 또는 멤셋
+		//구조체의 변수들의 값을 한번에 0으로 초기화 시켜준다
+		ZeroMemory(&bullet, sizeof(tagBullet));
+		bullet.bulletImage = new image;
+		bullet.bulletImage = IMAGEMANAGER->findImage(imageName);
+		bullet.speed = 5.0f;
+		bullet.fire = false;
+
+		//벡터에 담기
+		_vBullet.push_back(bullet);
+	}
+
+
+
 
 	return S_OK;
 }
 
 void bullet::release(void)
 {
+
 }
 
 void bullet::update(void)
@@ -27,67 +42,51 @@ void bullet::update(void)
 
 void bullet::render(void)
 {
-	if (_isFrameImg)
+	for (auto iBullets : _vBullet)
 	{
-
-	}
-	else
-	{
-		_viBullet = _vBullet.begin();
-		for (_viBullet; _viBullet != _vBullet.end(); ++_viBullet)
-		{
-			_viBullet->bulletImage->render(getMemDC(), _viBullet->rc.left, _viBullet->rc.top);
-		}
+		if (!iBullets.fire) continue;
+		iBullets.bulletImage->render(getMemDC(), iBullets.rc.left - CAMERA.getCRc().left, iBullets.rc.top - CAMERA.getCRc().top);
 	}
 }
 
 void bullet::fire(float x, float y, float angle, float speed)
 {
-	//총알 벡터에 담는것을 제한하자
-	if (_bulletMax < _vBullet.size() + 1) return;
+	for (auto& iBullets : _vBullet)
+	{
+		if (iBullets.fire) continue;
 
-	tagBullet bullet;
-	ZeroMemory(&bullet, sizeof(tagBullet));
-	bullet.bulletImage = IMAGEMANAGER->findImage(_imageName);
-	bullet.speed = speed;
-	bullet.angle = angle;
-	bullet.x = bullet.fireX = x;
-	bullet.y = bullet.fireY = y;
-	bullet.rc = RectMakeCenter(bullet.x, bullet.y,
-		bullet.bulletImage->getWidth(),
-		bullet.bulletImage->getHeight());
-
-	//벡터에 담기
-	_vBullet.push_back(bullet);
+		iBullets.fire = true;
+		iBullets.angle = angle;
+		iBullets.speed = speed;
+		iBullets.x = iBullets.fireX = x;
+		iBullets.y = iBullets.fireY = y;
+		iBullets.rc = RectMakeCenter(iBullets.x, iBullets.y,
+			iBullets.bulletImage->getWidth(),
+			iBullets.bulletImage->getHeight());
+		break;
+	}
 }
 
 void bullet::move()
 {
-	_viBullet = _vBullet.begin();
-	for (; _viBullet != _vBullet.end();)
+	for (auto &iBullet : _vBullet)
 	{
-		_viBullet->x += cosf(_viBullet->angle) * _viBullet->speed;
-		_viBullet->y += -sinf(_viBullet->angle) * _viBullet->speed;
-		_viBullet->rc = RectMakeCenter(_viBullet->x, _viBullet->y,
-			_viBullet->bulletImage->getWidth(),
-			_viBullet->bulletImage->getHeight());
+		if (!iBullet.fire) continue;
 
-		
+		iBullet.x += cosf(iBullet.angle) * iBullet.speed;
+		iBullet.y += -sinf(iBullet.angle) * iBullet.speed;
 
-		
+		iBullet.rc = RectMakeCenter(iBullet.x, iBullet.y,
+			iBullet.bulletImage->getWidth(),
+			iBullet.bulletImage->getHeight());
 
 		//총알이 사거리보다 커졌을때
-		float distance =  GetDistance(_viBullet->fireX, _viBullet->fireY,
-			_viBullet->x, _viBullet->y);
-		
+		float distance = GetDistance(iBullet.fireX, iBullet.fireY,
+			iBullet.x, iBullet.y);
 
 		if (_range < distance)
 		{
-			_viBullet = _vBullet.erase(_viBullet);
-		}
-		else
-		{
-			++_viBullet;
+			iBullet.fire = false;
 		}
 	}
 }

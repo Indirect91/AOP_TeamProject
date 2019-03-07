@@ -3,6 +3,8 @@
 /*앞으로는 각각의 씬들의 헤더파일만 메인게임에 추가해둔다*/
 #include "loadingScene.h"
 #include "Stage1Class.h"
+#include "BossStageClass.h"
+#include "TitleClass.h"
 
 class mainGame : public gameNode
 {

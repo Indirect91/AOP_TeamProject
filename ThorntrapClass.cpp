@@ -22,7 +22,7 @@ HRESULT ThorntrapClass::init(stageNumber Stage)
 		ThornList.push_back(ThornFive);
 		break;
 
-	case stageNumber:: BossStage:
+	case stageNumber::BossStage:
 		break;
 	default:
 		break;
@@ -30,8 +30,8 @@ HRESULT ThorntrapClass::init(stageNumber Stage)
 
 
 	//보스스테이지 렉트
-	
-	
+
+
 	return S_OK;
 }
 
