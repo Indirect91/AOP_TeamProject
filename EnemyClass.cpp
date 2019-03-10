@@ -6,14 +6,18 @@
 //===================================
 #pragma region 떠다니는 문어
 //=============초기화=============
-HRESULT flyOctopus::init(void)
+HRESULT flyOctopus::init(float _enemyX, float _enemyY)
 {
 	enemyImage = IMAGEMANAGER->findImage("enemy-떠다니는 문어");
 
-	enemyX = 0;
-	enemyY = 0;
-	enemySpeed = 0;
+	enemyX = _enemyX;
+	enemyY = _enemyY;
 	isDie = false;
+
+	dieCount = 1.f;
+	dieCountX = 1.f;
+	firstStep = false;
+
 	reviveCount = 0;
 
 	imgCount = 0;
@@ -32,11 +36,30 @@ void flyOctopus::update(void)
 	//죽었을때 다시 되살아나게
 	if (isDie == true)
 	{
-		reviveCount++;
+		if (firstStep == false)
+		{
+			dieCount -= 0.1f;
+			dieCountX += 0.1f;
+			if (dieCount < 0.5f)
+			{
+				dieCount = 0;
+				firstStep = true;
+			}
+		}
+		else
+		{
+			dieCount += 0.07f;
+			dieCountX -= 0.05f;
+			if (dieCountX < 0)
+			{
+				dieCountX = 0;
+				dieCount = 1.5f;
+			}
+		}
 
+		reviveCount++;
 		if (reviveCount % 180 == 0)
 		{
-			enemySpeed = 0;
 			reviveCount = 0;
 
 			imgCount = 0;
@@ -46,6 +69,20 @@ void flyOctopus::update(void)
 			isDie = false;
 		}
 	}
+	else
+	{
+		//dieCount = 1.f;
+
+		dieCountX += 0.1f;
+		dieCount -= 0.05f;
+		if (dieCountX > 1.f)
+		{
+			dieCountX = 1.f;
+			dieCount = 1.f;
+			firstStep = false;
+		}
+	}
+
 
 	//이미지 프레임
 	imgCount++;
@@ -71,21 +108,17 @@ void flyOctopus::render(void)
 		Rectangle(getMemDC(), RelativeCameraRect(enemyRc));
 	}
 
-	//죽어있지 않을때만 보이게
-	if (isDie == false)
-	{
-		enemyImage->frameRender(getMemDC(), enemyRc.left - CAMERA.getCRc().left, enemyRc.top - CAMERA.getCRc().top, frameX, frameY);
-	}
+	enemyImage->stretchFrameRenderCenterXDownY(getMemDC(), enemyRc.left - CAMERA.getCRc().left, enemyRc.top - CAMERA.getCRc().top, frameX, frameY, dieCountX, dieCount);
 
 }
 #pragma endregion 떠다니는 문어
 
-//===================================
+///===================================
 //	## 기어다니는 벌레 enemy ##
 //===================================
 #pragma region 기어다니는 벌레
 //=============초기화=============
-HRESULT crawlBug::init(float _x, float _y)
+HRESULT crawlBug::init(float _x, float _y, float _scaleLeftX, float _scaleRightX)
 {
 	enemyImage = IMAGEMANAGER->findImage("enemy-기어다니는 벌레");
 
@@ -103,10 +136,13 @@ HRESULT crawlBug::init(float _x, float _y)
 	frameX = 0;
 	frameY = 0;
 
-	scaleLeftX = 0;
-	scaleRightX = 0;
+	scaleLeftX = _scaleLeftX;
+	scaleRightX = _scaleRightX;
 
 	dieCount = 1.f;
+	dieCountX = 1.f;
+
+	firstStep = true;
 
 	return S_OK;
 }
@@ -120,10 +156,25 @@ void crawlBug::update(void)
 	//죽었을때 다시 되살아나게
 	if (isDie == true)
 	{
-		dieCount -= 0.1f;
-		if (dieCount < 0)
+		if (firstStep == false)
 		{
-			dieCount = 0;
+			dieCount -= 0.1f;
+			dieCountX += 0.1f;
+			if (dieCount < 0.5f)
+			{
+				dieCount = 0;
+				firstStep = true;
+			}
+		}
+		else
+		{
+			dieCount += 0.07f;
+			dieCountX -= 0.05f;
+			if (dieCountX < 0)
+			{
+				dieCountX = 0;
+				dieCount = 1.5f;
+			}
 		}
 
 		reviveCount++;
@@ -146,10 +197,13 @@ void crawlBug::update(void)
 	{
 		//dieCount = 1.f;
 
-		dieCount += 0.1f;
-		if (dieCount > 1.f)
+		dieCountX += 0.1f;
+		dieCount -= 0.05f;
+		if (dieCountX > 1.f)
 		{
+			dieCountX = 1.f;
 			dieCount = 1.f;
+			firstStep = false;
 		}
 	}
 
@@ -211,10 +265,9 @@ void crawlBug::render(void)
 		Rectangle(getMemDC(), RelativeCameraRect(enemyRc));
 	}
 
-	//죽어있지 않을때만 보이게
-	enemyImage->stretchFrameRender(getMemDC(), enemyRc.left - CAMERA.getCRc().left, enemyRc.top - CAMERA.getCRc().top, frameX, frameY, dieCount);
+	enemyImage->stretchFrameRenderCenterXDownY(getMemDC(), enemyRc.left - CAMERA.getCRc().left, enemyRc.top - CAMERA.getCRc().top, frameX, frameY, dieCountX, dieCount);
 	//enemyImage->frameRender(getMemDC(), enemyRc.left - CAMERA.getCRc().left, enemyRc.top - CAMERA.getCRc().top, frameX, frameY);
-	
+
 }
 
 #pragma endregion 기어다니는 벌레
@@ -224,7 +277,7 @@ void crawlBug::render(void)
 //===================================
 #pragma region 날아다니는 크리스탈
 //=============초기화=============
-HRESULT flyCrystal::init(float _x, float _y)
+HRESULT flyCrystal::init(float _x, float _y, float _scaleLeftX, float _scaleRightX)
 {
 	enemyImage = IMAGEMANAGER->findImage("enemy-떠다니는 크리스탈");
 
@@ -242,10 +295,10 @@ HRESULT flyCrystal::init(float _x, float _y)
 	frameX = 0;
 	frameY = 0;
 
-	scaleLeftX = 0;
-	scaleRightX = 0;
+	scaleLeftX = _scaleLeftX;
+	scaleRightX = _scaleRightX;
 
-	dieAlpha = 225;
+	dieCount = 225;
 
 	return S_OK;
 }
@@ -265,12 +318,12 @@ void flyCrystal::update(void)
 		{
 			if (reviveCount % 5 == 0)
 			{
-				dieAlpha += 125;
+				dieCount += 125;
 			}
 		}
 		else
 		{
-			dieAlpha = 0;
+			dieCount = 0;
 		}
 		
 		if (reviveCount % 180 == 0)
@@ -281,7 +334,7 @@ void flyCrystal::update(void)
 			imgCount = 0;
 			frameX = 0;
 			frameY = 0;
-			dieAlpha = 225;
+			dieCount = 225;
 
 			reviveCount = 0;
 
@@ -352,8 +405,86 @@ void flyCrystal::render(void)
 	}
 
 	//죽어있지 않을때만 보이게
-	enemyImage->alphaFrameRender(getMemDC(), enemyRc.left - CAMERA.getCRc().left, enemyRc.top - CAMERA.getCRc().top, frameX, frameY, dieAlpha);
+	enemyImage->alphaFrameRender(getMemDC(), enemyRc.left - CAMERA.getCRc().left, enemyRc.top - CAMERA.getCRc().top, frameX, frameY, dieCount);
 	
 }
 
 #pragma endregion 날아다니는 크리스탈
+
+//===================================
+//	## 둥둥이 유령 enemy ##
+//===================================
+#pragma region 둥둥이 유령
+//=============초기화=============
+HRESULT flyGhost::init(float _x, float _y)
+{
+	enemyImage = IMAGEMANAGER->findImage("enemy-둥둥이 유령");
+
+	enemyX = _x;
+	enemyY = _y;
+	enemySpeed = 0;
+	isDie = false;
+	reviveCount = 0;
+
+	imgCount = 0;
+	frameX = 0;
+	frameY = 0;
+
+	return S_OK;
+}
+
+void flyGhost::release(void)
+{
+}
+
+void flyGhost::update(void)
+{
+	//죽었을때 다시 되살아나게
+	if (isDie == true)
+	{
+		reviveCount++;
+
+		if (reviveCount % 180 == 0)
+		{
+			enemySpeed = 0;
+			reviveCount = 0;
+
+			imgCount = 0;
+			frameX = 0;
+			frameY = 0;
+
+			isDie = false;
+		}
+	}
+
+	//이미지 프레임
+	imgCount++;
+	if (imgCount % 10 == 0)
+	{
+		frameX++;
+		if (frameX > 3)
+		{
+			frameX = 0;
+		}
+		imgCount = 0;
+	}
+
+	enemyRc = RectMakeCenter(enemyX, enemyY, 59, 70);
+}
+
+void flyGhost::render(void)
+{
+	//렉트 확인용 토글키
+	if (KEYMANAGER->isToggleKey('T'))
+	{
+		Rectangle(getMemDC(), RelativeCameraRect(enemyRc));
+	}
+
+	//죽어있지 않을때만 보이게
+	if (isDie == false)
+	{
+		enemyImage->frameRender(getMemDC(), enemyRc.left - CAMERA.getCRc().left, enemyRc.top - CAMERA.getCRc().top, frameX, frameY);
+	}
+}
+
+#pragma endregion 둥둥이 유령

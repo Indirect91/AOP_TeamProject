@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "BossStageClass.h"
+#include "UIClass.h"
 #include "PlayerClass.h"
 #include "EnemyManagerClass.h"
 #include "PetsClass.h"
@@ -22,72 +23,22 @@ HRESULT BossStageClass::init(void)
 	IMAGEMANAGER->findImage("나무배경4");
 	loopX4 = loopY4 = 0;
 
+	//보스스테이지 UI이미지 생성
+	bUIPtr = new UIClass;
+	bUIPtr->init();
+
 	//보스스테이지 초기화
 	fieldPtr = new FieldManagerClass;
 	fieldPtr->init("BossStage");
 
 	playerPtr = new PlayerClass;
-	playerPtr->init(100,100,"BossStageCollision");
-
+	playerPtr->init(100,340,"BossStageCollision");
 
 	fieldPtr->setPlayerPtr(playerPtr);
 
-
-
 	//적 생성 및 초기화
-#pragma region 에너미
-	//떠다니는 문어
 	bEnemyMPtr = new EnemyManagerClass;
-	bEnemyMPtr->init(EnemyManagerClass::EnemyKind::octopus, 4414, 480, 0, 0);
-	bEnemyMPtrV.push_back(bEnemyMPtr);
-
-	bEnemyMPtr = new EnemyManagerClass;
-	bEnemyMPtr->init(EnemyManagerClass::EnemyKind::octopus, 4664, 480, 0, 0);
-	bEnemyMPtrV.push_back(bEnemyMPtr);
-
-	bEnemyMPtr = new EnemyManagerClass;
-	bEnemyMPtr->init(EnemyManagerClass::EnemyKind::octopus, 4714, 1053, 0, 0);
-	bEnemyMPtrV.push_back(bEnemyMPtr);
-
-	bEnemyMPtr = new EnemyManagerClass;
-	bEnemyMPtr->init(EnemyManagerClass::EnemyKind::octopus, 5843, 1017, 0, 0);
-	bEnemyMPtrV.push_back(bEnemyMPtr);
-
-	//기어다니는 벌레
-	bEnemyMPtr = new EnemyManagerClass;
-	bEnemyMPtr->init(EnemyManagerClass::EnemyKind::bug, 3197, 629, 2991, 3413);
-	bEnemyMPtrV.push_back(bEnemyMPtr);
-
-	bEnemyMPtr = new EnemyManagerClass;
-	bEnemyMPtr->init(EnemyManagerClass::EnemyKind::bug, 4855, 1229, 4744, 4997);
-	bEnemyMPtrV.push_back(bEnemyMPtr);
-
-	bEnemyMPtr = new EnemyManagerClass;
-	bEnemyMPtr->init(EnemyManagerClass::EnemyKind::bug, 5148, 1314, 5078, 5332);
-	bEnemyMPtrV.push_back(bEnemyMPtr);
-	 
-	//크리스탈
-	bEnemyMPtr = new EnemyManagerClass;
-	bEnemyMPtr->init(EnemyManagerClass::EnemyKind::crystal, 1858, 645, 0,  0);
-	bEnemyMPtrV.push_back(bEnemyMPtr);
-
-	bEnemyMPtr = new EnemyManagerClass;
-	bEnemyMPtr->init(EnemyManagerClass::EnemyKind::crystal, 2557, 598, 2404, 2756);
-	bEnemyMPtrV.push_back(bEnemyMPtr);
-
-	bEnemyMPtr = new EnemyManagerClass;
-	bEnemyMPtr->init(EnemyManagerClass::EnemyKind::crystal, 6082, 1160, 0, 0);
-	bEnemyMPtrV.push_back(bEnemyMPtr);
-
-	bEnemyMPtr = new EnemyManagerClass;
-	bEnemyMPtr->init(EnemyManagerClass::EnemyKind::crystal, 7273, 2010, 7141, 7673);
-	bEnemyMPtrV.push_back(bEnemyMPtr);
-
-	bEnemyMPtr = new EnemyManagerClass;
-	bEnemyMPtr->init(EnemyManagerClass::EnemyKind::crystal, 9336, 1358, 9266, 9376);
-	bEnemyMPtrV.push_back(bEnemyMPtr);
-
-#pragma endregion 에너미
+	bEnemyMPtr->init(EnemyManagerClass::tagWhereStage::bossStage);	
 
 	//펫 생성 및 초기화
 	bPetPtr = new PetsClass;
@@ -104,7 +55,7 @@ HRESULT BossStageClass::init(void)
 	bTreasurePtrV.push_back(bTreasurePtr);
 
 	bTreasurePtr = new treasureBox;
-	bTreasurePtr->init(2881, 578, true, "BossStageCollision");
+	bTreasurePtr->init(2881, 578, false, "BossStageCollision");
 	bTreasurePtrV.push_back(bTreasurePtr);
 
 	bTreasurePtr = new treasureBox;
@@ -116,10 +67,10 @@ HRESULT BossStageClass::init(void)
 	bTreasurePtrV.push_back(bTreasurePtr);
 
 	COLLISION.setPlayer(playerPtr);
-	COLLISION.setEnemyManagerClass(&bEnemyMPtrV);
 	COLLISION.setPetsClass(&bPetPtrV);
 	COLLISION.setSavePoint(bSaveMPtr);
 	COLLISION.setTreasureBox(&bTreasurePtrV);
+	COLLISION.setEnemyManagerClass(bEnemyMPtr);
 
 	return S_OK;
 }
@@ -133,15 +84,16 @@ void BossStageClass::release(void)
 	fieldPtr->release();
 	SAFE_DELETE(fieldPtr);
 
+	//보스스테이지 UI이미지 해제
+	bUIPtr->release();
+	SAFE_DELETE(bUIPtr);
+
 	//적 클래스 해제
-	for (int i = 0; i < bEnemyMPtrV.size(); i++)
-	{
-		bEnemyMPtrV[i]->release();
-		SAFE_DELETE(bEnemyMPtrV[i]);
-	}
+	bEnemyMPtr->release();
+	SAFE_DELETE(bEnemyMPtr);
 	
 	//펫 클래스 해제
-	for (int i = 0; i < bPetPtrV.size(); i++)
+	for (UINT i = 0; i < bPetPtrV.size(); i++)
 	{
 		bPetPtrV[i]->release();
 		SAFE_DELETE(bPetPtrV[i]);
@@ -152,7 +104,7 @@ void BossStageClass::release(void)
 	SAFE_DELETE(bSaveMPtr);
 
 	//보물상자 클래스 해제
-	for (int i = 0; i < bTreasurePtrV.size(); i++)
+	for (UINT i = 0; i < bTreasurePtrV.size(); i++)
 	{
 		bTreasurePtrV[i]->release();
 		SAFE_DELETE(bTreasurePtrV[i]);
@@ -165,15 +117,13 @@ void BossStageClass::update(void)
 	//업데이트 돌리는곳
 	fieldPtr->update();
 	playerPtr->update();
+	bUIPtr->update();
 
 	//적 클래스 업데이트
-	for (int i = 0; i < bEnemyMPtrV.size(); i++)
-	{
-		bEnemyMPtrV[i]->update();
-	}
+	bEnemyMPtr->update(playerPtr->getX(), playerPtr->getY());
 
 	//펫 클래스 업데이트
-	for (int i = 0; i < bPetPtrV.size(); i++)
+	for (UINT i = 0; i < bPetPtrV.size(); i++)
 	{
 		bPetPtrV[i]->update();
 	}
@@ -182,7 +132,7 @@ void BossStageClass::update(void)
 	bSaveMPtr->update();
 
 	//보물상자 클래스 업데이트
-	for (int i = 0; i < bTreasurePtrV.size(); i++)
+	for (UINT i = 0; i < bTreasurePtrV.size(); i++)
 	{
 		bTreasurePtrV[i]->update();
 	}
@@ -207,9 +157,10 @@ void BossStageClass::update(void)
 	loopX3 = CAMERA.getCRc().left / 3;
 	loopX4 = CAMERA.getCRc().left / 2;
 	loopY4 = CAMERA.getCRc().top / 2;
-
-	COLLISION.playerStepEnemy();
+	
 	COLLISION.playerCrashedEnemy();
+	COLLISION.playerStepEnemy();
+	COLLISION.playerCrashedEBullet();
 	COLLISION.playerFindPets();
 	COLLISION.playerSavePoint();
 	COLLISION.playerFindTreasureBox();
@@ -225,7 +176,7 @@ void BossStageClass::render(void)
 	IMAGEMANAGER->loopRender("나무배경1", getMemDC(), &bgRc, loopX1, loopY1);
 	IMAGEMANAGER->loopRender("나무배경3", getMemDC(), &bgRc, loopX3, loopY3);
 	IMAGEMANAGER->loopRender("나무배경2", getMemDC(), &bgRc, loopX2, loopY2);
-	//if (CAMERA.getCRc().left >= 4014 && CAMERA.getCRc().left < 8114)
+	//if (CAMERA.getCRc().left >= 4070 && CAMERA.getCRc().left < 9538)
 	//{
 	//	IMAGEMANAGER->loopRender("나무배경4", getMemDC(), &bgRc, loopX4, loopY4);
 	//}
@@ -234,8 +185,10 @@ void BossStageClass::render(void)
 	
 	fieldPtr->render();
 
+	bUIPtr->render();
+
 	//보물상자 클래스 렌더
-	for (int i = 0; i < bTreasurePtrV.size(); i++)
+	for (UINT i = 0; i < bTreasurePtrV.size(); i++)
 	{
 		bTreasurePtrV[i]->render();
 	}
@@ -244,13 +197,10 @@ void BossStageClass::render(void)
 	bSaveMPtr->render();
 
 	//적 클래스 렌더
-	for (int i = 0; i < bEnemyMPtrV.size(); i++)
-	{
-		bEnemyMPtrV[i]->render();
-	}
+	bEnemyMPtr->render();
 
 	//펫 클래스 렌더
-	for (int i = 0; i < bPetPtrV.size(); i++)
+	for (UINT i = 0; i < bPetPtrV.size(); i++)
 	{
 		bPetPtrV[i]->render();
 	}

@@ -8,10 +8,15 @@ private:
 	image * pip1;      //형태별 핍
 	image * pip2;	   //형태별 핍
 	image * pip3;	   //형태별 핍
-	image * esc;	//ESC누르라는 창
-	image * enter; //Enter 누르라는 창
+	image * esc;		//ESC누르라는 창
+	image * enter;		//Enter 누르라는 창
+	image * newYes;
+	image * newNo;		//세
 
-	bool isMotion; //모션진행중인지
+
+	UINT titleAlpha;
+	UINT counter; //모션 진행 확인용
+	bool SecondPhase; //타이틀창 2번째 화면인지
 
 
 public:

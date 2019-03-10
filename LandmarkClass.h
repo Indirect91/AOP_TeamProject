@@ -53,6 +53,8 @@ public:
 		float jGravity;				//보석 날아갔다가 떨어트릴 중력
 		float jSpeed;				//보석이 날아갈 속도
 		int jewelPrice;				//보석이 얼마인가?
+
+		bool isJewelGet;			//보석을 주웠는가?
 	};
 private:
 
@@ -67,22 +69,23 @@ private:
 	int imgCount;
 	int frameX, frameY;
 
-
-
 	int jewelNum;					//보석이 몇개가 나올것인가?
 	tagJewel jewel;					//보석 구조체
 	vector <tagJewel>jewelV;		//보석 구조체를 담는 벡터
 
 	string collisionStage;			//픽셀 충돌할 스테이지가 어딘지 입력하기위해
 
+	RECT saveJewelRc;				//UI부근에 위치할 렉트(충돌해서 사라지게 만들려고)
+	RECT jEmpty;
+
 public:
 	HRESULT init(float _x, float _y, bool _isRight, string _collisionStage);
 	void release(void);
 	void update(void);
 	void render(void);
-
+	
 	RECT getTreasureBoxRc() { return treasureBoxRc; }
-	vector <tagJewel> & getJewels() { return jewelV; }
+	vector <tagJewel> &getJewels() { return jewelV; }
 	void setIsOpen(bool _isOpen) { isOpen = _isOpen; }
 	bool getIsOpen() { return isOpen; }
 

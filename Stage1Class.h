@@ -18,7 +18,6 @@ private:
 	class PlayerClass* playerPtr;				//스테이지1에 있는 플레이어 클래스 포인터
 	
 	class EnemyManagerClass* s1EnemyMPtr;		//스테이지1에 있는 적 매니저 클래스 포인터
-	vector < EnemyManagerClass*> s1EnemyMPtrV;	//스테이지1에 있는 적 매니저 클래스 포인터를 담는 벡터
 	
 	class PetsClass* s1PetPtr;					//스테이지1에 있는 펫 클래스 포인터
 	vector <PetsClass*> s1PetPtrV;				//스테이지1에 있는 펫 클래스 포인터를 담는 벡터

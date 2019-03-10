@@ -1,98 +1,111 @@
 #pragma once
 #include "gameNode.h"
-//센서 구조체(픽셀충돌을 위한 센서)
+//센서 구조체
 struct tagSensor
 {
-	RECT sensorRc;			//센서 렉트
-	float x, y;				//센서 중심좌표
-	bool isJump;			//점프를 위한 불변수
-	bool isTouch;			//센서가 충돌중인가?
-
+	RECT sensorRc;					//센서 렉트
+	float x, y;						//중점 좌표
+	bool isJump;					//점프를 하고있는지 판단
+	bool isTouch;					//센서가 터치 중인지 판단
 };
 class PlayerClass : public gameNode
 {
 private:
-	//플레이어 행동 상태처리를 위한 이넘문~
-	enum tagEnum
+	enum playerState		//플레이어 상태(이미지)
 	{
-		IDLE,					//플레이어 대기
-		RUN,					//플레이어 뛰기
-		ATTACK,					//플레이어 공격
-		JUMP,					//플레이어 점프
-		GRAB,					//플레이어 벽잡기
-		DOWNATTACK				//플레이어 아래공격
+		//왼쪽 
+		LEFTIDLE,
+		LEFTRUN,
+		LEFTATTACK,
+		LEFTJUMPUP,
+		LEFTJUMPDOWN,
+		LEFTGRAB,
+		LEFTDOWNATTACK,
+		LEFTCHANGEFORM,
+		//오른쪽
+		RIGHTIDLE,
+		RIGHTRUN,
+		RIGHTATTACK,
+		RIGHTJUMPUP,
+		RIGHTJUMPDOWN,
+		RIGHTGRAB,
+		RIGHTDOWNATTACK,
+		RIGHTCHANGEFORM,
+	};
+	enum changeFormEnum			//플레이어가 변신 상태
+	{
+		//젤리
+		JELLYIDLE,
+		JELLYJUMPUP,
+		JELLYJUMPDOWN
 	};
 private:
-	//플레이어 변수
-	RECT playerRc;				//플레이어 렉트
-	RECT attackRc;				//공격시 판정 렉트
-	float x, y;					//플레이어 좌표
-	float width;				//플레이어 가로
-	float height;				//플레이어 세로
-	float speed;				//플레이어 스피드
-	float gravity;				//중력
-	float addtionalPower;		//가변점프를 위한 추가적인 파워
-	float leftPower;			//반발력 점프를 위한 왼쪽에서 끌어당기는 힘
-	float rightPower;			//반발력 점프를 위한 오른쪽에서 끌어당기는 힘
-	int imgCount;				//이미지 프레임 시간
-	int imgIndex;				//이미지 인덱스 접근
-	bool isAttack;				//공격을 했는지 판단
-	bool isAttackOrMove;		//공격중엔 이동불가
-	bool isLeft;				//좌우 프레임 이미지 구분을 위한 변수
-	bool isJumpCheck;			//점프 프레임 이미지를 위한 변수
-	bool isWallGrab;			//벽을 잡고있는지?
-	string CollisionStage;		//어느 스테이지와 충돌중인지
+	int counter;
+	int suckHan;
+	int frme;
+	//플레이어
+	RECT playerRc;					//플레이어 렉트
+	float x, y;						//플레이어 좌표
+	float width;					//플레이어 가로
+	float height;					//플레이어 세로
+	float speed;					//플레이어 스피드
+	float jellySpeed;				//젤리 스피드
+	float gravity;					//중력
+	float addtionalPower;			//가변점프 파워
+	float leftRepulsivePower;		//왼쪽에서 당기는 힘(반발력)
+	float rightRepulsivePower;		//오른쪽에서 당기는 힘(반발력)
+	float changeCount;				//변신 시간
+	int imgCount;					//이미지 프레임 돌릴 카운트
+	int imgIndex;					//이미지 프레임 인덱스 돌릴 카운트
+	bool isRepusiveCheck;			//반발력 점프
+	bool isLeftRepulsive;			//왼쪽으로 반발력을 줄것인가?
+	bool changeForm;				//젤리 핍인가? 픽셀 핍인가?
+	bool isLeft;					//왼쪽인지 판단
+	bool isAttack;					//공격중인가?
+	bool isDownAttack;				//다운 공격 중인가?
+	//bool isChange;					//변신
+	string CollisionStage;			//스테이지 이름을 담기위해
 
-	tagEnum playerState;		//플레이어 상태 (프레임 이미지 돌릴꺼임)
+	//센서 
+	tagSensor sensorBottom;			//아래
+	tagSensor sensorTop;			//위
+	tagSensor sensorLeft;			//왼쪽
+	tagSensor sensorRight;			//오른쪽
+	tagSensor sensorLeftTop;		//왼쪽 대각선
+	tagSensor sensorRightTop;		//오른쪽 대각선
 
-	//젤리 변수
-	//RECT jellyRc;				//젤리 캐릭터 렉트
-	//float x, y;					//젤리 좌표
-	//float width;				//플레이어 가로
-	//float height;				//플레이어 세로
-	//float speed;				//플레이어 스피드
-	//float gravity;				//중력
-	//float addtionalPower;		//가변점프를 위한 추가적인 파워
-
-	//센서 생성(상 하 좌 우)
-	tagSensor sensorLeft;
-	tagSensor sensorTop;
-	tagSensor sensorRight;
-
-	tagSensor sensorBottom;			//지금 안씀
-	tagSensor sensorRightBottom;	//
-	tagSensor sensorLeftBottom;
-	//센서 대각선
-	tagSensor sensorLeftDiagonal;
-	tagSensor sensorRightDiagonal;
+	playerState playerStateEnum;
+	changeFormEnum jellyState;
 
 public:
 
-	HRESULT init(float x, float y, string stage);
+	HRESULT init(float _x, float _y, string _collisionStage);
 	void release(void);
 	void update(void);
 	void render(void);
 
-	//겟,셋 함수//
 	RECT getRect() { return playerRc; }
-	RECT getAttackRect() { return attackRc; }
+	RECT getSensorRcBottom() { return sensorBottom.sensorRc; }
 	float getX() { return x; }
 	float getY() { return y; }
-	float getLeftPower() { return leftPower; }
-	float getRightPower() { return rightPower; }
+	float getLeftRepulsiver() { return leftRepulsivePower; }
+	float getRightRepulsive() { return rightRepulsivePower; }
 	float getGravity() { return gravity; }
+	float getChangeCount() { return changeCount; }
+	bool getChangeForm() { return changeForm; }
 	void setGravity(float _gravity) { gravity = _gravity; }
 
+	void playerMove();											//플레이어(픽셀 핍) 움직임
+	void playerAttack();										//플레이어 공격
+	void sensorMove();											//센서 움직임
+	void pixelCollision();										//픽셀 충돌
+	void repulsive();											//반발력
 
-	// 함수 //
-	void playerMove();			//플레이어 움직임에 대한 함수(이동,점프)
-	void playerAttack();		//플레이어 공격~
-	void sensorMove();			//플레이어를 따라다니는 센서의 움직임에 대한 함수
-	void pixelCollision();		//센서가 픽셀충돌 감지
+	void jellyMove();											//젤리 핍 움직임
 
-	void playerStateFrameImageRender(float x, float y);		//프레임 이미지 렌더를 위한 함수
+	void sensorPixelCollisionCheck();							//센서가 충돌이 되고있는지 체크
 
-	RECT getSensorRcBottom() { return sensorBottom.sensorRc; }
+	void playerStateFrameImageRender(float x, float y);			//프레임 이미지 렌더를 위한 함수
 
 	PlayerClass() {};
 	~PlayerClass() {};

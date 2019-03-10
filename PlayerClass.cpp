@@ -1,488 +1,377 @@
 #include "stdafx.h"
 #include "PlayerClass.h"
+
 /*====================================================
-						init
+						init()
 ======================================================*/
-HRESULT PlayerClass::init(float _x, float _y, string _CollisionStage)
+HRESULT PlayerClass::init(float _x, float _y, string _collisionStage)
 {
-	//플레이어 변수 초기화
-	x = _x;									//플레이어 x좌표
-	y = _y;									//플레이어 y좌표
-	width = 50;								//플레이어 가로 길이
-	height = 50;							//플레이어 세로길이
-	speed = 5.0f;							//플레이어 스피드
-	gravity = 0.0f;							//중력
-	addtionalPower = 0.0f;					//가변점프를 위한 추가적인 파워(가변점프)
-	leftPower = 0.0f;						//왼쪽에서 끌어당기는 힘(반발력)
-	rightPower = 0.0f;						//오른쪽에서 끌어당기는 힘(반발력)
-	imgCount = 0;							//이미지를 돌릴 카운트
-	imgIndex = 0;							//이미지 인덱스 접근을 위한 변수
-	isAttack = false;						//공격을 했는지 판단
-	isAttackOrMove = false;					//공격중에 이동불가
-	isLeft = false;							//왼쪽인지? 오른쪽인지?
-	isJumpCheck = false;					//점프를 했는지?
-	isWallGrab = false;						//벽을 잡고있는지?
-	CollisionStage = _CollisionStage;		//맵이름 넣기
+	//플레이어 초기화
+	x = _x;										//플레이어 죄표x
+	y = _y;										//플레이어 좌표y
+	width = 50;									//플레이어 가로
+	height = 50;								//플레이어 세로
+	speed = 5.0f;								//플레이어 스피드
+	jellySpeed = 4.0f;							//젤리 스피드
+	gravity = 0.0f;								//중력
+	addtionalPower = 0.0f;						//가변점프 파워
+	leftRepulsivePower = 0.0f;					//왼쪽에서 당기는 반발력
+	rightRepulsivePower = 0.0f;					//오른쪽에서 당기는 반발력
+	imgCount = 0;								//이미지 프레임 돌리기
+	imgIndex = 0;								//프레임 이미지 인덱스 접근
+	changeCount = 0.0f;							//변신 시간
+	isRepusiveCheck = false;					//반발력 체크
+	isLeftRepulsive = false;					//반발략을 어느 부분으로 줄것인가?
+	changeForm = false;							//젤리 핍인가? 픽셀 핍인가?
+	isLeft = false;								//왼쪽? 오른쪽? 방향 판단
+	isAttack = false;							//공격중인가?
+	isDownAttack = false;
+	//isChange = false;							//이동중 공격 못하게
+	CollisionStage = _collisionStage;			//인자 값으로 받아온 이미지 담기~
 
-	// 센서 변수 초기화 //
-	//센서 왼쪽
-	sensorLeft.x = x;
-	sensorLeft.y = y + height / 2;
-	sensorLeft.isJump = false;
-	sensorLeft.isTouch = false;
-	//센서 위
-	sensorTop.x = x + width / 2;
-	sensorTop.y = y;
-	sensorTop.isJump = false;
-	sensorTop.isTouch = false;
+#pragma region 센서 초기화
+	//센서 초기화
+	sensorBottom.x = x + width / 2;				//센서 x위치 초기화
+	sensorBottom.y = y + height;				//센서 y위치 초기화
+	sensorBottom.isJump = false;				//센서 점프 bool변수 초기화
+	sensorBottom.isTouch = false;				//센서 터치 bool변수 초기화
 
-	//센서 오른쪽
-	sensorRight.x = x + width;
-	sensorRight.y = y + height / 2;
-	sensorRight.isJump = false;
-	sensorRight.isTouch = false;
+	sensorLeft.x = x;							//센서 x위치 초기화
+	sensorLeft.y = y + height / 2;				//센서 y위치 초기화
+	sensorLeft.isJump = false;					//센서 점프 bool변수 초기화
+	sensorLeft.isTouch = false;					//센서 터치 bool변수 초기화
 
-	//센서 아래
-	sensorBottom.x = x + width / 2;
-	sensorBottom.y = y + height;
-	sensorBottom.isJump = false;
-	sensorBottom.isTouch = false;
+	sensorRight.x = x + width;					//센서 x위치 초기화
+	sensorRight.y = y + height / 2;				//센서 y위치 초기화
+	sensorRight.isJump = false;					//센서 점프 bool변수 초기화
+	sensorRight.isTouch = false;				//센서 터치 bool변수 초기화
 
-	//센서 왼쪽 아래
-	sensorLeftBottom.x = x;
-	sensorLeftBottom.y = y + height;
-	//센서 오른쪽 아래
-	sensorRightBottom.x = x + width;
-	sensorRightBottom.y = y + height;
+	sensorTop.x = x + width / 2;				//센서 x위치 초기화
+	sensorTop.y = y;							//센서 y위치 초기화
+	sensorTop.isJump = false;					//센서 점프 bool변수 초기화
+	sensorTop.isTouch = false;					//센서 터치 bool변수 초기화
 
-	//왼똑 대각선
-	sensorLeftDiagonal.x = x;
-	sensorLeftDiagonal.y = y;
-	sensorLeftDiagonal.isJump = false;
-	sensorLeftDiagonal.isTouch = false;
-	//오른쪽 대각선
-	sensorRightDiagonal.x = x + width;
-	sensorRightDiagonal.y = y;
-	sensorRightDiagonal.isJump = false;
-	sensorRightDiagonal.isTouch = false;
+	sensorLeftTop.x = x;						//센서 x위치 초기화
+	sensorLeftTop.y = y;						//센서 y위치 초기화
+	sensorLeftTop.isJump = false;				//센서 점프 bool변수 초기화
+	sensorLeftTop.isTouch = false;				//센서 터치 bool변수 초기화
+
+	sensorRightTop.x = x + width;				//센서 x위치 초기화
+	sensorRightTop.y = y;						//센서 y위치 초기화
+	sensorRightTop.isJump = false;				//센서 점프 bool변수 초기화
+	sensorRightTop.isTouch = false;				//센서 터치 bool변수 초기화
+#pragma endregion
+	frme = 0;
+	counter = 0;
+	suckHan = 50;
 	return S_OK;
 }
+
 /*====================================================
-						release
+						release()
 =====================================================*/
 void PlayerClass::release(void)
 {
 }
 
 /*====================================================
-						update
+						update()
 ======================================================*/
 void PlayerClass::update(void)
 {
 	//상시 중력
-	gravity += 0.2f;
+	gravity += 0.4f;
 
-	//반발력
-	if (leftPower > 0)			//옆으로 미는 힘이 존재만 한다면
-		leftPower -= 0.2f;		//업데이트마다 깎아준다
-	else
+	if (!changeForm)
 	{
-		leftPower = 0;			 //0보다 작아지면 0으로 셋
+		this->playerMove();							//플레이어 움직임
+		this->playerAttack();
 	}
 
-	if (rightPower > 0)
-		rightPower -= 0.2f;
-	else
+	this->sensorMove();								//센서 움직임
+	this->pixelCollision();							//픽셀 충돌
+	this->repulsive();								//반발력
+
+	//변신
+	if (KEYMANAGER->isStayKeyDown('L'))
 	{
-		rightPower = 0;
+		changeCount += 0.05f;
+
+		if (!isLeft) playerStateEnum = playerState::LEFTCHANGEFORM;
+		else playerStateEnum = playerState::RIGHTCHANGEFORM;
+	}
+	if (KEYMANAGER->isOnceKeyUp('L'))
+	{
+		if (changeCount <= 2.0f)
+		{
+			changeCount = 0.0f;
+		}
 	}
 
+	if (changeCount >= 2.0f)
+	{
+		changeCount = 2.0f;
+		changeForm = true;
+	}
 
-	this->playerMove();			//플레이어 윰직임
-	this->sensorMove();			//센서 움직임
-	this->pixelCollision();		//센서 픽셀 충돌
-	this->playerAttack();		//플레이어 공격
+	if (changeForm)
+	{
+		this->jellyMove();
+	}
 
-	//플레이어에 중력 적용시킨다.
+	//중력을 제일 마지막에 더해줘야한다.
 	y += gravity;
 
-	//반발력 적용
-	x += rightPower; //항시 작용하는 힘이 존재시 적용한다. 0이면 당근 변동 없겠지?
-	x -= leftPower;
+	//반발력이 존재하면 당겨당겨~
+	x -= leftRepulsivePower;
+	x += rightRepulsivePower;
+
 }
-/*====================================================
-						render
-======================================================*/
+
+/*============================================================
+						render()
+==============================================================*/
 void PlayerClass::render(void)
 {
-	//조건에 따라 프레임 이미지 렌더하는 함수
-	this->playerStateFrameImageRender((x + 5), (y - 20));
-
-
-	//토글키로 렉트 판정같은거 확인할 수 있읍
+	counter++;
 	if (KEYMANAGER->isToggleKey('Q'))
 	{
-		//플레이어 렌더
+		//플레이어
 		Rectangle(getMemDC(), RelativeCameraRect(playerRc));
 
-		// || sensorLeft.isTouch || sensorLeftDiagonal.isTouch || sensorRight.isTouch || sensorRightDiagonal.isTouch || sensorTop.isTouch
-		if (sensorBottom.isTouch || sensorLeft.isTouch || sensorLeftDiagonal.isTouch || sensorRight.isTouch || sensorRightDiagonal.isTouch || sensorTop.isTouch)
-		{
-
-			HBRUSH brush = (HBRUSH)CreateSolidBrush(RGB(255, 0, 0));
-			RECT temp = RelativeCameraRect(sensorBottom.sensorRc);
-			//Rectangle(getMemDC(), temp);
-			FillRect(getMemDC(), &temp, brush);
-
-			Rectangle(getMemDC(), RelativeCameraRect(sensorLeft.sensorRc));
-
-			Rectangle(getMemDC(), RelativeCameraRect(sensorTop.sensorRc));
-
-			Rectangle(getMemDC(), RelativeCameraRect(sensorRight.sensorRc));
-
-			//Rectangle(getMemDC(), RelativeCameraRect(sensorLeftBottom.sensorRc));
-			//Rectangle(getMemDC(), RelativeCameraRect(sensorRightBottom.sensorRc));
-
-			Rectangle(getMemDC(), RelativeCameraRect(sensorLeftDiagonal.sensorRc));
-			Rectangle(getMemDC(), RelativeCameraRect(sensorRightDiagonal.sensorRc));
-
-
-			DeleteObject(brush);
-		}
-
-		//공격 판정 렉트 렌더
-		Rectangle(getMemDC(), RelativeCameraRect(attackRc));
-
-		TextOutfloat(getMemDC(), 400, 10, "센서 레프트의 레프트 좌표", sensorLeft.sensorRc.left);
-
+		//픽셀 충돌시 체크
+		this->sensorPixelCollisionCheck();
 	}
-}
 
-/*====================================================
-			playerMove() - 플레이어 움직임 -
-======================================================*/
-
-void PlayerClass::playerMove()
-{
-	if (isJumpCheck)		//만약 플레이어가 점프를 한다면(false라면) 대기 이미지 출력 못하도록
+	
+	if (counter>15&&counter<115)
 	{
-		if (gravity > 0)
+		frme++;
+		if (frme % 15 == 0)
 		{
-			playerState = PlayerClass::JUMP;
+			
+			if (frme > 16)
+			{
+				frme = 16;
+			}
 		}
-	}//else if(isJumpCheck) END
-
-	//오른쪽 움직임
-	if (KEYMANAGER->isStayKeyDown(VK_RIGHT) && isAttackOrMove == false)
-	{
-		x += speed;							//플레이어 속도만큼 x축 이동(오른쪽이니까 x축 증가)
-		isLeft = false;						//false면 오른쪽 움직임 이미지
-		isAttack = false;					//하면 공격 모션 캔슬
-		//isWallGrab = false;
-
-
-		if (!isJumpCheck && !isAttack)		//만약 플레이어가 점프를 한다면(false라면) 달리는 이미지 출력 못하도록
-		{
-
-			// 오른쪽 누르고있으니까 저는 오른쪽으로 뛰고있습니다.
-			playerState = PlayerClass::RUN;
-
-		}
-
-
-
 	}
-	//왼쪽 움직임
-	else if (KEYMANAGER->isStayKeyDown(VK_LEFT) && isAttackOrMove == false)
-	{
-		isLeft = true;			//true면 왼쪽 움직임 이미지
-		//isWallGrab = true;		//벽을 잡은 상태로 반대키누르면?
-		x -= speed;				//플레이어 속도만큼 x축 이동(왼쪽이니까 x축 감소)
-
-		if (!isJumpCheck && !isAttack)		//만약 플레이어가 점프를 한다면(false라면) 달리는 이미지 출력 못하도록
-		{
-			//왼쪽을 누르고 있느니까 저는 왼쪽으로 뛰고있습니다.
-			playerState = PlayerClass::RUN;
-		}
-
-	}
-	// 달리고 있다가 멈췄네 ? 그러면 IDLE로 돌아감 ㅎ
 	else
 	{
-		playerState = PlayerClass::IDLE;
-	}
-
-	//점프(가변 점프 : 점프키 누른 시간에 따라 점프력 상승 / 점프력 최대치 존재)
-	if (sensorBottom.isJump == false)
-	{
-		if (KEYMANAGER->isOnceKeyDown('C'))
+		frme--;
+		if (frme % 10 == 0)
 		{
-			isJumpCheck = true;						//점프를 하게되면 프레임 이미지를 출력할 수 있게 true
-			playerState = PlayerClass::JUMP;
-			//반발력 점프
-			if (sensorLeft.isJump == true)			//왼쪽 센서의 점프 불변수가 true면
+			if (frme < 0)
 			{
-				//leftPower = 0.0f;
-				rightPower = 7.5f;					//오른쪽으로 반발력 주기~
-				isJumpCheck = true;					//점프를 하게되면 프레임 이미지를 출력할 수 있게 true
-				sensorRight.isJump = false;			//
-				isLeft = false;
+				frme = 0;
 			}
-			if (sensorRight.isJump == true)			//오른쪽 센서의 점프 불변수가 true면
+		}
+	}
+	IMAGEMANAGER->addFrameImage("portl", "2312,308_ 복사본.bmp", 2312, 308, 17, 1, true, RGB(255, 0, 255))->stretchFrameRenderCenterXDownY(getMemDC(), 60, 80, frme, 0, 1, 2);
+
+
+	this->playerStateFrameImageRender((x + 5), (y - 20));
+}
+
+/*=============================================================
+			playerMove() - 플레이어 움직임 -
+===============================================================*/
+void PlayerClass::playerMove()
+{
+	//!isLeft ? playerStateEnum = RIGHTIDLE : playerStateEnum = LEFTIDLE;
+
+	if (KEYMANAGER->isStayKeyDown(VK_RIGHT))
+	{
+		//공격중이지 않으면 이동가능 // 점프(true) 공격(true) 이동 가능
+		if (!isAttack)
+		{
+			x += speed;
+			isLeft = true;
+			if (isLeft) playerStateEnum = playerState::RIGHTRUN;
+		}
+
+		if (!sensorBottom.isTouch)
+		{
+			if (isAttack)
 			{
-				//rightPower = 0.0f;
-				leftPower = 7.5f;					//왼쪽으로 반발력 주기~
-				isJumpCheck = true;					//점프를 하게되면 프레임 이미지를 출력할 수 있게 true
-				sensorLeft.isJump = false;
+				x += speed;
 				isLeft = true;
 			}
-			y -= 20;								//점프 할때 살짝 띄워준다
-			gravity = -1.8f;						//중력 역전시키기
-
-		}
-		if (KEYMANAGER->isStayKeyDown('C'))			//가변 점프
-		{
-			isJumpCheck = true;						//점프를 하게되면 프레임 이미지를 출력할 수 있게 true
-
-			if (addtionalPower <= 1.6f)				//가변점프 파워가 1.6f이하면 
-			{
-				addtionalPower += 0.2f;				//파워를 추가시켜준다.
-			}
-			if (addtionalPower <= 1.6f)
-			{
-				gravity -= addtionalPower;
-			}
-
-
-			//if (isJumpCheck == true)
-			//{
-			//	playerState = PlayerClass::JUMP;
-			//}
-		}
-		if (KEYMANAGER->isOnceKeyUp('C'))
-		{
-			isJumpCheck = true;						//점프를 하게되면 프레임 이미지를 출력할 수 있게 true
-			playerState = PlayerClass::JUMP;
-
-			//gravity = 0.0f;
-			addtionalPower = 0.0f;					//점프 키를 떼면 가변 점프 파워 0.0f로 초기화
-			sensorBottom.isJump = true;				//2단 점프 가능하지 못하게 변수 true로 변경
 		}
 	}
-	else if (gravity > 0 || gravity < 0)
+	else
 	{
-		isJumpCheck = true;						//점프를 하게되면 프레임 이미지를 출력할 수 있게 true
-		playerState = PlayerClass::JUMP;
+		playerStateEnum = playerState::RIGHTIDLE;
 	}
 
-	//플레이어 상태 지속 업데이트
+	if (KEYMANAGER->isStayKeyDown(VK_LEFT))
+	{
+		if (!isAttack)
+		{
+			x -= speed;
+			isLeft = false;
+			playerStateEnum = playerState::LEFTRUN;
+		}
+
+		if (!sensorBottom.isTouch)
+		{
+			if (isAttack)
+			{
+				x -= speed;
+				isLeft = false;
+			}
+		}
+	}
+	else
+	{
+		if (!isLeft) playerStateEnum = playerState::LEFTIDLE;
+	}
+
+	if (!sensorBottom.isJump)												//바텀의 센서 점프 bool변수가 false면 아래의 기능을 사용 할 수 있다.
+	{
+		if (KEYMANAGER->isOnceKeyDown('K'))
+		{
+			y -= 10;														//점프하기 전에 y축을 살짝 이격시킨다.
+			gravity = -6.0f;												//중력을 역전 시켜서 점프
+
+			//반발력
+			if (isRepusiveCheck && !sensorBottom.isTouch)					//반발력을 줄것인지?
+			{
+				if (isLeftRepulsive && !sensorLeftTop.isTouch)				//왼쪽으로 반발력을 준다면
+				{
+					x += 10;												//x축을 살짝 이격 시킨후
+					rightRepulsivePower = 5.5f;								//반발력을 준다.
+					isLeft = true;
+				}
+				else if (!isLeftRepulsive && !sensorRightTop.isTouch)		//오른쪽으로 반발력을 준다면
+				{
+					x -= 10;												//x축을 살짝 이격 시킨후
+					leftRepulsivePower = 5.5f;								//반발력을 준다.
+					isLeft = false;
+				}
+			}
+		}
+		if (KEYMANAGER->isStayKeyDown('K'))
+		{
+			//가변 점프(C키를 꾹 누르고 있으면 가변 점프 파워가 증가를 하게 된다.(최대치 존재))
+			if (addtionalPower <= 1.6f)										//가변점프 파워가 1.6f 이하라면
+			{
+				addtionalPower += 0.2f;										//가변점프 파워 증가
+			}
+			if (addtionalPower <= 1.6f)										//가변점프 파워가 1.6f 이하라면
+			{
+				gravity -= addtionalPower;									//증가한 가변점프 파워를 점프 중력에 추가해 점프를 높게 뛸수 있도록 해준다
+			}
+
+		}
+		if (KEYMANAGER->isOnceKeyUp('K'))
+		{
+			sensorBottom.isJump = true;										//이중 점프를 막기위해 bool변수 true
+			addtionalPower = 0.0f;											//가변점프 파워 다시 초기화
+		}
+	}
+	if (!sensorBottom.isTouch)
+	{
+		if (!isLeft)
+		{
+			if (gravity < 0) playerStateEnum = playerState::LEFTJUMPUP;
+			else playerStateEnum = playerState::LEFTJUMPDOWN;
+		}
+		else
+		{
+			if (gravity < 0) playerStateEnum = playerState::RIGHTJUMPUP;
+			else playerStateEnum = playerState::RIGHTJUMPDOWN;
+		}
+	}
+
+	//플레이어 지속 업데이트
 	playerRc = RectMake(x, y, width, height);
 }
 
-/*====================================================
-			sensorMove() - 센서 움직임 -
-======================================================*/
-void PlayerClass::sensorMove()
+/*=============================================================
+			playerAttack() - 플레이어 공격 -
+===============================================================*/
+void PlayerClass::playerAttack()
 {
-	//센서 위치 조정(왼쪽)
-	sensorLeft.x = x;
-	sensorLeft.y = y + height / 2;
-	//센서 위치 조정(위)
-	sensorTop.x = x + width / 2;
-	sensorTop.y = y;
-	//센서 위치 조정(오른쪽)
-	sensorRight.x = x + width;
-	sensorRight.y = y + height / 2;
+	//플레이어 일반 공격
+	if (KEYMANAGER->isOnceKeyDown('J'))
+	{
+		imgIndex = 12;
+		isAttack = true;
+	}
 
-	//센서 위치 조정(아래)
-	sensorBottom.x = x + width / 2;
-	sensorBottom.y = y + height;
-	//센서 위치 조정(왼쪽 아래)
-	sensorLeftBottom.x = x + 10;
-	sensorLeftBottom.y = y + height;
-	//센서 위치 조정(오른쪽 아래)
-	sensorRightBottom.x = x + (width - 10);
-	sensorRightBottom.y = y + height;
+	if (isAttack && !isLeft)
+	{
+		playerStateEnum = playerState::LEFTATTACK;
+	}
+	else if (isAttack && isLeft)
+	{
+		playerStateEnum = playerState::RIGHTATTACK;
+	}
 
+	//플레이어 다운공격
+	if (KEYMANAGER->isOnceKeyDown(VK_DOWN))
+	{
+		isDownAttack = true;
+	}
 
-	//왼똑 대각선
-	sensorLeftDiagonal.x = x;
-	sensorLeftDiagonal.y = y;
-	//오른쪽 대각선
-	sensorRightDiagonal.x = x + width;
-	sensorRightDiagonal.y = y;
+	if (isDownAttack && !isLeft)
+	{
+		playerStateEnum = PlayerClass::LEFTDOWNATTACK;
+	}
+	else if (isDownAttack && isLeft)
+	{
+		playerStateEnum = PlayerClass::LEFTDOWNATTACK;
+	}
 
-
-	//센서가 플레이어를 따라다니게 지속 업데이트
-	sensorLeft.sensorRc = RectMakeCenter(sensorLeft.x, sensorLeft.y, 5, 40);
-	sensorTop.sensorRc = RectMakeCenter(sensorTop.x, sensorTop.y, 40, 5);
-	sensorRight.sensorRc = RectMakeCenter(sensorRight.x, sensorRight.y, 5, 40);
-
-	sensorBottom.sensorRc = RectMakeCenter(sensorBottom.x, sensorBottom.y, 30, 5);
-	//sensorLeftBottom.sensorRc = RectMakeCenter(sensorLeftBottom.x, sensorLeftBottom.y, 5, 5);
-	//sensorRightBottom.sensorRc = RectMakeCenter(sensorRightBottom.x, sensorRightBottom.y, 5, 5);
-
-	sensorLeftDiagonal.sensorRc = RectMakeCenter(sensorLeftDiagonal.x, sensorLeftDiagonal.y, 5, 5);
-	sensorRightDiagonal.sensorRc = RectMakeCenter(sensorRightDiagonal.x, sensorRightDiagonal.y, 5, 5);
 }
 
-/*====================================================
-			pixelCollision() - 픽셀 충돌 -
-======================================================*/
-void PlayerClass::pixelCollision()
-//인자값이 센서렉트고 이게 들어가면 방금 들어온 센서가 픽셀충돌이 가능하게 
+/*==============================================================
+			sensorMove() - 센서 움직임 -
+================================================================*/
+void PlayerClass::sensorMove()
 {
+#pragma region 센서 위치 지속 업데이트
+	sensorBottom.x = x + width / 2;
+	sensorBottom.y = y + height;
+	sensorBottom.isTouch = false;
 
-	//왼쪽 아래 픽셀 충돌(Bottom)//
-	for (int i = sensorLeftBottom.y - 5; i < sensorLeftBottom.y + 5; i++)
-	{
-		COLORREF color = GetPixel(IMAGEMANAGER->findImage(CollisionStage)->getMemDC(), sensorLeftBottom.x, i);
-		int r = GetRValue(color);
-		int g = GetGValue(color);
-		int b = GetBValue(color);
-		//일반 타일 충돌
-		if (r == 255 && g == 255 && b == 0)
-		{
-			y = i - height;							//픽셀 충돌시 플레이어 위치보정
-			gravity = 0.0f;							//중력 0으로~
-			sensorBottom.isJump = false;			//점프를 할 수 있도록 false
-			isJumpCheck = false;					//점프 프레임 이미지 끄기
-			break;
-		}
-		//무너지는 타일 충돌
-		if (r == 91 && g == 63 && b == 34)
-		{
-			y = i - height;							//픽셀 충돌시 플레이어 위치보정
-			gravity = 0.0f;							//중력 0으로~
-			sensorBottom.isJump = false;			//점프를 할 수 있도록 false
-			isJumpCheck = false;					//점프 프레임 이미지 끄기
-			break;
-		}
-	}
+	sensorLeft.x = x;
+	sensorLeft.y = y + height / 2;
+	sensorLeft.isTouch = false;
 
-	//오른쪽 아래 픽셀 충돌(Bottom)//
-	for (int i = sensorRightBottom.y - 5; i < sensorRightBottom.y + 5; i++)
-	{
-		COLORREF color = GetPixel(IMAGEMANAGER->findImage(CollisionStage)->getMemDC(), sensorRightBottom.x, i);
-		int r = GetRValue(color);
-		int g = GetGValue(color);
-		int b = GetBValue(color);
+	sensorRight.x = x + width;
+	sensorRight.y = y + height / 2;
+	sensorRight.isTouch = false;
 
-		//일반 타일 충돌
-		if ((r == 255 && g == 255 && b == 0))
-		{
-			y = i - height;							//픽셀 충돌시 플레이어 위치보정
-			gravity = 0.0f;							//중력 0으로~
-			sensorBottom.isJump = false;			//점프를 할 수 있도록 false
-			isJumpCheck = false;					//점프 프레임 이미지 끄기
-			break;
-		}
-		//무너지는 타일 충돌
-		if ((r == 91 && g == 63 && b == 34))
-		{
-			y = i - height;							//픽셀 충돌시 플레이어 위치보정
-			gravity = 0.0f;							//중력 0으로~
-			sensorBottom.isJump = false;			//점프를 할 수 있도록 false
-			isJumpCheck = false;					//점프 프레임 이미지 끄기
-			break;
-		}
-	}
+	sensorTop.x = x + width / 2;
+	sensorTop.y = y;
+	sensorTop.isTouch = false;
 
-	//왼쪽 픽셀 충돌(Left)// = 왼쪽 충돌은 오른쪽 충돌과 반대로 줘야 한다.!!!!!!!!!!!!!!!!!!!
-	for (int i = sensorLeft.x + 5; i > sensorLeft.x - 5; i--)
-	{
-		COLORREF color = GetPixel(IMAGEMANAGER->findImage(CollisionStage)->getMemDC(), i, sensorLeft.y);
-		int r = GetRValue(color);
-		int g = GetGValue(color);
-		int b = GetBValue(color);
+	sensorLeftTop.x = x;
+	sensorLeftTop.y = y;
+	sensorLeftTop.isTouch = false;
 
-		if ((r == 0 && g == 255 && b == 0))					//RGB값이 0,255,0 이면
-		{
+	sensorRightTop.x = x + width;
+	sensorRightTop.y = y;
+	sensorRightTop.isTouch = false;
+#pragma endregion
 
-			//플레이어 x축을 i만큼 보정(충돌이 일어난 곳으로 보정해준다. 안쪽으로 못들어가게)
-			x = i;
+	//센서 지속 업데이트
+	sensorBottom.sensorRc = RectMakeCenter(sensorBottom.x, sensorBottom.y, 40, 5);
+	sensorLeft.sensorRc = RectMakeCenter(sensorLeft.x, sensorLeft.y, 5, 40);
+	sensorRight.sensorRc = RectMakeCenter(sensorRight.x, sensorRight.y, 5, 40);
+	sensorTop.sensorRc = RectMakeCenter(sensorTop.x, sensorTop.y, 40, 5);
+	sensorLeftTop.sensorRc = RectMakeCenter(sensorLeftTop.x, sensorLeftTop.y, 5, 5);
+	sensorRightTop.sensorRc = RectMakeCenter(sensorRightTop.x, sensorRightTop.y, 5, 5);
+}
 
-			if (KEYMANAGER->isStayKeyDown(VK_LEFT) && isAttackOrMove == false)			//벽에 닿은채로 왼쪽키를 누르면
-			{
-				gravity = 0.0f;								//중력을 0으로 만들어 벽에 붙어있게 만듬
-				sensorLeft.isJump = true;					//반발력 점프를 위한 변수 true면 반발력 점프 가능
-				if (isLeft)									//벽잡하는 중에 왼쪽인지 판단
-				{
-					playerState = PlayerClass::GRAB;		//벽잡하는 중에 왼쪽이면 이미지 출력
-				}
-			}
-			else if (isLeft && gravity > 0)					//벽잡이 아닌 그냥 왼쪽 벽에 충돌중에 중력이 0이상이고 왼쪽 판단하는 변수가 true면
-			{
-				playerState = PlayerClass::GRAB;			//벽잡고있는 이미지 출력
-			}
-			else if (gravity == 0)							//중력이 0일경우
-			{
-				playerState = PlayerClass::IDLE;			//대기모션 출력
-			}
-
-			leftPower = 0.0f;								//왼쪽 벽에 충돌을 하게 되면 leftpower 0으로 초기화
-			sensorBottom.isJump = false;					//임시로 맵확인을 위한 점프
-			sensorLeft.isTouch = true;						//센서가 픽셀과 충돌햇는지?
-			break;
-
-		}
-	}
-
-	//위 픽셀 충돌(Top)//
-	for (int i = sensorTop.y - 5; i < sensorTop.y + 5; i++)
-	{
-		COLORREF color = GetPixel(IMAGEMANAGER->findImage(CollisionStage)->getMemDC(), sensorTop.x, i);
-		int r = GetRValue(color);
-		int g = GetGValue(color);
-		int b = GetBValue(color);
-
-		if ((r == 0 && g == 0 && b == 0))
-		{
-			y += 5;				//떨어지기 위해 거리를 이격시킨다.
-			gravity = 0.0f;		//그 후 중력을 0으로 만들어준후 중력값을 다시 받게
-			sensorTop.isTouch = true;
-			break;
-		}
-	}
-
-	//오른쪽 픽셀 충돌(Right)//
-	for (int i = sensorRight.x - 5; i < sensorRight.x + 5; i++)
-	{
-		COLORREF color = GetPixel(IMAGEMANAGER->findImage(CollisionStage)->getMemDC(), i, sensorRight.y);
-		int r = GetRValue(color);
-		int g = GetGValue(color);
-		int b = GetBValue(color);
-
-		if ((r == 0 && g == 0 & b == 255))
-		{
-			x = i - width;
-			if (KEYMANAGER->isStayKeyDown(VK_RIGHT) && isAttackOrMove == false)
-			{
-				gravity = 0.0f;							//오른쪽 방향키를 누르고 있는 상태라면 중력을 0으로 해서 벽잡기
-				sensorRight.isJump = true;				//반발력 점프를 위한 오른쪽 점프 센서가 true면 반발력 점프 가능
-				if (!isLeft)							//벽잡하는 중에 오른쪽인지 판단 
-				{
-					playerState = PlayerClass::GRAB;	//벽잡하는 중에 오른쪽이면 이미지 출력
-				}
-			}
-			else if (!isLeft && gravity > 0)			//벽잡이 아닌 그냥 오른쪽 벽에 충돌중에 중력이 0이상이고 오른쪽 판단하는 변수가 true면
-			{
-				playerState = PlayerClass::GRAB;		//오른쪽 벽잡 이미지 출력
-			}
-			else if (gravity == 0)						//중력이 0 이면 
-			{
-				playerState = PlayerClass::IDLE;		//대기 상태 이미지 출력
-			}
-
-			rightPower = 0.0f;						//오른쪽 충돌이 일어나면 오른쪽으로 당기는 반발력 0으로 초기화
-			sensorBottom.isJump = false;			//임시로 맵확인을 위한 점프
-			sensorRight.isTouch = true;
-
-			break;
-		}
-	}
-
-	//아래 픽셀 충돌(Bottom)// = 현재 안쓰는 충돌 =
+/*==============================================================
+			pixelCollision() - 픽셀 충돌 -
+================================================================*/
+void PlayerClass::pixelCollision()
+{
+	//바텀 픽셀 충돌(Bottom)
 	for (int i = sensorBottom.y - 5; i < sensorBottom.y + 5; i++)
 	{
 		COLORREF color = GetPixel(IMAGEMANAGER->findImage(CollisionStage)->getMemDC(), sensorBottom.x, i);
@@ -490,119 +379,410 @@ void PlayerClass::pixelCollision()
 		int g = GetGValue(color);
 		int b = GetBValue(color);
 
-		if ((r == 255 && g == 255 && b == 0))
+		//바텀센서 X 픽셀(노란색)
+		if (r == 255 && g == 255 && b == 0)
 		{
-			y = i - height;
-			gravity = 0.0f;
-			sensorLeft.isJump = false;
-			sensorRight.isJump = false;
-			sensorBottom.isJump = false;
-			isJumpCheck = false;					//점프 프레임 이미지 끄기
-			sensorBottom.isTouch = true;
+			y = i - height;						//y축 위치보정
+			gravity = 0.0f;						//중력 0으로~
+			sensorBottom.isTouch = true;		//현재 픽셀 충돌중인지 체크
+			sensorBottom.isJump = false;		//픽셀 충돌중이면 언제든지 점프
+			isRepusiveCheck = false;			//벽점프가 아닌 점프 할 때 반발력을 안주게 하기 위해
+			//if(isAttack) isAttack = false;
 			break;
 		}
-		//무너지는 타일 충돌
-		else if ((r == 91 && g == 63 && b == 34))
+
+		//바텀 센서 X 무너지는 타일
+		if (r == 91 && g == 63 && b == 34)
 		{
-			//y = i - height;							//픽셀 충돌시 플레이어 위치보정
-			//gravity = 0.0f;							//중력 0으로~
-			//sensorBottom.isJump = false;				//점프를 할 수 있도록 false
-			//isJumpCheck = false;						//점프 프레임 이미지 끄기
+			y = i - height;
+			gravity = 0.0f;						//중력 0으로~
+			sensorBottom.isTouch = true;		//현재 픽셀 충돌중인지 체크
+			sensorBottom.isJump = false;		//픽셀 충돌중이면 언제든지 점프
+			isRepusiveCheck = false;			//벽점프가 아닌 점프 할 때 반발력을 안주게 하기 위해
+			break;
+		}
 
-			if (KEYMANAGER->isStayKeyDown(VK_DOWN))
+		//바텀 센서 X 나무타일
+		if (r == 255 && g == 94 && b == 0)
+		{
+			y = i - height;
+			gravity = 0.0f;						//중력 0으로~
+			sensorBottom.isTouch = true;		//현재 픽셀 충돌중인지 체크
+			sensorBottom.isJump = false;		//픽셀 충돌중이면 언제든지 점프
+			isRepusiveCheck = false;			//벽점프가 아닌 점프 할 때 반발력을 안주게 하기 위해
+			break;
+		}
+
+		//바텀센서 X 변신으로 부서지는 타일
+		if (r == 126 && g == 206 && b == 244)
+		{
+			y = i - height;
+			gravity = 0.0f;						//중력 0으로~
+			sensorBottom.isTouch = true;		//현재 픽셀 충돌중인지 체크
+			sensorBottom.isJump = false;		//픽셀 충돌중이면 언제든지 점프
+			isRepusiveCheck = false;			//벽점프가 아닌 점프 할 때 반발력을 안주게 하기 위해
+			break;
+		}
+
+		//바텀센서 X 끊어지는 타일
+		if (r == 149 && g == 149 && b == 149)
+		{
+			y = i - height;
+			gravity = 0.0f;						//중력 0으로~
+			sensorBottom.isTouch = true;		//현재 픽셀 충돌중인지 체크
+			sensorBottom.isJump = false;		//픽셀 충돌중이면 언제든지 점프
+			isRepusiveCheck = false;			//벽점프가 아닌 점프 할 때 반발력을 안주게 하기 위해
+			break;
+		}
+	}
+
+	//오른쪽 픽셀 충돌(Right)
+	for (int i = sensorRight.x - 5; i < sensorRight.x + 5; i++)
+	{
+		COLORREF color = GetPixel(IMAGEMANAGER->findImage(CollisionStage)->getMemDC(), i, sensorRight.y);
+		int r = GetRValue(color);
+		int g = GetGValue(color);
+		int b = GetBValue(color);
+
+		//오른쪽 센서 X 픽셀(파란색)
+		if (r == 0 && g == 0 && b == 255)
+		{
+			x = i - width;						//x축 위치 보정
+			isLeftRepulsive = false;			//반발력을 어느방향으로 줄 것인가?(왼쪽으로 줄거임)
+			rightRepulsivePower = 0.0f;			//반발력 파워가 항시 존재하면 안되니까 0으로 초기화
+			isRepusiveCheck = true;				//벽점프를 할 수 있도록 
+			sensorBottom.isJump = false;		//벽에 닿으면 점프를 할 수 있어야 하니까
+			sensorRight.isTouch = true;			//오른쪽 센서가 충돌이 되고있는지?
+
+			if (!sensorBottom.isTouch && sensorRight.isTouch && gravity > 0)
 			{
-
+				playerStateEnum = playerState::RIGHTGRAB;
 			}
+
+			if (gravity > 15.0f)
+			{
+				gravity = 15.0f;
+			}
+			if (!changeForm)
+			{
+				if (KEYMANAGER->isStayKeyDown(VK_RIGHT))
+				{
+					gravity = 0.0f;					//벽잡을 하는 중이니 중력 0
+				}
+			}
+			break;
+		}
+
+		//노란색과 충돌시
+		if (r == 255 && g == 255 && b == 0)
+		{
+			x = i - width;						//위치 보정
+			break;
+		}
+		//검정색과 충돌시
+		if (r == 0 && g == 0 && b == 0)
+		{
+			x = i - width;						//위치 보정
 			break;
 		}
 
 	}
 
-	// 중력이 0이상이때만 픽셀충돌함 //
-	if (gravity > 0)
+	//왼쪽 픽셀 충돌(Left)
+	for (int i = sensorLeft.x + 5; i > sensorLeft.x - 5; i--)
 	{
-		// 왼쪽 대각선 픽셀 충돌(LeftDiagonal) - 모서리 잡기위한 부분  //
-		for (int i = sensorLeftDiagonal.y - 5; i < sensorLeftDiagonal.y + 5; i++)
+		COLORREF color = GetPixel(IMAGEMANAGER->findImage(CollisionStage)->getMemDC(), i, sensorLeft.y);
+		int r = GetRValue(color);
+		int g = GetGValue(color);
+		int b = GetBValue(color);
+
+		//왼쪽 센서 X 픽셀(연두)
+		if (r == 0 && g == 255 && b == 0)
 		{
-			COLORREF color = GetPixel(IMAGEMANAGER->findImage(CollisionStage)->getMemDC(), sensorLeftDiagonal.x, i);
-			int r = GetRValue(color);
-			int g = GetGValue(color);
-			int b = GetBValue(color);
 
-			if ((r == 96 && g == 25 && b == 134))
+			x = i;								//x축 위치 보정
+			isLeftRepulsive = true;				//반발력을 어느방향으로 줄 것인가?(오른쪽으로 줄거임)
+			leftRepulsivePower = 0.0f;			//반발력 파워가 항시 존재하면 안되니까 0으로 초기화
+			isRepusiveCheck = true; 			//벽점프를 할 수 있도록 
+			sensorBottom.isJump = false;		//벽에 닿으면 점프를 할 수 있어야 하니까
+			sensorLeft.isTouch = true;			//왼쪽 센서가 충돌이 되고있는지?
+
+			if (!sensorBottom.isTouch && sensorLeft.isTouch && gravity > 0)
 			{
-				gravity = 0.0f;								//모서리 잡으면 중력 0으로~
-				sensorBottom.isJump = false;				//점프를 할 수 있도록 false
-
-				if (KEYMANAGER->isStayKeyDown(VK_DOWN))		//모서리 잡은채로 DOWN키 누르면
-				{
-					y += 10;								//플레이어 떨어질수 있게
-				}
-
-				if (KEYMANAGER->isOnceKeyDown(VK_UP))		//모서리 잡은채로 UP키 누르면 부드럽게 올라가야하는데 실패...ㅜㅜ
-				{
-					y -= 60;
-					x -= 50;
-				}
-				break;
+				playerStateEnum = playerState::LEFTGRAB;
 			}
-		}//완쪽 대각선 픽셀충돌 for문 END
 
-		//오른쪽 대각선 픽셀 충돌(RightDiagonal) - 모서리 잡기위한 부분 //
-		for (int i = sensorRightDiagonal.y - 5; i < sensorRightDiagonal.y + 5; i++)
+			if (gravity > 15.0f)
+			{
+				gravity = 15.0f;
+			}
+			if (!changeForm)
+			{
+				if (KEYMANAGER->isStayKeyDown(VK_LEFT))
+				{
+					gravity = 0.0f;					//벽잡을 하는 중이니 중력을 0
+				}
+			}
+			break;
+		}
+		//노란색과 충돌시 
+		if (r == 255 && g == 255 && b == 0)
 		{
-			COLORREF color = GetPixel(IMAGEMANAGER->findImage(CollisionStage)->getMemDC(), sensorRightDiagonal.x, i);
-			int r = GetRValue(color);
-			int g = GetGValue(color);
-			int b = GetBValue(color);
+			x = i;								//위치 보정
+			break;
+		}
+		//검정색과 충돌시
+		if (r == 0 && g == 0 && b == 0)
+		{
+			x = i;								//위치 보정
+			break;
+		}
+	}
 
-			if ((r == 96 && g == 25 && b == 134))
+	//탑 픽셀 충돌(Top)
+	for (int i = sensorTop.y - 5; i < sensorTop.y + 5; i++)
+	{
+		COLORREF color = GetPixel(IMAGEMANAGER->findImage(CollisionStage)->getMemDC(), sensorTop.x, i);
+		int r = GetRValue(color);
+		int g = GetGValue(color);
+		int b = GetBValue(color);
+
+		//탑 센서 X 픽셀(검정)
+		if (r == 0 && g == 0 && b == 0)
+		{
+			y += 5;								//y축을 이격시켜준다.
+			gravity = 0.0f;						//중력을 0으로 만들어 자연스럽게 떨어지게
+			sensorTop.isTouch = true;			//탑 센서가 충돌 중인지?
+			break;
+		}
+	}
+
+	//오른쪽 대각선 픽셀 충돌(RightTop)
+	for (int i = sensorRightTop.y - 5; i < sensorRightTop.y + 5; i++)
+	{
+		COLORREF color = GetPixel(IMAGEMANAGER->findImage(CollisionStage)->getMemDC(), sensorRightTop.x, i);
+		int r = GetRValue(color);
+		int g = GetGValue(color);
+		int b = GetBValue(color);
+		if (!changeForm)
+		{
+			//오른쪽 대각 센서 X 픽셀(보라)
+			if (r == 96 && g == 25 && b == 134)
 			{
-				gravity = 0.0f;								//모서리 잡으면 중력 0으로~
-				sensorBottom.isJump = false;				//점프를 할 수 있도록 false
+				gravity = 0.0f;								//모서리에 매달리고 있으니 중력 0
+				sensorRightTop.isTouch = true;				//오른쪽 모서리 센서가 충돌중인지?
+				sensorBottom.isJump = false;				//모서리 잡은후 점프 가능하게
 
-				if (KEYMANAGER->isStayKeyDown(VK_DOWN))		//모서리 잡은채로 DOWN키 누르면
+				if (KEYMANAGER->isOnceKeyDown(VK_DOWN))
 				{
-					y += 10;								//플레이어 떨어질수 있게
-
+					y += 20;								//Down버튼 누를시 내려올수 있게
 				}
-				if (KEYMANAGER->isStayKeyDown(VK_UP))		//모서리 잡은채로 UP키 누르면 부드럽게 올라가야하는데 실패...ㅜㅜ
-				{
-					y -= 60;
-					x += 50;
-				}
-				break;
 			}
-		}//오른쪽 대각선 픽셀충돌 for문 END
+		}
+	}
+
+	//왼쪽 대각선 픽셀 충돌(LeftTop)
+	for (int i = sensorLeftTop.y - 5; i < sensorLeftTop.y + 5; i++)
+	{
+		COLORREF color = GetPixel(IMAGEMANAGER->findImage(CollisionStage)->getMemDC(), sensorLeftTop.x, i);
+		int r = GetRValue(color);
+		int g = GetGValue(color);
+		int b = GetBValue(color);
+
+		if (!changeForm)
+		{
+			//왼쪽 대각 센서 X 픽셀(보라)
+			if (r == 96 && g == 25 && b == 134)
+			{
+				gravity = 0.0f;								//모서리에 매달리고 있으니 중력 0
+				sensorLeftTop.isTouch = true;				//왼쪽 모서리 센서가 충돌중인지?
+				sensorBottom.isJump = false;				//모서리 잡은후 점프 가능하게
+
+				if (KEYMANAGER->isOnceKeyDown(VK_DOWN))
+				{
+					y += 20;								//Down버튼 누를시 내려올수 있게
+				}
+			}
+		}
 	}
 }
 
-/*====================================================
-			playerAttack() - 플레이어 공격 -
-======================================================*/
-void PlayerClass::playerAttack()
+/*==============================================================
+			repulsive() - 반발력 -
+================================================================*/
+void PlayerClass::repulsive()
 {
-
-	if (KEYMANAGER->isOnceKeyDown('X'))
+	//반발력 힘(왼쪽)
+	if (leftRepulsivePower > 0)							//왼쪽 반발력 힘이 0 이상이면
 	{
-		isAttack = true;
-		isAttackOrMove = true;
+		leftRepulsivePower -= 0.1f;						//힘을 계속 깎아 준다.
+	}
+	else
+	{
+		leftRepulsivePower = 0.0f;						//반발력 힘이 음수(-)이면 0으로 유지
+	}
+	//반발력 힘(오른쪽)
+	if (rightRepulsivePower > 0)						//오른쪽 반발력 힘이 0 이상이면
+	{
+		rightRepulsivePower -= 0.1f;					//힘을 계속 깎아 준다.
+	}
+	else
+	{
+		rightRepulsivePower = 0.0f;						//반발력 힘이 음수(-)이면 0으로 유지
+	}
+}
 
-		if (isLeft && isAttack)
-		{
-			attackRc = RectMakeCenter(x - 35, y + height / 2, 10, 10);
-		}
-		else if (!isLeft && isAttack)
-		{
-			attackRc = RectMakeCenter(x + 90, y + height / 2, 10, 10);
-		}
+/*==============================================================
+			jellyMove() - 젤리 움직임 -
+================================================================*/
+void PlayerClass::jellyMove()
+{
+	jellyState = changeFormEnum::JELLYIDLE;
+	if (KEYMANAGER->isStayKeyDown(VK_RIGHT))
+	{
+		x += jellySpeed;
+	}
+	if (KEYMANAGER->isStayKeyDown(VK_LEFT))
+	{
+		x -= jellySpeed;
 	}
 
-	if (isLeft && isAttack || !isLeft && isAttack)
+	if (!sensorBottom.isJump)												//바텀의 센서 점프 bool변수가 false면 아래의 기능을 사용 할 수 있다.
 	{
-		playerState = PlayerClass::ATTACK;
+		if (KEYMANAGER->isOnceKeyDown('K'))
+		{
+			y -= 10;														//점프하기 전에 y축을 살짝 이격시킨다.
+			gravity = -6.0f;												//중력을 역전 시켜서 점프
+		}
+		if (KEYMANAGER->isStayKeyDown('K'))
+		{
+			//가변 점프(C키를 꾹 누르고 있으면 가변 점프 파워가 증가를 하게 된다.(최대치 존재))
+			if (addtionalPower <= 1.6f)										//가변점프 파워가 1.6f 이하라면
+			{
+				addtionalPower += 0.2f;										//가변점프 파워 증가
+			}
+			if (addtionalPower <= 1.6f)										//가변점프 파워가 1.6f 이하라면
+			{
+				gravity -= addtionalPower;									//증가한 가변점프 파워를 점프 중력에 추가해 점프를 높게 뛸수 있도록 해준다
+			}
+			//젤리 점프~
+			if (gravity > 0)												//젤리 점프 천천히 떨어지기
+			{
+				gravity -= 0.3f;											//현재 작용되고있는 중력에서 빼준다.
+			}
+		}
+		if (KEYMANAGER->isOnceKeyUp('K'))
+		{
+			sensorBottom.isJump = true;										//이중 점프를 막기위해 bool변수 true
+			addtionalPower = 0.0f;											//가변점프 파워 다시 초기화
+		}
+	}
+	if (!sensorBottom.isTouch)
+	{
+		if (gravity < 0) jellyState = changeFormEnum::JELLYJUMPUP;
+		else jellyState = changeFormEnum::JELLYJUMPDOWN;
 	}
 
+	//플레이어 지속 업데이트
+	playerRc = RectMake(x, y, width, height);
+}
+
+/*==============================================================
+	sensorPixelCollisionCheck() - 센서 충돌 체크 -
+================================================================*/
+void PlayerClass::sensorPixelCollisionCheck()
+{
+	//센서 렌더(픽셀 충돌 중이면 빨간색 | 충돌중이 아니면 하늘색)
+	if (sensorBottom.isTouch)
+	{
+		HBRUSH brush = (HBRUSH)CreateSolidBrush(RGB(255, 0, 0));
+		RECT temp = RelativeCameraRect(sensorBottom.sensorRc);
+		FillRect(getMemDC(), &temp, brush);
+		DeleteObject(brush);
+	}
+	else
+	{
+		HBRUSH brush = (HBRUSH)CreateSolidBrush(RGB(0, 255, 255));
+		RECT temp = RelativeCameraRect(sensorBottom.sensorRc);
+		FillRect(getMemDC(), &temp, brush);
+		DeleteObject(brush);
+	}
+	//
+	if (sensorLeft.isTouch)
+	{
+		HBRUSH brush = (HBRUSH)CreateSolidBrush(RGB(255, 0, 0));
+		RECT temp = RelativeCameraRect(sensorLeft.sensorRc);
+		FillRect(getMemDC(), &temp, brush);
+		DeleteObject(brush);
+	}
+	else
+	{
+		HBRUSH brush = (HBRUSH)CreateSolidBrush(RGB(0, 255, 255));
+		RECT temp = RelativeCameraRect(sensorLeft.sensorRc);
+		FillRect(getMemDC(), &temp, brush);
+		DeleteObject(brush);
+	}
+	//
+	if (sensorRight.isTouch)
+	{
+		HBRUSH brush = (HBRUSH)CreateSolidBrush(RGB(255, 0, 0));
+		RECT temp = RelativeCameraRect(sensorRight.sensorRc);
+		FillRect(getMemDC(), &temp, brush);
+		DeleteObject(brush);
+	}
+	else
+	{
+		HBRUSH brush = (HBRUSH)CreateSolidBrush(RGB(0, 255, 255));
+		RECT temp = RelativeCameraRect(sensorRight.sensorRc);
+		FillRect(getMemDC(), &temp, brush);
+		DeleteObject(brush);
+	}
+	//
+	if (sensorTop.isTouch)
+	{
+		HBRUSH brush = (HBRUSH)CreateSolidBrush(RGB(255, 0, 0));
+		RECT temp = RelativeCameraRect(sensorTop.sensorRc);
+		FillRect(getMemDC(), &temp, brush);
+		DeleteObject(brush);
+	}
+	else
+	{
+		HBRUSH brush = (HBRUSH)CreateSolidBrush(RGB(0, 255, 255));
+		RECT temp = RelativeCameraRect(sensorTop.sensorRc);
+		FillRect(getMemDC(), &temp, brush);
+		DeleteObject(brush);
+	}
+	//
+	if (sensorLeftTop.isTouch)
+	{
+		HBRUSH brush = (HBRUSH)CreateSolidBrush(RGB(255, 0, 0));
+		RECT temp = RelativeCameraRect(sensorLeftTop.sensorRc);
+		FillRect(getMemDC(), &temp, brush);
+		DeleteObject(brush);
+	}
+	else
+	{
+		HBRUSH brush = (HBRUSH)CreateSolidBrush(RGB(0, 255, 255));
+		RECT temp = RelativeCameraRect(sensorLeftTop.sensorRc);
+		FillRect(getMemDC(), &temp, brush);
+		DeleteObject(brush);
+	}
+	//
+	if (sensorRightTop.isTouch)
+	{
+		HBRUSH brush = (HBRUSH)CreateSolidBrush(RGB(255, 0, 0));
+		RECT temp = RelativeCameraRect(sensorRightTop.sensorRc);
+		FillRect(getMemDC(), &temp, brush);
+		DeleteObject(brush);
+	}
+	else
+	{
+		HBRUSH brush = (HBRUSH)CreateSolidBrush(RGB(0, 255, 255));
+		RECT temp = RelativeCameraRect(sensorRightTop.sensorRc);
+		FillRect(getMemDC(), &temp, brush);
+		DeleteObject(brush);
+	}
+	//
 }
 
 /*==============================================================
@@ -610,13 +790,11 @@ playerStateFrameImageRender(float x, float y) - 행동 상태 처리 -
 ================================================================*/
 void PlayerClass::playerStateFrameImageRender(float x, float y)
 {
-	//Enum문을 사용해 플레이어 이미지 상태 변화
-	switch (playerState)
+	if (!changeForm)
 	{
-	case PlayerClass::IDLE:								// 대기
-		if (isLeft)		//왼쪽이면?
+		switch (playerStateEnum)
 		{
-			//대기 모션 이미지 프레임 돌리기
+		case PlayerClass::LEFTIDLE:
 			IMAGEMANAGER->findImage("pipIdle")->setFrameY(0);
 			imgCount++;
 			if (imgCount % 5 == 0)
@@ -628,11 +806,114 @@ void PlayerClass::playerStateFrameImageRender(float x, float y)
 				}
 				IMAGEMANAGER->findImage("pipIdle")->setFrameX(imgIndex);
 			}
-			IMAGEMANAGER->findImage("pipIdle")->frameRender(getMemDC(), x - CAMERA.getCRc().left, y - CAMERA.getCRc().top);
-		}
-		else			//오른쪽이면?
-		{
-			//대기 모션 이미지 프레임 돌리기
+			//IMAGEMANAGER->findImage("pipIdle")->frameRender(getMemDC(), x - CAMERA.getCRc().left, y - CAMERA.getCRc().top);
+			if (suckHan <= 1)
+				suckHan = 1;
+			else
+				suckHan -= 1;
+			IMAGEMANAGER->findImage("pipIdle")->stretchFrameRenderCenterXDownY(getMemDC(), x - CAMERA.getCRc().left, y - CAMERA.getCRc().top, IMAGEMANAGER->findImage("pipIdle")->getFrameX(), IMAGEMANAGER->findImage("pipIdle")->getFrameY(), 1.0f, suckHan);
+			
+			break;
+
+		case PlayerClass::LEFTRUN:
+			IMAGEMANAGER->findImage("pipRun")->setFrameY(1);
+			imgCount++;
+			if (imgCount % 5 == 0)
+			{
+				imgIndex++;
+				if (imgIndex > 11)
+				{
+					imgIndex = 0;
+				}
+				IMAGEMANAGER->findImage("pipRun")->setFrameX(imgIndex);
+			}
+			IMAGEMANAGER->findImage("pipRun")->frameRender(getMemDC(), x - CAMERA.getCRc().left, y - CAMERA.getCRc().top);
+			break;
+
+		case PlayerClass::LEFTATTACK:
+			IMAGEMANAGER->findImage("pipAttackLeft")->setFrameY(0);
+			imgCount++;
+			if (imgCount % 4 == 0)
+			{
+				imgIndex--;
+				if (imgIndex < 0)
+				{
+					imgIndex = 11;
+					isAttack = false;
+				}
+				if (isAttack) IMAGEMANAGER->findImage("pipAttackLeft")->setFrameX(imgIndex);
+			}
+			IMAGEMANAGER->findImage("pipAttackLeft")->frameRender(getMemDC(), (x - 47) - CAMERA.getCRc().left, y - CAMERA.getCRc().top);
+			break;
+
+		case PlayerClass::LEFTJUMPUP:
+			IMAGEMANAGER->findImage("pipJumpUp")->setFrameY(0);
+			imgCount++;
+			if (imgCount % 5 == 0)
+			{
+				imgIndex++;
+				if (imgIndex > 6)
+				{
+					imgIndex = 0;
+				}
+				IMAGEMANAGER->findImage("pipJumpUp")->setFrameX(imgIndex);
+			}
+			IMAGEMANAGER->findImage("pipJumpUp")->frameRender(getMemDC(), x - CAMERA.getCRc().left, y - CAMERA.getCRc().top);
+			break;
+
+		case PlayerClass::LEFTJUMPDOWN:
+			IMAGEMANAGER->findImage("pipJumpDown")->setFrameY(0);
+			imgCount++;
+			if (imgCount % 5 == 0)
+			{
+				imgIndex++;
+				if (imgIndex > 5)
+
+				{
+					imgIndex = 0;
+				}
+				IMAGEMANAGER->findImage("pipJumpDown")->setFrameX(imgIndex);
+			}
+			IMAGEMANAGER->findImage("pipJumpDown")->frameRender(getMemDC(), x - CAMERA.getCRc().left, y - CAMERA.getCRc().top);
+			break;
+
+		case PlayerClass::LEFTGRAB:
+			IMAGEMANAGER->findImage("pipGrabLeft")->render(getMemDC(), x - CAMERA.getCRc().left, y - CAMERA.getCRc().top);
+			break;
+
+		case PlayerClass::LEFTDOWNATTACK:
+			IMAGEMANAGER->findImage("pipDownAttack")->setFrameY(0);
+			imgCount++;
+			if (imgCount % 5 == 0)
+			{
+				imgIndex++;
+				if (imgIndex > 10)
+				{
+					imgIndex = 0;
+					isDownAttack = false;
+				}
+				if (!isDownAttack) IMAGEMANAGER->findImage("pipDownAttack")->setFrameX(imgIndex);
+			}
+			IMAGEMANAGER->findImage("pipDownAttack")->frameRender(getMemDC(), x - CAMERA.getCRc().left, y - CAMERA.getCRc().top);
+			break;
+
+		case PlayerClass::LEFTCHANGEFORM:
+			IMAGEMANAGER->findImage("pipChangeForm")->setFrameY(0);
+			imgCount++;
+			if (imgCount % 5 == 0)
+			{
+				imgIndex++;
+				if (imgIndex > 9)
+				{
+					imgIndex = 0;
+				}
+				IMAGEMANAGER->findImage("pipChangeForm")->setFrameX(imgIndex);
+			}
+			IMAGEMANAGER->findImage("pipChangeForm")->frameRender(getMemDC(), x - CAMERA.getCRc().left, y - CAMERA.getCRc().top);
+			break;
+
+			//오른쪽
+		case PlayerClass::RIGHTIDLE:
 			IMAGEMANAGER->findImage("pipIdle")->setFrameY(1);
 			imgCount++;
 			if (imgCount % 5 == 0)
@@ -645,192 +926,157 @@ void PlayerClass::playerStateFrameImageRender(float x, float y)
 				IMAGEMANAGER->findImage("pipIdle")->setFrameX(imgIndex);
 			}
 			IMAGEMANAGER->findImage("pipIdle")->frameRender(getMemDC(), x - CAMERA.getCRc().left, y - CAMERA.getCRc().top);
-		}
-		break;
+			break;
 
-	case PlayerClass::RUN:								//뛰기
-		if (isLeft)									//만약 플레이어가 점프를 한다면(false라면) 달리는 이미지 출력 못하도록
-		{
-			if (!isJumpCheck && !isAttack)
-			{
-				//왼쪽으로 뛰는 이미지 프레임 돌리기
-				IMAGEMANAGER->findImage("pipRun")->setFrameY(1);
-				imgCount++;															//키를 누르고 있을때 이미지카운트가 증가(++)
-				if (imgCount % 3 == 0)												//이미지 카운트를 5로나눈 나머지가 0이면
-				{
-					imgIndex++;														//이미지 인덱스 증가(++)
-					if (imgIndex > 11)												//이미지 인덱스가 마지막 인덱스 초과될경우
-					{
-						imgIndex = 0;												//이미지 인덱스 0으로 초기화
-					}
-					IMAGEMANAGER->findImage("pipRun")->setFrameX(imgIndex);			//x축 프레임 셋 돌리기~
-				}
-				IMAGEMANAGER->findImage("pipRun")->frameRender(getMemDC(), x - CAMERA.getCRc().left, y - CAMERA.getCRc().top);
-			}//if(!isJumpCheck && !isAttack) END
-		}
-		else
-		{
-			if (!isJumpCheck && !isAttack)
-			{
-				//오른쪽으로 뛰는 이미지 프레임 돌리기
-				IMAGEMANAGER->findImage("pipRun")->setFrameY(0);
-				imgCount++;															//키를 누르고 있을때 이미지카운트가 증가(++)
-				if (imgCount % 3 == 0)												//이미지 카운트를 5로나눈 나머지가 0이면
-				{
-					imgIndex++;														//이미지 인덱스 증가(++)
-					if (imgIndex > 11)												//이미지 인덱스가 마지막 인덱스 초과될경우
-					{
-						imgIndex = 0;												//이미지 인덱스 0으로 초기화
-					}
-					IMAGEMANAGER->findImage("pipRun")->setFrameX(imgIndex);			//x축 프레임 셋 돌리기~
-				}
-				IMAGEMANAGER->findImage("pipRun")->frameRender(getMemDC(), x - CAMERA.getCRc().left, y - CAMERA.getCRc().top);
-			}
-		}
-		break;
-
-	case PlayerClass::ATTACK:							//공격
-		if (isLeft && isAttack)		//왼쪽이면
-		{
-			IMAGEMANAGER->findImage("pipAttackLeft")->setFrameY(0);
+		case PlayerClass::RIGHTRUN:
+			IMAGEMANAGER->findImage("pipRun")->setFrameY(0);
 			imgCount++;
-			if (imgCount % 3 == 0)
+			if (imgCount % 5 == 0)
 			{
 				imgIndex++;
 				if (imgIndex > 11)
 				{
 					imgIndex = 0;
-					if (imgIndex == 0)
-					{
-						isAttack = false;
-						isAttackOrMove = false;
-					}
 				}
+				IMAGEMANAGER->findImage("pipRun")->setFrameX(imgIndex);
 			}
-			IMAGEMANAGER->findImage("pipAttackLeft")->setFrameX(imgIndex);
-			IMAGEMANAGER->findImage("pipAttackLeft")->frameRender(getMemDC(), (x - 47) - CAMERA.getCRc().left, y - CAMERA.getCRc().top);
-		}
-		else if (!isLeft && isAttack)						//오른쪽이면
-		{
+			IMAGEMANAGER->findImage("pipRun")->frameRender(getMemDC(), x - CAMERA.getCRc().left, y - CAMERA.getCRc().top);
+			break;
+
+		case PlayerClass::RIGHTATTACK:
 			IMAGEMANAGER->findImage("pipAttackRight")->setFrameY(0);
 			imgCount++;
 			if (imgCount % 3 == 0)
 			{
+				imgIndex--;
+				if (imgIndex < 0)
+				{
+					imgIndex = 11;
+					isAttack = false;
+				}
+				if (isAttack) IMAGEMANAGER->findImage("pipAttackRight")->setFrameX(imgIndex);
+			}
+			IMAGEMANAGER->findImage("pipAttackRight")->frameRender(getMemDC(), x - CAMERA.getCRc().left, y - CAMERA.getCRc().top);
+			break;
+
+		case PlayerClass::RIGHTJUMPUP:
+			IMAGEMANAGER->findImage("pipJumpUp")->setFrameY(1);
+			imgCount++;
+			if (imgCount % 5 == 0)
+			{
 				imgIndex++;
-				if (imgIndex > 11)
+				if (imgIndex > 6)
 				{
 					imgIndex = 0;
-					if (imgIndex == 0)
-					{
-						isAttack = false;
-						isAttackOrMove = false;
-					}
 				}
+				IMAGEMANAGER->findImage("pipJumpUp")->setFrameX(imgIndex);
 			}
-			IMAGEMANAGER->findImage("pipAttackRight")->setFrameX(imgIndex);
-			IMAGEMANAGER->findImage("pipAttackRight")->frameRender(getMemDC(), x - CAMERA.getCRc().left, y - CAMERA.getCRc().top);
-		}
-		break;
+			IMAGEMANAGER->findImage("pipJumpUp")->frameRender(getMemDC(), x - CAMERA.getCRc().left, y - CAMERA.getCRc().top);
+			break;
 
-	case PlayerClass::JUMP:								//점프
-		if (isLeft)
-		{
-			if (gravity < 0 && isJumpCheck)		//중력이 0미만이면?
+		case PlayerClass::RIGHTJUMPDOWN:
+			IMAGEMANAGER->findImage("pipJumpDown")->setFrameY(1);
+			imgCount++;
+			if (imgCount % 5 == 0)
 			{
-				//왼쪽 방향
-				//점프 뛰는 이미지 프레임
-				IMAGEMANAGER->findImage("pipJumpUp")->setFrameY(0);
-				imgCount++;
-				if (imgCount % 3 == 0)
+				imgIndex++;
+				if (imgIndex > 5)
 				{
-					imgIndex++;
-					if (imgIndex > 6)
-					{
-						imgIndex = 0;
-					}
-					IMAGEMANAGER->findImage("pipJumpUp")->setFrameX(imgIndex);
-				}
-				IMAGEMANAGER->findImage("pipJumpUp")->frameRender(getMemDC(), x - CAMERA.getCRc().left, y - CAMERA.getCRc().top);
-			}
-
-			if (gravity > 0 && isJumpCheck)		//중력이 0 초과면?
-			{
-				//착지하는 이미지 프레임 돌리기
-				IMAGEMANAGER->findImage("pipJumpDown")->setFrameY(0);
-				imgCount++;
-				if (imgCount % 3 == 0)
-				{
-					imgIndex++;
-					if (imgIndex > 5)
-					{
-						imgIndex = 0;
-					}
+					imgIndex = 0;
 				}
 				IMAGEMANAGER->findImage("pipJumpDown")->setFrameX(imgIndex);
-				IMAGEMANAGER->findImage("pipJumpDown")->frameRender(getMemDC(), x - CAMERA.getCRc().left, y - CAMERA.getCRc().top);
 			}
+			IMAGEMANAGER->findImage("pipJumpDown")->frameRender(getMemDC(), x - CAMERA.getCRc().left, y - CAMERA.getCRc().top);
+			break;
 
-		}
-		else
-		{
-			if (gravity < 0 && isJumpCheck)
-			{
-				//오른쪽 방향
-				//점프 뛰는 이미지 프레임
-				IMAGEMANAGER->findImage("pipJumpUp")->setFrameY(1);
-				imgCount++;
-				if (imgCount % 3 == 0)
-				{
-					imgIndex++;
-					if (imgIndex > 6)
-					{
-						imgIndex = 0;
-
-					}
-					IMAGEMANAGER->findImage("pipJumpUp")->setFrameX(imgIndex);
-				}
-
-				IMAGEMANAGER->findImage("pipJumpUp")->frameRender(getMemDC(), x - CAMERA.getCRc().left, y - CAMERA.getCRc().top);
-			}
-			if (gravity > 0 && isJumpCheck)
-			{
-				IMAGEMANAGER->findImage("pipJumpDown")->setFrameY(1);
-				imgCount++;
-				if (imgCount % 3 == 0)
-				{
-					imgIndex++;
-					if (imgIndex > 5)
-					{
-						imgIndex = 0;
-					}
-				}
-				IMAGEMANAGER->findImage("pipJumpDown")->setFrameX(imgIndex);
-				IMAGEMANAGER->findImage("pipJumpDown")->frameRender(getMemDC(), x - CAMERA.getCRc().left, y - CAMERA.getCRc().top);
-			}
-		}
-		//if(isLeft && isJumpCheck) END
-		break;
-
-	case PlayerClass::GRAB:								//벽잡기
-		if (isLeft)
-		{
-			//왼쪽(true)
-			IMAGEMANAGER->findImage("pipGrabLeft")->render(getMemDC(), x - CAMERA.getCRc().left, y - CAMERA.getCRc().top);
-		}
-		else
-		{
-			//오른쪽(false)
+		case PlayerClass::RIGHTGRAB:
 			IMAGEMANAGER->findImage("pipGrabRight")->render(getMemDC(), x - CAMERA.getCRc().left, y - CAMERA.getCRc().top);
+			break;
+
+		case PlayerClass::RIGHTDOWNATTACK:
+			IMAGEMANAGER->findImage("pipDownAttack")->setFrameY(0);
+			imgCount++;
+			if (imgCount % 5 == 0)
+			{
+				imgIndex++;
+				if (imgIndex > 10)
+				{
+					imgIndex = 0;
+				}
+				IMAGEMANAGER->findImage("pipDownAttack")->setFrameX(imgIndex);
+			}
+			IMAGEMANAGER->findImage("pipDownAttack")->frameRender(getMemDC(), x - CAMERA.getCRc().left, y - CAMERA.getCRc().top);
+			break;
+
+		case PlayerClass::RIGHTCHANGEFORM:
+			IMAGEMANAGER->findImage("pipChangeForm")->setFrameY(1);
+			imgCount++;
+			if (imgCount % 5 == 0)
+			{
+				imgIndex--;
+				if (imgIndex < 0)
+				{
+					imgIndex = 9;
+				}
+				IMAGEMANAGER->findImage("pipChangeForm")->setFrameX(imgIndex);
+			}
+			IMAGEMANAGER->findImage("pipChangeForm")->frameRender(getMemDC(), x - CAMERA.getCRc().left, y - CAMERA.getCRc().top);
+			break;
+		default:
+			break;
 		}
-		break;
-
-	case PlayerClass::DOWNATTACK:						//다운공격
-		break;
-
-	default:
-		break;
+	}
+	else
+	{
+		switch (jellyState)
+		{
+		case PlayerClass::JELLYIDLE:
+			IMAGEMANAGER->findImage("jellyStay")->setFrameY(0);
+			imgCount++;
+			if (imgCount % 5 == 0)
+			{
+				imgIndex++;
+				if (imgIndex > 7)
+				{
+					imgIndex = 0;
+				}
+				IMAGEMANAGER->findImage("jellyStay")->setFrameX(imgIndex);
+			}
+			IMAGEMANAGER->findImage("jellyStay")->frameRender(getMemDC(), x - CAMERA.getCRc().left, (y + 30) - CAMERA.getCRc().top);
+			break;
+		case PlayerClass::JELLYJUMPUP:
+			IMAGEMANAGER->findImage("jellyJumpUp")->setFrameY(0);
+			imgCount++;
+			if (imgCount % 5 == 0)
+			{
+				imgIndex++;
+				if (imgIndex > 7)
+				{
+					imgIndex = 0;
+				}
+				IMAGEMANAGER->findImage("jellyJumpUp")->setFrameX(imgIndex);
+			}
+			IMAGEMANAGER->findImage("jellyJumpUp")->frameRender(getMemDC(), x - CAMERA.getCRc().left, (y + 30) - CAMERA.getCRc().top);
+			break;
+		case PlayerClass::JELLYJUMPDOWN:
+			IMAGEMANAGER->findImage("jellyJumpDown")->setFrameY(0);
+			imgCount++;
+			if (imgCount % 5 == 0)
+			{
+				imgIndex++;
+				if (imgIndex > 10)
+				{
+					imgIndex = 0;
+				}
+				IMAGEMANAGER->findImage("jellyJumpDown")->setFrameX(imgIndex);
+			}
+			IMAGEMANAGER->findImage("jellyJumpDown")->frameRender(getMemDC(), x - CAMERA.getCRc().left, (y + 30) - CAMERA.getCRc().top);
+			break;
+		default:
+			break;
+		}
 	}
 
-
+	
 
 }

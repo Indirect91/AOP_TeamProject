@@ -131,12 +131,15 @@ HRESULT treasureBox::init(float _x, float _y, bool _isRight, string _collisionSt
 		jewel.jGravity = 0;
 		jewel.jSpeed = 8;
 		jewel.jewelPrice = 1;
+		jewel.isJewelGet = false;
 
 		jewel.jewelRc = RectMakeCenter(jewel.jewelX, jewel.jewelY, 16, 16);
 
 		jewelV.push_back(jewel);
 	}
 
+	saveJewelRc = RectMakeCenter(1083, 67, 40, 40);
+	jEmpty = { 0 };
 
 	return S_OK;
 }
@@ -188,73 +191,77 @@ void treasureBox::update(void)
 		}
 	}
 
-	//보석 픽셀 충돌
+
 	for (int i = 0; i < jewelV.size(); i++)
 	{
-		//바닥충돌
-		COLORREF colorBottom = GetPixel(IMAGEMANAGER->findImage(collisionStage)->getMemDC(), jewelV[i].jewelX, jewelV[i].jewelRc.bottom);
-		int rBottom = GetRValue(colorBottom);
-		int gBottom = GetGValue(colorBottom);
-		int bBottom = GetBValue(colorBottom);
-
-		if (rBottom == 255 && gBottom == 255 && bBottom == 0)
+		if (jewelV[i].isJewelGet == true)
 		{
-			jewelV[i].jGravity = 0;
-			jewelV[i].jSpeed = 0;
-			jewelV[i].jewelY = jewelV[i].jewelRc.bottom - 8;
-
+			COLLISION.jewelIsBelieveCanFly();
 		}
 
-		//왼쪽 벽 충돌
-		COLORREF colorLeft = GetPixel(IMAGEMANAGER->findImage(collisionStage)->getMemDC(), jewelV[i].jewelRc.left, jewelV[i].jewelY);
-		int rLeft = GetRValue(colorLeft);
-		int gLeft = GetGValue(colorLeft);
-		int bLeft = GetBValue(colorLeft);
-
-		if (rLeft == 0 && gLeft == 255 && bLeft == 0)
+		//보석 픽셀 충돌
+		if (jewelV[i].isJewelGet == false)
 		{
-			jewelV[i].jewelX = jewelV[i].jewelRc.left + 8;
+			//바닥충돌
+			COLORREF colorBottom = GetPixel(IMAGEMANAGER->findImage(collisionStage)->getMemDC(), jewelV[i].jewelX, jewelV[i].jewelRc.bottom);
+			int rBottom = GetRValue(colorBottom);
+			int gBottom = GetGValue(colorBottom);
+			int bBottom = GetBValue(colorBottom);
+
+			if (rBottom == 255 && gBottom == 255 && bBottom == 0)
+			{
+				jewelV[i].jGravity = 0;
+				jewelV[i].jSpeed = 0;
+				jewelV[i].jewelY = jewelV[i].jewelRc.bottom - 8;
+
+			}
+
+			//왼쪽 벽 충돌
+			COLORREF colorLeft = GetPixel(IMAGEMANAGER->findImage(collisionStage)->getMemDC(), jewelV[i].jewelRc.left, jewelV[i].jewelY);
+			int rLeft = GetRValue(colorLeft);
+			int gLeft = GetGValue(colorLeft);
+			int bLeft = GetBValue(colorLeft);
+
+			if (rLeft == 0 && gLeft == 255 && bLeft == 0)
+			{
+				jewelV[i].jewelX = jewelV[i].jewelRc.left + 8;
+			}
+
+			//오른쪽 벽 충돌
+			COLORREF colorRight = GetPixel(IMAGEMANAGER->findImage(collisionStage)->getMemDC(), jewelV[i].jewelRc.right, jewelV[i].jewelY);
+			int rRight = GetRValue(colorLeft);
+			int gRight = GetGValue(colorLeft);
+			int bRight = GetBValue(colorLeft);
+
+			if (rRight == 0 && gRight == 0 && bRight == 255)
+			{
+				jewelV[i].jewelX = jewelV[i].jewelRc.right - 8;
+			}
 		}
-
-		//오른쪽 벽 충돌
-		COLORREF colorRight = GetPixel(IMAGEMANAGER->findImage(collisionStage)->getMemDC(), jewelV[i].jewelRc.right, jewelV[i].jewelY);
-		int rRight = GetRValue(colorLeft);
-		int gRight = GetGValue(colorLeft);
-		int bRight = GetBValue(colorLeft);
-
-		if (rRight == 0 && gRight == 0 && bRight == 255)
-		{
-			jewelV[i].jewelX = jewelV[i].jewelRc.right - 8;
-		}
-
-		jewelV[i].jewelRc = RectMakeCenter(jewelV[i].jewelX, jewelV[i].jewelY, 16, 16);
-
 	}
 
 	//그리기
 	treasureBoxRc = RectMakeCenter(treasureX, treasureY, 60, 44);
+
+	for (int i = 0; i < jewelV.size(); i++)
+	{
+		jewelV[i].jewelRc = RectMakeCenter(jewelV[i].jewelX, jewelV[i].jewelY, 16, 16);
+	}
 }
 //=============렌더=============
 void treasureBox::render(void)
 {
-	//보물상자
+	//확인용 토글키
 	if (KEYMANAGER->isToggleKey('T'))
 	{
-		Rectangle(getMemDC(), treasureBoxRc);
+		Rectangle(getMemDC(), saveJewelRc);
+		Rectangle(getMemDC(), RelativeCameraRect(treasureBoxRc));
 	}
 	treasureBoxImg->frameRender(getMemDC(), treasureBoxRc.left - CAMERA.getCRc().left, treasureBoxRc.top - CAMERA.getCRc().top, frameX, frameY);
 
 	//보석
 	if (isOpen == true)
 	{
-		if (KEYMANAGER->isToggleKey('T'))
-		{
-			for (int i = 0; i < jewelV.size(); i++)
-			{
-				Rectangle(getMemDC(), jewelV[i].jewelRc);
-			}
-		}
-
 		for (int i = 0; i < jewelV.size(); i++)
 		{
 			jewelV[i].jewelImg->frameRender(getMemDC(), jewelV[i].jewelRc.left - CAMERA.getCRc().left, jewelV[i].jewelRc.top - CAMERA.getCRc().top, jewelV[i].jewelType, 0);

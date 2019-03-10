@@ -19,7 +19,6 @@ HRESULT gameNode::init(bool managerInit)
 		SetTimer(_hWnd, 1, 10, NULL);		//타이머 초기화
 		KEYMANAGER->init();					//키매니져 초기화
 		IMAGEMANAGER->init();				//이미지 매니져 초기화
-		TXTDATA->init();					//텍스트데이터 초기화
 		SCENEMANAGER->init();				//씬매니져 초기화
 		srand(GetTickCount());
 	}
@@ -42,9 +41,7 @@ void gameNode::release(void)
 		//이미지매니져 해제
 		IMAGEMANAGER->release();
 		IMAGEMANAGER->releaseSingleton();
-		//텍스트데이터 해제
-		TXTDATA->release();
-		TXTDATA->releaseSingleton();
+
 		//씬매니져 해제
 		SCENEMANAGER->release();
 		SCENEMANAGER->releaseSingleton();
@@ -94,12 +91,6 @@ LRESULT gameNode::MainProc(HWND hWnd, UINT iMessage, WPARAM wParam, LPARAM lPara
 		_ptMouse.y = HIWORD(lParam);
 		break;
 	case WM_KEYDOWN:		
-		switch (wParam)
-		{
-		case VK_ESCAPE:		
-			PostMessage(hWnd, WM_DESTROY, 0, 0);
-			break;
-		}
 		break;
 	case WM_DESTROY:		
 		PostQuitMessage(0);

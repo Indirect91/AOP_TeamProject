@@ -1,8 +1,17 @@
 #pragma once
-class UIClass
+#include "gameNode.h"
+
+class UIClass : public gameNode
 {
+	image* moneyBar;
+
 public:
-	UIClass();
-	~UIClass();
+	HRESULT init();
+	void release();
+	void update();
+	void render();
+
+	UIClass() {}
+	~UIClass() {}
 };
 

@@ -1,12 +1,25 @@
 #include "stdafx.h"
 #include "UIClass.h"
 
+HRESULT UIClass::init()
+{
+	moneyBar = IMAGEMANAGER->findImage("µ· Ç¥½Ã À§Ä¡");
+	moneyBar->setX(1062);
+	moneyBar->setY(48);
 
-UIClass::UIClass()
+	return S_OK;
+}
+
+void UIClass::release()
 {
 }
 
-
-UIClass::~UIClass()
+void UIClass::update()
 {
+	
+}
+
+void UIClass::render()
+{
+	moneyBar->render(getMemDC(), moneyBar->getX(),moneyBar->getY());
 }

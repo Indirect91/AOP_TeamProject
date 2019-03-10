@@ -33,18 +33,18 @@ void BreakTileClass::release(void)
 void BreakTileClass::update(PlayerClass * player)
 {
 
-	for (int i = 0; i < TileList.size(); i++)
-	{
-		RECT temp;
-		if (IntersectRect(&temp, &TileList[i].rc, &player->getRect()))
-		{
-			TileList[i].isTouch = true;
-		}
-		if (TileList[i].isTouch == true)
-		{
-			TileList[i].Count++;
-		}
-	}
+	//for (int i = 0; i < TileList.size(); i++)
+	//{
+	//	RECT temp;
+	//	if (IntersectRect(&temp, &TileList[i].rc, &player->getRect()))
+	//	{
+	//		TileList[i].isTouch = true;
+	//	}
+	//	if (TileList[i].isTouch == true)
+	//	{
+	//		TileList[i].Count++;
+	//	}
+	//}
 
 
 	for (int i = 0; i < TileList.size(); i++)

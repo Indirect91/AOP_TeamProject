@@ -296,3 +296,18 @@ void imageManager::stretchFrameRender(string strKey, HDC hdc, int destX, int des
 	image* img = findImage(strKey);
 	if (img) img->stretchFrameRender(hdc, destX, destY, currentFrameX, currentFrameY, scale);
 }
+
+void imageManager::stretchFrameRenderCenterXUpY(string strKey, HDC hdc, int destX, int destY, int currentFrameX, int currentFrameY, float centerX, float upY)
+{
+	//이미지를 찾아서 그냥 이미지클래스의 함수를 실행시키면 됨
+	image* img = findImage(strKey);
+	if (img) img->stretchFrameRenderCenterXUpY(hdc, destX, destY, currentFrameX, currentFrameY, centerX, upY);
+}
+
+void imageManager::stretchFrameRenderCenterXDownY(string strKey, HDC hdc, int destX, int destY, int currentFrameX, int currentFrameY, float centerX, float downY)
+{
+	//이미지를 찾아서 그냥 이미지클래스의 함수를 실행시키면 됨
+	image* img = findImage(strKey);
+	if (img) img->stretchFrameRenderCenterXDownY(hdc, destX, destY, currentFrameX, currentFrameY, centerX, downY);
+}
+

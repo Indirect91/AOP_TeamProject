@@ -17,10 +17,12 @@ private: //▼ 원래 하던대로 프라이빗에 들어갈 변수들 넣고 진행하면 됩니다
 	class PlayerClass* cPlayerPtr;
 	class FieldManagerClass* cFieldPtr;
 
-	vector <class EnemyManagerClass*>* cEnemyPtrV;
+	class EnemyManagerClass* cEnemyMPtr;
 	vector <class PetsClass*>* cPetsPtrV;
 	vector <class treasureBox*>* cTreasureBoxPtrV;
 	class savePoint* cSavePointPtr;
+
+	//vector <class bullet*>* cEBulletV;
 
 	RECT cEmpty = { 0 };
 
@@ -35,7 +37,7 @@ public: //▼겟터셋터같은 원래 하던대로 여기 퍼블릭에 함수 만들면 됨!
 
 	void setFieldManagerClass(class FieldManagerClass* _cFieldPtrV) { cFieldPtr = _cFieldPtrV; }
 
-	void setEnemyManagerClass(vector<class EnemyManagerClass*>* _cEnemyPtrV) { cEnemyPtrV = _cEnemyPtrV; }
+	void setEnemyManagerClass(class EnemyManagerClass* _cEnemyPtr) { cEnemyMPtr = _cEnemyPtr; }
 
 	void setPetsClass(vector<class PetsClass*>* _cPetsPtrV) { cPetsPtrV = _cPetsPtrV; }
 
@@ -43,10 +45,17 @@ public: //▼겟터셋터같은 원래 하던대로 여기 퍼블릭에 함수 만들면 됨!
 
 	void setSavePoint(class savePoint* _cSavePointPtr) { cSavePointPtr = _cSavePointPtr; }
 
+	//void setCEBullet(vector<class bullet*>* _cEBulletV) { cEBulletV = _cEBulletV; }
+
 	//플레이어가 에너미를 밟음
 	void playerStepEnemy();
 	//플레이어가 에너미랑 부딪힘
 	void playerCrashedEnemy();
+
+	//플레이어가 둥둥이 총알에 맞음
+	void playerCrashedEBullet();
+	//총알이 벽에 맞음
+	void bulletCrashedWall();
 
 	//플레이어가 펫을 발견
 	void playerFindPets();
@@ -54,6 +63,10 @@ public: //▼겟터셋터같은 원래 하던대로 여기 퍼블릭에 함수 만들면 됨!
 	void playerSavePoint();
 	//플레이어가 보물상자를 발견
 	void playerFindTreasureBox();
-
+	//플레이어가 보석을 주움
 	void playerGetJewel();
+	//보석이 날아감
+	void jewelIsBelieveCanFly();
+
+
 };

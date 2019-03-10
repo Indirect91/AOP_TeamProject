@@ -817,3 +817,98 @@ void image::stretchFrameRender(HDC hdc, int destX, int destY, int currentFrameX,
 			_imageInfo->frameHeight, SRCCOPY);
 	}
 }
+
+//넘겨진 비율에 따라 중심점으로부터 길어졌다 짧아졌다 한다. Y는 항시 위에서부터 랜더된다
+void image::stretchFrameRenderCenterXUpY(HDC hdc, int destX, int destY, int currentFrameX, int currentFrameY, float centerX, float upY)
+{
+	//스트레치이미지 처음 사용하냐?
+	//이미지 스케일링을 사용할 수 있도록 초기화 해라
+	if (!_stretchImage) this->initForStretchBlt();
+
+	_stretchImage->width = _imageInfo->width * centerX;
+	_stretchImage->height = _imageInfo->height * upY;
+	_stretchImage->frameWidth = _stretchImage->width / (_imageInfo->maxFrameX + 1);
+	_stretchImage->frameHeight = _stretchImage->height / (_imageInfo->maxFrameY + 1);
+
+	if (_isTrans) //배경색 없앨꺼냐?
+	{
+		//원본이미지를 Scale값 만큼 확대/축소시켜서 그려준다
+		SetStretchBltMode(getMemDC(), COLORONCOLOR);
+		StretchBlt(_stretchImage->hMemDC, 0, 0, _stretchImage->frameWidth, _stretchImage->frameHeight,
+			_imageInfo->hMemDC,
+			currentFrameX * _imageInfo->frameWidth,
+			currentFrameY * _imageInfo->frameHeight,
+			_imageInfo->frameWidth,
+			_imageInfo->frameHeight, SRCCOPY);
+
+		//GdiTransparentBlt : 비트맵의 특정색상을 제외하고 고속복사 해주는 함수
+		GdiTransparentBlt(
+			hdc,							//복사할 장소의 DC
+			destX + (_imageInfo->frameWidth - _stretchImage->frameWidth) / 2,//복사될 좌표 시작점 X
+			destY,							//복사될 좌표 시작점 Y
+			_stretchImage->frameWidth,		//복사될 이미지 가로크기
+			_stretchImage->frameHeight,		//복사될 이미지 세로크기
+			_stretchImage->hMemDC,			//복사될 대상 DC
+			0, 0,							//복사 시작지점
+			_stretchImage->frameWidth,		//복사 영역 가로크기
+			_stretchImage->frameHeight,		//복사 영역 세로크기
+			_transColor);					//복사할때 제외할 색상 (마젠타)
+	}
+	else //원본 이미지 그래도 출력할꺼냐?
+	{
+		//원본이미지를 Scale값 만큼 확대/축소시켜서 그려준다
+		StretchBlt(hdc, destX + (_imageInfo->frameWidth - _stretchImage->frameWidth) / 2, destY, _stretchImage->frameWidth, _stretchImage->frameHeight,
+			_imageInfo->hMemDC,
+			currentFrameX * _imageInfo->frameWidth,
+			currentFrameY * _imageInfo->frameHeight,
+			_imageInfo->frameWidth,
+			_imageInfo->frameHeight, SRCCOPY);
+	}
+}
+
+void image::stretchFrameRenderCenterXDownY(HDC hdc, int destX, int destY, int currentFrameX, int currentFrameY, float centerX, float downY)
+{
+	//스트레치이미지 처음 사용하냐?
+	//이미지 스케일링을 사용할 수 있도록 초기화 해라
+	if (!_stretchImage) this->initForStretchBlt();
+
+	_stretchImage->width = _imageInfo->width * centerX;
+	_stretchImage->height = _imageInfo->height * downY;
+	_stretchImage->frameWidth = _stretchImage->width / (_imageInfo->maxFrameX + 1);
+	_stretchImage->frameHeight = _stretchImage->height / (_imageInfo->maxFrameY + 1);
+
+	if (_isTrans) //배경색 없앨꺼냐?
+	{
+		//원본이미지를 Scale값 만큼 확대/축소시켜서 그려준다
+		SetStretchBltMode(getMemDC(), COLORONCOLOR);
+		StretchBlt(_stretchImage->hMemDC, 0, 0, _stretchImage->frameWidth, _stretchImage->frameHeight,
+			_imageInfo->hMemDC,
+			currentFrameX * _imageInfo->frameWidth,
+			currentFrameY * _imageInfo->frameHeight,
+			_imageInfo->frameWidth,
+			_imageInfo->frameHeight, SRCCOPY);
+
+		//GdiTransparentBlt : 비트맵의 특정색상을 제외하고 고속복사 해주는 함수
+		GdiTransparentBlt(
+			hdc,							//복사할 장소의 DC
+			destX + (_imageInfo->frameWidth - _stretchImage->frameWidth) / 2,//중간지점 보정된 X
+			destY + (_imageInfo->frameHeight - _stretchImage->frameHeight),			//Y 뒤집어짐
+			_stretchImage->frameWidth,		//복사될 이미지 가로크기
+			_stretchImage->frameHeight,		//복사될 이미지 세로크기
+			_stretchImage->hMemDC,			//복사될 대상 DC
+			0, 0,							//복사 시작지점
+			_stretchImage->frameWidth,		//복사 영역 가로크기
+			_stretchImage->frameHeight,		//복사 영역 세로크기
+			_transColor);					//복사할때 제외할 색상 (마젠타)
+	}
+	else //원본 이미지 그래도 출력할꺼냐?
+	{
+		//원본이미지를 Scale값 만큼 확대/축소시켜서 그려준다
+		StretchBlt(hdc, destX + (_imageInfo->frameWidth - _stretchImage->frameWidth) / 2, destY, _stretchImage->frameWidth, _stretchImage->frameHeight,
+			_imageInfo->hMemDC,
+			currentFrameX * _imageInfo->frameWidth,
+			currentFrameY * _imageInfo->frameHeight,
+			_imageInfo->frameWidth,
+			_imageInfo->frameHeight, SRCCOPY);
+	}
+}

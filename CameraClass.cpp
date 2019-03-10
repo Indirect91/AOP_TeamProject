@@ -10,7 +10,6 @@ CameraClass::CameraClass()
 	cY = WINSIZEY / 2;
 	cWidth = WINSIZEX;
 	cHeight = WINSIZEY;
-
 }
 
 //카메라가 따라가는 함수

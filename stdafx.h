@@ -39,7 +39,7 @@ using namespace std;
 
 #define KEYMANAGER keyManager::getSingleton()
 #define IMAGEMANAGER imageManager::getSingleton()
-#define TXTDATA txtData::getSingleton()
+#define TXTDATA txtData::getInstance()
 #define SCENEMANAGER sceneManager::getSingleton()
 #define CAMERA CameraClass::getInstance()
 #define SOUNDMANAGER soundManager::getSingleton()
@@ -47,7 +47,7 @@ using namespace std;
 
 
 //▼윈도우 
-#define WINNAME (LPTSTR)(TEXT(" Adventure of Pip Practice : 2차 묶음 _ 하늘"))
+#define WINNAME (LPTSTR)(TEXT(" Adventure of Pip Practice 3월9일자 종합"))
 #define WINSTARTX	200
 #define WINSTARTY	200
 #define WINSIZEX		1366

@@ -31,72 +31,8 @@ HRESULT Stage1Class::init(void)
 	fieldPtr = new FieldManagerClass;
 	fieldPtr->init("Stage1");
 
-	//에너미 매니저 생성 및 초기화 -> 이 부분에 인자값만 넣어 생성및 초기화 해주면 됨
-#pragma region 에너미
-	//1. 날으는 문어
 	s1EnemyMPtr = new EnemyManagerClass;
-	s1EnemyMPtr->init(EnemyManagerClass::EnemyKind::octopus, 1844, 582, 0, 0);
-	s1EnemyMPtrV.push_back(s1EnemyMPtr);
-
-	s1EnemyMPtr = new EnemyManagerClass;
-	s1EnemyMPtr->init(EnemyManagerClass::EnemyKind::octopus, 1959, 483, 0, 0);
-	s1EnemyMPtrV.push_back(s1EnemyMPtr);
-
-	//2. 기어다니는 애벌레
-	s1EnemyMPtr = new EnemyManagerClass;
-	s1EnemyMPtr->init(EnemyManagerClass::EnemyKind::bug, 946, 630, 794, 1082);
-	s1EnemyMPtrV.push_back(s1EnemyMPtr);
-
-	s1EnemyMPtr = new EnemyManagerClass;
-	s1EnemyMPtr->init(EnemyManagerClass::EnemyKind::bug, 1289, 545, 1158, 1409);
-	s1EnemyMPtrV.push_back(s1EnemyMPtr);
-
-	s1EnemyMPtr = new EnemyManagerClass;
-	s1EnemyMPtr->init(EnemyManagerClass::EnemyKind::bug, 2455, 630, 2000, 2600);
-	s1EnemyMPtrV.push_back(s1EnemyMPtr);
-
-	s1EnemyMPtr = new EnemyManagerClass;
-	s1EnemyMPtr->init(EnemyManagerClass::EnemyKind::bug, 5618, 501, 5538, 5695);
-	s1EnemyMPtrV.push_back(s1EnemyMPtr);
-
-	s1EnemyMPtr = new EnemyManagerClass;
-	s1EnemyMPtr->init(EnemyManagerClass::EnemyKind::bug, 7127, 586, 7029, 7194);
-	s1EnemyMPtrV.push_back(s1EnemyMPtr);
-
-	s1EnemyMPtr = new EnemyManagerClass;
-	s1EnemyMPtr->init(EnemyManagerClass::EnemyKind::bug, 7166, 1570, 7122, 7273);
-	s1EnemyMPtrV.push_back(s1EnemyMPtr);
-
-	s1EnemyMPtr = new EnemyManagerClass;
-	s1EnemyMPtr->init(EnemyManagerClass::EnemyKind::bug, 7500, 1228, 7416, 7607);
-	s1EnemyMPtrV.push_back(s1EnemyMPtr);
-
-	s1EnemyMPtr = new EnemyManagerClass;
-	s1EnemyMPtr->init(EnemyManagerClass::EnemyKind::bug, 13813, 677, 13666, 13898);
-	s1EnemyMPtrV.push_back(s1EnemyMPtr);
-
-	s1EnemyMPtr = new EnemyManagerClass;
-	s1EnemyMPtr->init(EnemyManagerClass::EnemyKind::bug, 14064, 326, 13916, 14150);
-	s1EnemyMPtrV.push_back(s1EnemyMPtr);
-
-	//3.날아다니는 크리스탈
-	s1EnemyMPtr = new EnemyManagerClass;
-	s1EnemyMPtr->init(EnemyManagerClass::EnemyKind::crystal, 7218, 2170, 7156, 7283);
-	s1EnemyMPtrV.push_back(s1EnemyMPtr);
-
-	s1EnemyMPtr = new EnemyManagerClass;
-	s1EnemyMPtr->init(EnemyManagerClass::EnemyKind::crystal, 8934, 640, 8846, 9096);
-	s1EnemyMPtrV.push_back(s1EnemyMPtr);
-
-	s1EnemyMPtr = new EnemyManagerClass;
-	s1EnemyMPtr->init(EnemyManagerClass::EnemyKind::crystal, 10112, 630, 9880, 10320);
-	s1EnemyMPtrV.push_back(s1EnemyMPtr);
-
-	s1EnemyMPtr = new EnemyManagerClass;
-	s1EnemyMPtr->init(EnemyManagerClass::EnemyKind::crystal, WINSIZEX/2, 630, 600, 650);
-	s1EnemyMPtrV.push_back(s1EnemyMPtr);
-
-#pragma endregion 에너미
+	s1EnemyMPtr->init(EnemyManagerClass::tagWhereStage::stage1);
 
 	//펫 생성 및 초기화
 	//박쥐
@@ -136,7 +72,7 @@ HRESULT Stage1Class::init(void)
 	s1TreasurePtrV.push_back(s1TreasurePtr);
 
 	COLLISION.setPlayer(playerPtr);
-	COLLISION.setEnemyManagerClass(&s1EnemyMPtrV);
+	COLLISION.setEnemyManagerClass(s1EnemyMPtr);
 	COLLISION.setPetsClass(&s1PetPtrV);
 	COLLISION.setSavePoint(s1SaveMPtr);
 	COLLISION.setTreasureBox(&s1TreasurePtrV);
@@ -155,11 +91,7 @@ void Stage1Class::release(void)
 	SAFE_DELETE(fieldPtr);
 
 	//에너미 해제
-	for (int i = 0; i < s1EnemyMPtrV.size(); i++)
-	{
-		s1EnemyMPtrV[i]->release();
-		SAFE_DELETE(s1EnemyMPtrV[i]);
-	}
+	s1EnemyMPtr->release();
 
 	//펫 해제
 	for (int i = 0; i < s1PetPtrV.size(); i++)
@@ -172,7 +104,6 @@ void Stage1Class::release(void)
 	s1SaveMPtr->release();
 	SAFE_DELETE(s1SaveMPtr);
 	
-
 	//보물상자
 	for (int i = 0; i < s1TreasurePtrV.size(); i++)
 	{
@@ -188,10 +119,7 @@ void Stage1Class::update(void)
 	playerPtr->update();
 
 	//에너미 업데이트
-	for (int i = 0; i < s1EnemyMPtrV.size(); i++)
-	{
-		s1EnemyMPtrV[i]->update();
-	}
+	s1EnemyMPtr->update(playerPtr->getX(), playerPtr->getY());
 
 	//펫 업데이트
 	for (int i = 0; i < s1PetPtrV.size(); i++)
@@ -263,7 +191,6 @@ void Stage1Class::render(void)
 	if (KEYMANAGER->isToggleKey('W'))
 	{
 		stage1CollisionImg->render(getMemDC(), 0, 0, CAMERA.getCRc().left, CAMERA.getCRc().top, WINSIZEX, WINSIZEY);
-
 	}
 
 	//플레이어 클래스 렌더
@@ -279,10 +206,7 @@ void Stage1Class::render(void)
 	}
 
 	//에너미 렌더
-	for (int i = 0; i < s1EnemyMPtrV.size(); i++)
-	{
-		s1EnemyMPtrV[i]->render();
-	}
+	s1EnemyMPtr->render();
 	//펫 렌더
 	for (int i = 0; i < s1PetPtrV.size(); i++)
 	{
