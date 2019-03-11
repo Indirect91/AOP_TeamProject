@@ -19,6 +19,7 @@ private:
 private:
 	mSceneList _mSceneList;		//°¢°¢ÀÇ ¾À(È­¸é)µéÀ» ´ã¾ÆµÑ ¸Ê
 	gameNode* _currentScene;	//ÇöÀç¾À
+	string _current;
 
 public:
 	HRESULT init(void);
@@ -30,7 +31,7 @@ public:
 	gameNode* addScene(string sceneName, gameNode* scene);
 	//¾Àº¯°æ (ÇØ´ç¾À ·Îµå)
 	HRESULT loadScene(string sceneName);
-
+	string getCurrent() { return _current; }
 	sceneManager() : _currentScene(NULL) {}
 	~sceneManager() {}
 };

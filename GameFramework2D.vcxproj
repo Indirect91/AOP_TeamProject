@@ -149,7 +149,6 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="BossStageClass.h" />
-    <ClInclude Include="BreakTileClass.h" />
     <ClInclude Include="bullet.h" />
     <ClInclude Include="CameraClass.h" />
     <ClInclude Include="CollisionClass.h" />
@@ -159,7 +158,6 @@
     <ClInclude Include="FieldManagerClass.h" />
     <ClInclude Include="FlowerClass.h" />
     <ClInclude Include="gameNode.h" />
-    <ClInclude Include="HideTileClass.h" />
     <ClInclude Include="image.h" />
     <ClInclude Include="imageManager.h" />
     <ClInclude Include="keyManager.h" />
@@ -175,17 +173,16 @@
     <ClInclude Include="soundManager.h" />
     <ClInclude Include="Stage1Class.h" />
     <ClInclude Include="stdafx.h" />
-    <ClInclude Include="ThorntrapClass.h" />
     <ClInclude Include="timeManager.h" />
     <ClInclude Include="TitleClass.h" />
     <ClInclude Include="txtData.h" />
     <ClInclude Include="UIClass.h" />
+    <ClInclude Include="UniClass.h" />
     <ClInclude Include="VillageClass.h" />
     <ClInclude Include="WorldMapScene.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="BossStageClass.cpp" />
-    <ClCompile Include="BreakTileClass.cpp" />
     <ClCompile Include="bullet.cpp" />
     <ClCompile Include="CameraClass.cpp" />
     <ClCompile Include="CollisionClass.cpp" />
@@ -194,7 +191,6 @@
     <ClCompile Include="FieldManagerClass.cpp" />
     <ClCompile Include="FlowerClass.cpp" />
     <ClCompile Include="gameNode.cpp" />
-    <ClCompile Include="HideTileClass.cpp" />
     <ClCompile Include="image.cpp" />
     <ClCompile Include="imageManager.cpp" />
     <ClCompile Include="keyManager.cpp" />
@@ -208,11 +204,11 @@
     <ClCompile Include="sceneManager.cpp" />
     <ClCompile Include="soundManager.cpp" />
     <ClCompile Include="Stage1Class.cpp" />
-    <ClCompile Include="ThorntrapClass.cpp" />
     <ClCompile Include="timeManager.cpp" />
     <ClCompile Include="TitleClass.cpp" />
     <ClCompile Include="txtData.cpp" />
     <ClCompile Include="UIClass.cpp" />
+    <ClCompile Include="UniClass.cpp" />
     <ClCompile Include="VillageClass.cpp" />
     <ClCompile Include="winMain.cpp" />
     <ClCompile Include="stdafx.cpp">

@@ -25,7 +25,7 @@ HRESULT BossStageClass::init(void)
 
 	//보스스테이지 UI이미지 생성
 	bUIPtr = new UIClass;
-	bUIPtr->init();
+	bUIPtr->init("BossStage");
 
 	//보스스테이지 초기화
 	fieldPtr = new FieldManagerClass;
@@ -49,6 +49,10 @@ HRESULT BossStageClass::init(void)
 	bSaveMPtr = new savePoint;
 	bSaveMPtr->init(8530, 1306);
 
+	//클리어 포인트 생성 및 초기화
+	bClearMPtr = new clearPoint;
+	bClearMPtr->init(10436, 2069);
+
 	//보물상자 생성 및 초기화
 	bTreasurePtr = new treasureBox;
 	bTreasurePtr->init(2261, 577, true, "BossStageCollision");
@@ -71,6 +75,9 @@ HRESULT BossStageClass::init(void)
 	COLLISION.setSavePoint(bSaveMPtr);
 	COLLISION.setTreasureBox(&bTreasurePtrV);
 	COLLISION.setEnemyManagerClass(bEnemyMPtr);
+	COLLISION.setClearPoint(bClearMPtr);
+	COLLISION.setUIClass(bUIPtr);
+
 
 	return S_OK;
 }
@@ -102,6 +109,10 @@ void BossStageClass::release(void)
 	//세이브 포인트 클래스 해제
 	bSaveMPtr->release();
 	SAFE_DELETE(bSaveMPtr);
+	//클리어 포인트 클래스 해제
+	bClearMPtr->release();
+	SAFE_DELETE(bClearMPtr);
+
 
 	//보물상자 클래스 해제
 	for (UINT i = 0; i < bTreasurePtrV.size(); i++)
@@ -115,12 +126,14 @@ void BossStageClass::release(void)
 void BossStageClass::update(void)
 {
 	//업데이트 돌리는곳
-	fieldPtr->update();
+	if (playerPtr->getChangeCount() == 0)
+		fieldPtr->update("BossStage");
 	playerPtr->update();
 	bUIPtr->update();
 
 	//적 클래스 업데이트
-	bEnemyMPtr->update(playerPtr->getX(), playerPtr->getY());
+	if (playerPtr->getChangeCount() == 0)
+		bEnemyMPtr->update(playerPtr->getX(), playerPtr->getY());
 
 	//펫 클래스 업데이트
 	for (UINT i = 0; i < bPetPtrV.size(); i++)
@@ -130,6 +143,9 @@ void BossStageClass::update(void)
 
 	//세이브 포인트 업데이트
 	bSaveMPtr->update();
+
+	//클리어 포인트 업데이트
+	bClearMPtr->update();
 
 	//보물상자 클래스 업데이트
 	for (UINT i = 0; i < bTreasurePtrV.size(); i++)
@@ -161,11 +177,12 @@ void BossStageClass::update(void)
 	COLLISION.playerCrashedEnemy();
 	COLLISION.playerStepEnemy();
 	COLLISION.playerCrashedEBullet();
+	COLLISION.playerAttackEnemy();
 	COLLISION.playerFindPets();
 	COLLISION.playerSavePoint();
 	COLLISION.playerFindTreasureBox();
 	COLLISION.playerGetJewel();
-
+	COLLISION.playerClearPoint();
 }
 
 //=============렌더=============
@@ -176,14 +193,11 @@ void BossStageClass::render(void)
 	IMAGEMANAGER->loopRender("나무배경1", getMemDC(), &bgRc, loopX1, loopY1);
 	IMAGEMANAGER->loopRender("나무배경3", getMemDC(), &bgRc, loopX3, loopY3);
 	IMAGEMANAGER->loopRender("나무배경2", getMemDC(), &bgRc, loopX2, loopY2);
-	//if (CAMERA.getCRc().left >= 4070 && CAMERA.getCRc().left < 9538)
-	//{
-	//	IMAGEMANAGER->loopRender("나무배경4", getMemDC(), &bgRc, loopX4, loopY4);
-	//}
+
 
 	BossStageImg->render(getMemDC(), 0, 0, CAMERA.getCRc().left, CAMERA.getCRc().top, WINSIZEX, WINSIZEY);
 	
-	fieldPtr->render();
+	fieldPtr->render("BossStage");
 
 	bUIPtr->render();
 
@@ -195,6 +209,9 @@ void BossStageClass::render(void)
 
 	//세이브 포인트 클래스 렌더
 	bSaveMPtr->render();
+
+	//클리어 포인트 클래스 렌더
+	bClearMPtr->render();
 
 	//적 클래스 렌더
 	bEnemyMPtr->render();
@@ -214,8 +231,9 @@ void BossStageClass::render(void)
 	}
 
 	/*좌표 확인용*/
-	SetBkMode(getMemDC(), TRANSPARENT);
-	TextOutfloat(getMemDC(), 10, 10, "마우스 X", _ptMouse.x + CAMERA.getCRc().left);
-	TextOutfloat(getMemDC(), 10, 30, "마우스 Y", _ptMouse.y + CAMERA.getCRc().top);
-	TextOutfloat(getMemDC(), 10, 50, "카메라 left", CAMERA.getCRc().left);
+	//SetBkMode(getMemDC(), TRANSPARENT);
+	//TextOutfloat(getMemDC(), 10, 10, "마우스 X", _ptMouse.x + CAMERA.getCRc().left);
+	//TextOutfloat(getMemDC(), 10, 30, "마우스 Y", _ptMouse.y + CAMERA.getCRc().top);
+	//TextOutfloat(getMemDC(), 10, 50, "카메라 left", CAMERA.getCRc().left);
+	TIMEMANAGER->render(getMemDC());
 }

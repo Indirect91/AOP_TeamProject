@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "Stage1Class.h"
 #include "PlayerClass.h"
+#include "UIClass.h"
 #include "EnemyManagerClass.h"
 #include "PetsClass.h"
 #include "FieldManagerClass.h"
@@ -23,6 +24,10 @@ HRESULT Stage1Class::init(void)
 	IMAGEMANAGER->findImage("나무배경4");
 	loopX4 = loopY4 = 0;
 
+	//UI 클래스 생성 및 초기화
+	s1UIPtr = new UIClass;
+	s1UIPtr->init("Stage1");
+
 	//플레이어 클래스 생성 및 초기화
 	playerPtr = new PlayerClass;
 	playerPtr->init(100,400,"Stage1Collision");
@@ -31,6 +36,7 @@ HRESULT Stage1Class::init(void)
 	fieldPtr = new FieldManagerClass;
 	fieldPtr->init("Stage1");
 
+	//에너미 매니저 클래스 생성 및 초기화
 	s1EnemyMPtr = new EnemyManagerClass;
 	s1EnemyMPtr->init(EnemyManagerClass::tagWhereStage::stage1);
 
@@ -54,6 +60,10 @@ HRESULT Stage1Class::init(void)
 	s1SaveMPtr = new savePoint;
 	s1SaveMPtr->init(9393, 365);
 
+	//클리어 포인트 클래스 생성 및 초기화
+	s1ClearMPtr = new clearPoint;
+	s1ClearMPtr->init(17150, 362);
+
 	//보물상자 클래스 생성 및 초기화
 	s1TreasurePtr = new treasureBox;
 	s1TreasurePtr->init(2189, 406, true, "Stage1Collision");
@@ -76,6 +86,9 @@ HRESULT Stage1Class::init(void)
 	COLLISION.setPetsClass(&s1PetPtrV);
 	COLLISION.setSavePoint(s1SaveMPtr);
 	COLLISION.setTreasureBox(&s1TreasurePtrV);
+	COLLISION.setClearPoint(s1ClearMPtr);
+	COLLISION.setUIClass(s1UIPtr);
+
 
 	return S_OK;
 }
@@ -93,6 +106,10 @@ void Stage1Class::release(void)
 	//에너미 해제
 	s1EnemyMPtr->release();
 
+	//UI 클래스 해제
+	s1UIPtr->release();
+	SAFE_DELETE(s1UIPtr);
+
 	//펫 해제
 	for (int i = 0; i < s1PetPtrV.size(); i++)
 	{
@@ -104,6 +121,10 @@ void Stage1Class::release(void)
 	s1SaveMPtr->release();
 	SAFE_DELETE(s1SaveMPtr);
 	
+	//클리어 포인트 클래스 해제
+	s1ClearMPtr->release();
+	SAFE_DELETE(s1ClearMPtr);
+
 	//보물상자
 	for (int i = 0; i < s1TreasurePtrV.size(); i++)
 	{
@@ -118,20 +139,25 @@ void Stage1Class::update(void)
 {
 	playerPtr->update();
 
+	//UI 업데이트
+	s1UIPtr->update();
+
 	//에너미 업데이트
-	s1EnemyMPtr->update(playerPtr->getX(), playerPtr->getY());
-
-	//펫 업데이트
-	for (int i = 0; i < s1PetPtrV.size(); i++)
+	if (playerPtr->getChangeCount() == 0)
 	{
-		s1PetPtrV[i]->update();
+		s1EnemyMPtr->update(playerPtr->getX(), playerPtr->getY());
+
+		//펫 업데이트
+		for (int i = 0; i < s1PetPtrV.size(); i++)
+		{
+			s1PetPtrV[i]->update();
+		}
+		fieldPtr->update("Stage1");
 	}
-
-	fieldPtr->update();
-
 	//세이브 포인터 업데이트
 	s1SaveMPtr->update();
-	
+	//클리어 포인터 업데이트
+	s1ClearMPtr->update();
 	
 	//보물상자 업데이트
 	for (int i = 0; i < s1TreasurePtrV.size(); i++)
@@ -164,11 +190,14 @@ void Stage1Class::update(void)
 	loopX4 = CAMERA.getCRc().left / 2;
 	loopY4 = CAMERA.getCRc().top / 2;
 
-	COLLISION.playerStepEnemy();
 	COLLISION.playerCrashedEnemy();
+	COLLISION.playerStepEnemy();
+	COLLISION.playerCrashedEBullet();
 	COLLISION.playerFindPets();
 	COLLISION.playerSavePoint();
 	COLLISION.playerFindTreasureBox();
+	COLLISION.playerGetJewel();
+	COLLISION.playerClearPoint();
 }
 
 //=============렌더=============
@@ -196,8 +225,13 @@ void Stage1Class::render(void)
 	//플레이어 클래스 렌더
 	playerPtr->render();
 
+	//UI 클래스 렌더
+	s1UIPtr->render();
+
 	//세이브 포인트 렌더
 	s1SaveMPtr->render();
+	//클리어 포인트 렌더
+	s1ClearMPtr->render();
 	
 	//보물상자 렌더
 	for (int i = 0; i < s1TreasurePtrV.size(); i++)
@@ -213,7 +247,7 @@ void Stage1Class::render(void)
 		s1PetPtrV[i]->render();
 	}
 
-	fieldPtr->render();
+	fieldPtr->render("Stage1");
 
 	/*좌표 확인용*/
 	SetBkMode(getMemDC(), TRANSPARENT);

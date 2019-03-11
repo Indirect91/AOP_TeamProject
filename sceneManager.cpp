@@ -73,6 +73,13 @@ HRESULT sceneManager::loadScene(string sceneName)
 	if (SUCCEEDED(find->second->init()))
 	{
 		_currentScene = find->second;
+		_current = sceneName;
+
+		if (sceneName == "Title")
+		{
+			TXTDATA.PipLoad("saveSlot1.txt", "saveSlot2.txt", "saveSlot3.txt");
+
+		}
 		return S_OK;
 	}
 

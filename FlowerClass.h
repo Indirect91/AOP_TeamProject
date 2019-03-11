@@ -1,18 +1,47 @@
 #pragma once
 #include "FieldManagerClass.h"
-class FlowerClass :	public FieldManagerClass
+class FlowerClass : public FieldManagerClass
 {
+public:
+	enum class FlowerTile
+	{
+		Stage1 = 0,
+		BossStage
+	};
+private:
+	//²É ·ºÆ®
 	struct Flower
 	{
 		RECT rc;
 	};
+	//º¯¼ö
 	bool isHit;
+	//¹Ù´Ú ²É Ä«¿îÆ®
 	int Count;
+	//¿ÞÂÊ ²É Ä«¿îÆ®
+	int LeftCountone;
+	int LeftCounttwo;
+	int LeftCountthree;
+	int LeftCountfour;
+	//¿À¸¥ÂÊ ²É Ä«¿îÆ®
 	int RightCountone;
 	int RightCounttwo;
 	int RightCountthree;
 	int RightCountfour;
-
+	//¿ÞÂÊ µÎ¹øÂ° ²É Ä«¿îÆ®
+	int LeftTwoCountone;
+	int LeftTwoCounttwo;
+	//¿À¸¥ÂÊ µÎ¹øÂ° ²É Ä«¿îÆ®
+	int RightTwoCountone;
+	int RightTwoCounttwo;
+	//¹Ù´Ú²É 2¹øÂ° Ä«¿îÆ®
+	int DownoneCount;
+	int DowntwoCount;
+	//À§¿¡ ¿Ü°¢ ²É Ä«¿îÆ®
+	int UponeCount;
+	int UptwoCount;
+	//À§¿¡ Áß½É ²É Ä«¿îÆ®
+	int UpthreeCount;
 	//¹Ù´Ú ²É
 	Flower* flowerone;
 	Flower* flowertwo;
@@ -24,26 +53,51 @@ class FlowerClass :	public FieldManagerClass
 	Flower* flowerRightone;
 	Flower* flowerRighttwo;
 
+	//¿ÞÂÊ ²É
+	Flower* flwoerLeftone;
+	Flower* flowerLefttwo;
+	//¹Ù´Ú ²É 2¹ø¤Š
+	Flower* flowerDownone;
+	Flower* flowerDowntwo;
+	//À§¿¡ ¿Ü°¢ ²É
+	Flower* flowerUpone;
+	Flower* flowerUptwo;
+	//À§¿¡ Áß½É ²É
+	Flower* flowerUpthree;
 	//¹éÅÍ
 	vector<Flower*>FlowerList;
+	vector<Flower*>FlowerListLeft;
 	vector<Flower*>FlowerListRight;
-
+	vector<Flower*>FlowerListLefttwo;
+	vector<Flower*>FlowerListRighttwo;
+	vector<Flower*>FlowerListDownoen;
+	vector<Flower*>FlowerListDowntwo;
+	vector<Flower*>FlowerListUpone;
+	vector<Flower*>FlowerListUptwo;
+	vector<Flower*>FlowerListUpthree;
 	//ÃÑ¾Ë
 	class bullet* fireBollPtr;
+	class bullet* fireBollLeftPtr;
 	class bullet* fireBollRightPtr;
+	class bullet* fireBollLefttwoPtr;
+	class bullet* fireBollRighttwoPtr;
+	class bullet* fireBollUpOnePtr;
+	class bullet* fireBollUpTwoPtr;
+	class bullet* fireBollUpthreePtr;
+	class bullet* fireBollDownOnePtr;
+	class bullet* fireBollDownTwoPtr;
+
+
+	FlowerTile StageNumber;
 public:
-	enum class FlowerTile
-	{
-		Stage1 = 0,
-		BossStage
-	};
+
 
 	class PlayerClass* player;
 	void setPlayer(PlayerClass* play) { player = play; }
 
 	HRESULT init(FlowerTile Stage);
 	void release(void);
-	void update(PlayerClass * player);
+	void update(void);
 	void render(void);
 
 	void flowerOne();

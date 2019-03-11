@@ -15,6 +15,8 @@ private:
 	float loopX3, loopY3;		//배경 이미지 3의 루프좌표
 	float loopX4, loopY4;		//배경 이미지 4의 루프좌표
 
+	class UIClass* s1UIPtr;
+
 	class PlayerClass* playerPtr;				//스테이지1에 있는 플레이어 클래스 포인터
 	
 	class EnemyManagerClass* s1EnemyMPtr;		//스테이지1에 있는 적 매니저 클래스 포인터
@@ -25,6 +27,7 @@ private:
 	class FieldManagerClass* fieldPtr;
 
 	class savePoint* s1SaveMPtr;				//스테이지1에 있는 세이브포인터 클래스 포인터
+	class clearPoint* s1ClearMPtr;
 
 	class treasureBox* s1TreasurePtr;			//스테이지1에 있는 보물상자 클래스 포인터
 	vector <treasureBox*> s1TreasurePtrV;		//스테이지1에 있는 보물상자 클래스 포인터를 담는 벡터

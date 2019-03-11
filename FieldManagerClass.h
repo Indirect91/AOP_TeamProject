@@ -9,12 +9,14 @@ public:
 	class ThorntrapClass* thornPtr;
 	class PlayerClass* playerPtr;
 	class FlowerClass* flowerPtr;
+	class UniClass* uniPtr;
 	void setPlayerPtr(class PlayerClass* player) { playerPtr = player; }
+
 
 	HRESULT init(string stage);
 	void release(void);
-	void update(void);
-	void render(void);
+	void update(string stage);
+	void render(string stage);
 
 
 	FieldManagerClass() {}

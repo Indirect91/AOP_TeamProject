@@ -35,6 +35,7 @@ using namespace std;
 #include "CameraClass.h"
 #include "soundManager.h"
 #include "CollisionClass.h"
+#include "timeManager.h"
 
 
 #define KEYMANAGER keyManager::getSingleton()
@@ -44,10 +45,11 @@ using namespace std;
 #define CAMERA CameraClass::getInstance()
 #define SOUNDMANAGER soundManager::getSingleton()
 #define COLLISION CollisionClass::getInstance()
+#define TIMEMANAGER timeManager::getSingleton()
 
 
 //▼윈도우 
-#define WINNAME (LPTSTR)(TEXT(" Adventure of Pip Practice 3월9일자 종합"))
+#define WINNAME (LPTSTR)(TEXT(" Adventure of Pip Practice 3월 11일자 종합"))
 #define WINSTARTX	200
 #define WINSTARTY	200
 #define WINSIZEX		1366

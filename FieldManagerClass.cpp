@@ -1,10 +1,8 @@
 #include "stdafx.h"
 #include "FieldManagerClass.h"
-#include "ThorntrapClass.h"
-#include "BreakTileClass.h"
 #include "PlayerClass.h"
-#include "HideTileClass.h"
 #include "FlowerClass.h"
+#include "UniClass.h"
 HRESULT FieldManagerClass::init(string stage)
 {
 	//가시함정 클래스 할당
@@ -51,6 +49,15 @@ HRESULT FieldManagerClass::init(string stage)
 		flowerPtr->init(FlowerClass::FlowerTile::BossStage);
 	}
 
+	uniPtr = new UniClass;
+	if (stage == "Stage1")
+	{
+		uniPtr->init(UniClass::Jumpstate::Stage1);
+	}
+	else if (stage == "BossStage")
+	{
+		uniPtr->init(UniClass::Jumpstate::BossStage);
+	}
 
 	hideTilePtr->setPlayer(playerPtr);
 	breakTilePtr->setPlayer(playerPtr);
@@ -66,20 +73,24 @@ void FieldManagerClass::release(void)
 	breakTilePtr->release();
 	hideTilePtr->release();
 	flowerPtr->release();
+	uniPtr->release();
 }
 
-void FieldManagerClass::update(void)
+void FieldManagerClass::update(string stage)
 {
 	thornPtr->update();
-	breakTilePtr->update(playerPtr);
-	hideTilePtr->update(playerPtr);
-	flowerPtr->update(playerPtr);
+	hideTilePtr->update();
+	flowerPtr->update();
+	breakTilePtr->update();
+	uniPtr->update();
 }
 
-void FieldManagerClass::render(void)
+void FieldManagerClass::render(string stage)
 {
 	thornPtr->render();
 	breakTilePtr->render();
 	hideTilePtr->render();
 	flowerPtr->render();
+	uniPtr->render();
+
 }

@@ -37,13 +37,19 @@ void CollisionClass::playerStepEnemy()
 		}
 	}
 
-	//크리스탈이랑 충돌
+	//크리스탈이랑 충돌(Bottom 센서랑 충돌)
 	for (int i = 0; i < cEnemyMPtr->getEEnemy3V().size(); i++)
 	{
 		if (IntersectRect(&cEmpty, &cPlayerPtr->getSensorRcBottom(), &cEnemyMPtr->getEEnemy3V()[i]->getEnemyRc()) && cEnemyMPtr->getEEnemy3V()[i]->getIsDie() == false)
 		{
 			//플레이어 조건
-			cPlayerPtr->setGravity(-5);
+
+			cPlayerPtr->setGravity(-8);
+			if (KEYMANAGER->isStayKeyDown('K'))
+			{
+				cPlayerPtr->setGravity(-15);
+			}
+			cPlayerPtr->setChangeForm(false);
 
 			//enemy조건
 			cEnemyMPtr->getEEnemy3V()[i]->setIsDie(true);
@@ -116,6 +122,73 @@ void CollisionClass::playerCrashedEnemy()
 	}
 }
 
+void CollisionClass::playerAttackEnemy()
+{
+	//문어랑 충돌
+	for (int i = 0; i < cEnemyMPtr->getEEnemy1V().size(); i++)
+	{
+		if (IntersectRect(&cEmpty, &cPlayerPtr->getAttackRc(), &cEnemyMPtr->getEEnemy1V()[i]->getEnemyRc()) && cEnemyMPtr->getEEnemy1V()[i]->getIsDie() == false)
+		{
+			//플레이어 조건
+
+			//enemy조건
+			if (cPlayerPtr->getIsAttack() == true)
+			{
+				cEnemyMPtr->getEEnemy1V()[i]->setIsDie(true);
+			}
+			//exit(0);
+		}
+	}
+
+	//벌레랑 충돌
+	for (int i = 0; i < cEnemyMPtr->getEEnemy2V().size(); i++)
+	{
+		if (IntersectRect(&cEmpty, &cPlayerPtr->getAttackRc(), &cEnemyMPtr->getEEnemy2V()[i]->getEnemyRc()) && cEnemyMPtr->getEEnemy2V()[i]->getIsDie() == false)
+		{
+			//플레이어 조건
+
+			//enemy조건
+			if (cPlayerPtr->getIsAttack() == true)
+			{
+				cEnemyMPtr->getEEnemy2V()[i]->setIsDie(true);
+			}
+			//exit(0);
+		}
+	}
+
+	//크리스탈이랑 충돌
+	for (int i = 0; i < cEnemyMPtr->getEEnemy3V().size(); i++)
+	{
+		if (IntersectRect(&cEmpty, &cPlayerPtr->getAttackRc(), &cEnemyMPtr->getEEnemy3V()[i]->getEnemyRc()) && cEnemyMPtr->getEEnemy3V()[i]->getIsDie() == false)
+		{
+			//플레이어 조건
+
+			//enemy조건
+			if (cPlayerPtr->getIsAttack() == true)
+			{
+				cEnemyMPtr->getEEnemy3V()[i]->setIsDie(true);
+			}
+			//exit(0);
+		}
+	}
+
+	//유령이랑 충돌
+	for (int i = 0; i < cEnemyMPtr->getEEnemy4V().size(); i++)
+	{
+		if (IntersectRect(&cEmpty, &cPlayerPtr->getAttackRc(), &cEnemyMPtr->getEEnemy4V()[i]->getEnemyRc()) && cEnemyMPtr->getEEnemy4V()[i]->getIsDie() == false)
+		{
+			//플레이어 조건
+
+			//enemy조건
+			if (cPlayerPtr->getIsAttack() == true)
+			{
+				cEnemyMPtr->getEEnemy4V()[i]->setIsDie(true);
+			}
+			//exit(0);
+		}
+	}
+}
+
 //플레이어가 총알에 맞음
 void CollisionClass::playerCrashedEBullet()
 {
@@ -125,7 +198,7 @@ void CollisionClass::playerCrashedEBullet()
 		{
 			//총알 조건
 			cEnemyMPtr->getEBullet()[i]->getVBullet()[0].fire = false;
-
+			
 			break;
 		}
 	}
@@ -136,15 +209,29 @@ void CollisionClass::bulletCrashedWall()
 
 }
 
-//플레이어가 펫을 발견
+
+//플레이어가 클리어 포인트에 닿음
+void CollisionClass::playerClearPoint()
+{
+	if (IntersectRect(&cEmpty, &cPlayerPtr->getRect(), &cClearPointPtr->getClearPointRc()))
+	{
+		//clearPoint 조건
+		exit(0);
+	}
+}
+
+
 void CollisionClass::playerFindPets()
 {
 	for (int i = 0; i < cPetsPtrV->size(); i++)
 	{
-		if (IntersectRect(&cEmpty, &cPlayerPtr->getRect(), &(*cPetsPtrV)[i]->getPetRc()))
+		if (IntersectRect(&cEmpty, &cPlayerPtr->getRect(), &(*cPetsPtrV)[i]->getPetRc()) && (*cPetsPtrV)[i]->getIsPetFind() == false)
 		{
 			//pets 조건
-			(*cPetsPtrV)[i]->setIsPetCatch(true);
+			//(*cPetsPtrV)[i]->setIsPetFind(true);
+			if ((*cPetsPtrV)[i]->getWhichPet() == PetsClass::PetsTypes::bat && SCENEMANAGER->getCurrent() == "Stage1")
+				TXTDATA.getCurrentPipData()->isFindBatS1 = true;
+
 		}
 	}
 }
@@ -179,39 +266,26 @@ void CollisionClass::playerGetJewel()
 	for (int i = 0; i < cTreasureBoxPtrV->size(); i++) //보물상자
 	{
 		if ((*cTreasureBoxPtrV)[i]->getIsOpen() == false) continue;
-
 		for (int j = 0; j < (*cTreasureBoxPtrV)[i]->getJewels().size(); j++) //보석
 		{
-			if (IntersectRect(&cEmpty, &cPlayerPtr->getRect(), &(*cTreasureBoxPtrV)[i]->getJewels()[j].jewelRc))
+			if ((*cTreasureBoxPtrV)[i]->getJewels()[j].isJewelGet == false && (IntersectRect(&cEmpty, &cPlayerPtr->getRect(), &(*cTreasureBoxPtrV)[i]->getJewels()[j].jewelRc)))
 			{
-				//보물상자 보석 조건
-				//(*cTreasureBoxPtrV)[i]->getJewels().erase((*cTreasureBoxPtrV)[i]->getJewels().begin() + j); -이것은 그냥 지워버리는 것
 				(*cTreasureBoxPtrV)[i]->getJewels()[j].isJewelGet = true;
-
-				break;
 			}
-		}
-	}
-}
 
-//보석이 날아감
-void CollisionClass::jewelIsBelieveCanFly()
-{
-	for (int i = 0; i < cTreasureBoxPtrV->size(); i++) //보물상자
-	{
-		if ((*cTreasureBoxPtrV)[i]->getIsOpen() == false) continue;
-
-		for (int j = 0; j < (*cTreasureBoxPtrV)[i]->getJewels().size(); j++) //보석
-		{
-			int getJangle = GetAngle((*cTreasureBoxPtrV)[i]->getJewels()[j].jewelX, (*cTreasureBoxPtrV)[i]->getJewels()[i].jewelY, 1083, 67); //뒤에 숫자는 임시UI쪽 좌표를 입력한 것임
-			(*cTreasureBoxPtrV)[i]->getJewels()[j].jewelX += cosf(getJangle * PI / 180) * 3.f;
-			(*cTreasureBoxPtrV)[i]->getJewels()[j].jewelY += -sinf(getJangle * PI / 180) * 3.f;
-
-			if ((*cTreasureBoxPtrV)[i]->getJewels()[j].jewelX > 1083 && (*cTreasureBoxPtrV)[i]->getJewels()[j].jewelY < 67)
+			if (((*cTreasureBoxPtrV)[i]->getJewels()[j].jewelX > 900 + CAMERA.getCRc().left && (*cTreasureBoxPtrV)[i]->getJewels()[j].jewelY < 100 + CAMERA.getCRc().top && (*cTreasureBoxPtrV)[i]->getJewels()[j].jewelVisible == true))
 			{
-				(*cTreasureBoxPtrV)[i]->getJewels().erase((*cTreasureBoxPtrV)[i]->getJewels().begin() + j);
+				(*cTreasureBoxPtrV)[i]->getJewels()[j].jewelVisible = false;
 			}
-			
+
+			if ((*cTreasureBoxPtrV)[i]->getJewels()[j].isJewelGet == true && (*cTreasureBoxPtrV)[i]->getJewels()[j].jewelVisible == true)
+			{
+				(*cTreasureBoxPtrV)[i]->getJewels()[j].jGravity = 0;
+				float getJangle = GetAngle((*cTreasureBoxPtrV)[i]->getJewels()[j].jewelX, (*cTreasureBoxPtrV)[i]->getJewels()[i].jewelY, 1083 + CAMERA.getCRc().left, 67 + CAMERA.getCRc().top); //뒤에 숫자는 임시UI쪽 좌표를 입력한 것임
+				(*cTreasureBoxPtrV)[i]->getJewels()[j].jewelX += cosf(getJangle) * (*cTreasureBoxPtrV)[i]->getJewels()[j].jSpeed;
+				(*cTreasureBoxPtrV)[i]->getJewels()[j].jewelY += -sinf(getJangle) * (*cTreasureBoxPtrV)[i]->getJewels()[j].jSpeed;
+				(*cTreasureBoxPtrV)[i]->getJewels()[j].jSpeed += 0.5;
+			}
 		}
 	}
 }

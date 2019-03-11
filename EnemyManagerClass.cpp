@@ -208,6 +208,8 @@ void EnemyManagerClass::update(float _ePlayerX, float _ePlayerY)
 
 		for (UINT i = 0; i < eBulletV.size(); i++)
 		{
+			if (eEnemy4V[i]->getIsDie() == true) continue;
+
 			eAngle = GetAngle(eEnemy4V[i]->getEnemyX(), eEnemy4V[i]->getEnemyY(), _ePlayerX, _ePlayerY);
 			eBulletV[i]->fire(eEnemy4V[i]->getEnemyX(), eEnemy4V[i]->getEnemyY(), eAngle, 3.f);
 		}

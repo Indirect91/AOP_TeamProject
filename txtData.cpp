@@ -1,6 +1,11 @@
 #include "stdafx.h"
 #include "txtData.h"
 
+txtData::txtData()
+{
+	PipLoad("saveSlot1.txt", "saveSlot2.txt", "saveSlot3.txt");
+}
+
 //세이브
 void txtData::txtSave(const char * fileName, vector<string> vStr)
 {
@@ -65,7 +70,7 @@ vector<string> txtData::txtLoad(const char * fileName)
 	ZeroMemory(str, sizeof(str));
 
 	
-	file = CreateFile(fileName, GENERIC_READ, 0, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
+	file = CreateFile(fileName, GENERIC_READ, 0, NULL, OPEN_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
 	//file = CreateFile			write와 중복설명, 이번에도 열어볼 파일 핸들 선언
 	//fileName					write와 중복설명, 인자로 넘겨받은 실제 파일명 save.txt같이
 	//GENERIC_READ				쓰기와 달리 이번엔 읽을것이니 READ를 넣자
@@ -105,4 +110,86 @@ vector<string> txtData::charArraySeparation(char charArray[])
 	}
 
 	return vArray;
+}
+
+
+//▼핍게임 전용 로드
+void txtData::PipLoad(const char * saveSlot1, const char * saveSlot2, const char * saveSlot3)
+{
+	vector<string> pip1V; //데이터 저장할 임시 벡터 선언. 중괄호와 같이 사라짐 어짜피
+	vector<string> pip2V;
+	vector<string> pip3V;
+
+	pip1V = txtLoad(saveSlot1); //선언된 벡터에 세이브 슬롯별로 다음
+	pip2V = txtLoad(saveSlot2);
+	pip3V = txtLoad(saveSlot3);
+
+	saveData1.pipMaxHP = atoi(pip1V[0].c_str()); //담겨진 벡터에 있는 요소 하나씩 꺼내서 여기 변수들에게 줌
+	saveData1.pipRescued = atoi(pip1V[1].c_str());
+	saveData1.pipMoney = atoi(pip1V[2].c_str());
+	saveData1.pipCinematic = atoi(pip1V[3].c_str());
+	saveData1.isFindSealS1 = atoi(pip1V[4].c_str());
+	saveData1.isFindBatS1 = atoi(pip1V[5].c_str());
+	saveData1.isFindSharkS1 = atoi(pip1V[6].c_str());
+	saveData1.isFindSealB = atoi(pip1V[7].c_str());
+	saveData1.isFindBatB = atoi(pip1V[8].c_str());
+	saveData1.isFindSharkB = atoi(pip1V[9].c_str());
+
+	saveData2.pipMaxHP	= atoi(pip2V[0].c_str()); //담겨진 벡터에 있는 요소 하나씩 꺼내서 여기 변수들에게 줌
+	saveData2.pipRescued = atoi(pip2V[1].c_str());
+	saveData2.pipMoney = atoi(pip2V[2].c_str());
+	saveData2.pipCinematic = atoi(pip2V[3].c_str());
+	saveData2.isFindSealS1 = atoi(pip2V[4].c_str());
+	saveData2.isFindBatS1 = atoi(pip2V[5].c_str());
+	saveData2.isFindSharkS1 = atoi(pip2V[6].c_str());
+	saveData2.isFindSealB = atoi(pip2V[7].c_str());
+	saveData2.isFindBatB = atoi(pip2V[8].c_str());
+	saveData2.isFindSharkB = atoi(pip2V[9].c_str());
+
+	saveData3.pipMaxHP = atoi(pip3V[0].c_str()); //담겨진 벡터에 있는 요소 하나씩 꺼내서 여기 변수들에게 줌
+	saveData3.pipRescued = atoi(pip3V[1].c_str());
+	saveData3.pipMoney = atoi(pip3V[2].c_str());
+	saveData3.pipCinematic = atoi(pip3V[3].c_str());
+	saveData3.isFindSealS1 = atoi(pip3V[4].c_str());
+	saveData3.isFindBatS1 = atoi(pip3V[5].c_str());
+	saveData3.isFindSharkS1 = atoi(pip3V[6].c_str());
+	saveData3.isFindSealB = atoi(pip3V[7].c_str());
+	saveData3.isFindBatB = atoi(pip3V[8].c_str());
+	saveData3.isFindSharkB = atoi(pip3V[9].c_str());
+
+
+
+	//▼아래같은 방식으로 한줄로 코딩도 가능하나, 코드는 깔끔해져도 텍스트 로드 함수를 무지 많이 호출한다. 참고로 데이터입출력은 꽤나 무겁다.
+	//pip3MaxHP = atoi(txtLoad(saveSlot3)[0].c_str());
+	//pip3Saved = atoi(txtLoad(saveSlot3)[1].c_str());
+	//pip3Money = atoi(txtLoad(saveSlot3)[2].c_str());
+
+
+	//char temp[128];
+	//vector<string> vStr;
+	//vStr.push_back(itoa(_rocket->getX(), temp, 10));
+	//vStr.push_back(itoa(_rocket->getY(), temp, 10));
+	//vStr.push_back(itoa(_currentHp, temp, 10));
+	
+	//
+	//TXTDATA->txtSave("save.txt", vStr);
+
+}
+
+void txtData::setWhichSavefile(const char * selectedSaveFile)
+{
+	whichFileLoaded = selectedSaveFile;
+	if(whichFileLoaded == "saveSlot1.txt")
+	{
+		CurrentPipData = &saveData1;
+	}
+	else if (whichFileLoaded == "saveSlot2.txt")
+	{ 
+		CurrentPipData = &saveData2;
+	}
+	else if (whichFileLoaded == "saveSlot3.txt")
+	{
+		CurrentPipData = &saveData3;
+	}
+	
 }

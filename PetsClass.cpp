@@ -2,22 +2,22 @@
 #include "PetsClass.h"
 
 //=============초기화=============
-HRESULT PetsClass::init(int _whichPet, float _petX, float _petY)
+HRESULT PetsClass::init(PetsTypes _whichPet, float _petX, float _petY)
 {
 	whichPet = _whichPet;
 
 	switch (whichPet)
 	{
-	case bat:
-		petImage = IMAGEMANAGER->findImage("pets-박쥐");
+	case PetsTypes::seal:
+		petImg = IMAGEMANAGER->findImage("pets-물개");
 		break;
 
-	case seal:
-		petImage = IMAGEMANAGER->findImage("pets-물개");
+	case PetsTypes::bat:
+		petImg = IMAGEMANAGER->findImage("pets-박쥐");
 		break;
 
-	case shark:
-		petImage = IMAGEMANAGER->findImage("pets-상어");
+	case PetsTypes::shark:
+		petImg = IMAGEMANAGER->findImage("pets-상어");
 		break;
 	}
 
@@ -25,12 +25,16 @@ HRESULT PetsClass::init(int _whichPet, float _petX, float _petY)
 	petY = _petY;
 	petSpeed = 0;
 	isPetRight = true;
+	isPetFind = false;
 	isPetCatch = false;
 
 	petImgCount = 0;
 	frameX = 0;
 	frameY = 0;
 
+	petHeartImg = IMAGEMANAGER->findImage("펫 하트");
+	petHImgCount = 0;
+	frameHX = 0;
 
 	return S_OK;
 }
@@ -43,6 +47,7 @@ void PetsClass::release(void)
 //=============업데이트=============
 void PetsClass::update(void)
 {
+
 	if (isPetCatch == false)
 	{
 		//이미지 프레임
@@ -59,28 +64,7 @@ void PetsClass::update(void)
 
 		switch (whichPet)
 		{
-		case bat:
-			if (petImgCount % 5 == 0)
-			{
-				frameX++;
-				if (isPetRight == true)
-				{
-					if (frameX > 9)
-					{
-						frameX = 0;
-					}
-				}
-				else
-				{
-					if (frameX < 0)
-					{
-						frameX = 9;
-					}
-				}
-			}
-			break;
-
-		case seal:
+		case PetsTypes::seal:
 			if (petImgCount % 5 == 0)
 			{
 				frameX++;
@@ -101,7 +85,28 @@ void PetsClass::update(void)
 			}
 			break;
 
-		case shark:
+		case PetsTypes::bat:
+			if (petImgCount % 5 == 0)
+			{
+				frameX++;
+				if (isPetRight == true)
+				{
+					if (frameX > 9)
+					{
+						frameX = 0;
+					}
+				}
+				else
+				{
+					if (frameX < 0)
+					{
+						frameX = 9;
+					}
+				}
+			}
+			break;
+
+		case PetsTypes::shark:
 			if (petImgCount % 10 == 0)
 			{
 				frameX++;
@@ -125,17 +130,37 @@ void PetsClass::update(void)
 
 		switch (whichPet)
 		{
-		case bat:
-			petRc = RectMakeCenter(petX, petY, 84, 48);
-			break;
-
-		case seal:
+		case PetsTypes::seal:
 			petRc = RectMakeCenter(petX, petY, 80, 65);
 			break;
 
-		case shark:
+		case PetsTypes::bat:
+			petRc = RectMakeCenter(petX, petY, 84, 48);
+			break;
+
+		case PetsTypes::shark:
 			petRc = RectMakeCenter(petX, petY, 80, 52);
 			break;
+		}
+	}
+
+	if (isPetFind == true && isPetCatch == false)
+	{
+		//펫 하트 프레임
+		petHImgCount++;
+		if (petHImgCount % 5 == 0)
+		{
+			frameHX++;
+			if (frameHX > 4)
+			{
+				frameHX = 0;
+			}
+		}
+
+		if (petHImgCount % 120 == 0)
+		{
+			isPetCatch = true;
+			isPetFind = false;
 		}
 	}
 
@@ -151,7 +176,12 @@ void PetsClass::render(void)
 
 	if (isPetCatch == false)
 	{
-		petImage->frameRender(getMemDC(), petRc.left - CAMERA.getCRc().left, petRc.top - CAMERA.getCRc().top, frameX, frameY);
+		petImg->frameRender(getMemDC(), petRc.left - CAMERA.getCRc().left, petRc.top - CAMERA.getCRc().top, frameX, frameY);
 	}
-	
+
+	if (isPetFind == true && isPetCatch == false)
+	{
+		petHeartImg->frameRender(getMemDC(), petX - CAMERA.getCRc().left, petY - 80 - CAMERA.getCRc().top, frameHX, 0);
+	}
+
 }

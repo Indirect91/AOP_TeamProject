@@ -22,6 +22,7 @@ class BossStageClass :public gameNode
 	vector <PetsClass*> bPetPtrV;				//보스 스테이지에 있는 펫 클래스 포인터를 담는 벡터
 	
 	class savePoint* bSaveMPtr;					//보스 스테이지에 있는 세이브포인터 클래스 포인터
+	class clearPoint* bClearMPtr;				//보스 스테이지에 있는 클리어포인터 클래스 포인터
 
 	class treasureBox* bTreasurePtr;			//보스 스테이지에 있는 보물상자 클래스 포인터
 	vector <treasureBox*> bTreasurePtrV;		//보스 스테이지에 있는 보물상자 클래스 포인터를 담는 벡터

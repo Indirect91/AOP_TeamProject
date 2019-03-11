@@ -53,7 +53,7 @@ public:
 		float jGravity;				//보석 날아갔다가 떨어트릴 중력
 		float jSpeed;				//보석이 날아갈 속도
 		int jewelPrice;				//보석이 얼마인가?
-
+		bool jewelVisible;			//보석이 보이는가?
 		bool isJewelGet;			//보석을 주웠는가?
 	};
 private:
@@ -83,7 +83,7 @@ public:
 	void release(void);
 	void update(void);
 	void render(void);
-	
+
 	RECT getTreasureBoxRc() { return treasureBoxRc; }
 	vector <tagJewel> &getJewels() { return jewelV; }
 	void setIsOpen(bool _isOpen) { isOpen = _isOpen; }
@@ -91,4 +91,33 @@ public:
 
 	treasureBox() {}
 	~treasureBox() {}
+};
+
+//===================================
+//	## 클리어 포인트 ##
+//===================================
+class clearPoint : public gameNode
+{
+	image* clearPointImg;		//클리어 포인트 이미지
+	RECT clearPointRc;			//클리어 포인트 렉터
+
+	bool isClear;				//클리어 포인트에 닿았는가?
+
+	float clearPX, clearPY;		//지형물 중심좌표
+
+	int imgCount;				//이미지 카운팅 변수
+	int frameX;					//이미지 프레임 변수
+
+public:
+	HRESULT init(float _clearPX, float _clearPY);
+	void release(void);
+	void update(void);
+	void render(void);
+
+	RECT getClearPointRc() { return clearPointRc; }
+
+	void setIsClear(bool _isClear) { isClear = _isClear; }
+
+	clearPoint() {}
+	~clearPoint() {}
 };

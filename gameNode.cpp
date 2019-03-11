@@ -20,6 +20,7 @@ HRESULT gameNode::init(bool managerInit)
 		KEYMANAGER->init();					//키매니져 초기화
 		IMAGEMANAGER->init();				//이미지 매니져 초기화
 		SCENEMANAGER->init();				//씬매니져 초기화
+		TIMEMANAGER->init();				//타임매니져 초기화
 		srand(GetTickCount());
 	}
 
@@ -45,6 +46,9 @@ void gameNode::release(void)
 		//씬매니져 해제
 		SCENEMANAGER->release();
 		SCENEMANAGER->releaseSingleton();
+
+		TIMEMANAGER->release();
+		TIMEMANAGER->releaseSingleton();
 	}
 	
 	//DC 해제
