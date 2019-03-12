@@ -290,6 +290,12 @@ void imageManager::stretchRender(string strKey, HDC hdc, int destX, int destY, f
 	if (img) img->stretchRender(hdc, destX, destY, scale);
 }
 
+void imageManager::stretchRenderCenterXCenterY(string strKey, HDC hdc, int destX, int destY, float scale)
+{
+	image* img = findImage(strKey);
+	if (img) img->stretchRenderCenterXCenterY(hdc, destX, destY, scale);
+}
+
 void imageManager::stretchFrameRender(string strKey, HDC hdc, int destX, int destY, int currentFrameX, int currentFrameY, float scale)
 {
 	//이미지를 찾아서 그냥 이미지클래스의 함수를 실행시키면 됨

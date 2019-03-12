@@ -27,6 +27,8 @@ class BossStageClass :public gameNode
 	class treasureBox* bTreasurePtr;			//보스 스테이지에 있는 보물상자 클래스 포인터
 	vector <treasureBox*> bTreasurePtrV;		//보스 스테이지에 있는 보물상자 클래스 포인터를 담는 벡터
 
+	class BossClass* bBossPtr;					//보스 스테이지에 있는 보스 클래스 포인터
+
 
 public:
 	HRESULT init(void);

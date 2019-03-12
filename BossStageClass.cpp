@@ -6,6 +6,7 @@
 #include "PetsClass.h"
 #include "FieldManagerClass.h"
 #include "LandmarkClass.h"
+#include "BossClass.h"
 
 //=============초기화=============
 HRESULT BossStageClass::init(void)
@@ -39,6 +40,11 @@ HRESULT BossStageClass::init(void)
 	//적 생성 및 초기화
 	bEnemyMPtr = new EnemyManagerClass;
 	bEnemyMPtr->init(EnemyManagerClass::tagWhereStage::bossStage);	
+
+	//보스 생성 및 초기화
+	bBossPtr = new BossClass;
+	bBossPtr->init();
+	bBossPtr->setBPLayerClass(playerPtr);
 
 	//펫 생성 및 초기화
 	bPetPtr = new PetsClass;
@@ -77,7 +83,9 @@ HRESULT BossStageClass::init(void)
 	COLLISION.setEnemyManagerClass(bEnemyMPtr);
 	COLLISION.setClearPoint(bClearMPtr);
 	COLLISION.setUIClass(bUIPtr);
-	SOUNDMANAGER->play("스테이지");
+	COLLISION.setFieldManagerClass(fieldPtr);
+	COLLISION.playerCollisionHideTile();
+	//SOUNDMANAGER->play("스테이지");
 
 	return S_OK;
 }
@@ -98,6 +106,10 @@ void BossStageClass::release(void)
 	//적 클래스 해제
 	bEnemyMPtr->release();
 	SAFE_DELETE(bEnemyMPtr);
+
+	//보스 클래스 해제
+	bBossPtr->release();
+	SAFE_DELETE(bBossPtr);
 	
 	//펫 클래스 해제
 	for (UINT i = 0; i < bPetPtrV.size(); i++)
@@ -141,6 +153,10 @@ void BossStageClass::update(void)
 		bPetPtrV[i]->update();
 	}
 
+	//보스 클래스 업데이트
+	if (playerPtr->getChangeCount() == 0)
+		bBossPtr->update();
+
 	//세이브 포인트 업데이트
 	bSaveMPtr->update();
 
@@ -174,15 +190,18 @@ void BossStageClass::update(void)
 	loopX4 = CAMERA.getCRc().left / 2;
 	loopY4 = CAMERA.getCRc().top / 2;
 	
-	COLLISION.playerCrashedEnemy();
 	COLLISION.playerStepEnemy();
+	COLLISION.playerCrashedEnemy();
 	COLLISION.playerCrashedEBullet();
+	COLLISION.playerChangeEnemyCrash();
 	COLLISION.playerAttackEnemy();
 	COLLISION.playerFindPets(2);
 	COLLISION.playerSavePoint();
 	COLLISION.playerFindTreasureBox();
 	COLLISION.playerGetJewel();
 	COLLISION.playerClearPoint();
+	COLLISION.playerDamegeThorn();
+	COLLISION.playerChangeTile();
 }
 
 //=============렌더=============
@@ -215,6 +234,9 @@ void BossStageClass::render(void)
 
 	//적 클래스 렌더
 	bEnemyMPtr->render();
+
+	//보스 클래스 렌더
+	bBossPtr->render();
 
 	//펫 클래스 렌더
 	for (UINT i = 0; i < bPetPtrV.size(); i++)

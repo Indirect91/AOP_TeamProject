@@ -159,32 +159,39 @@ HRESULT FlowerClass::init(FlowerTile Stage)
 
 void FlowerClass::release(void)
 {
-	//πŸ¥⁄ ≤… «ÿ¡¶
-	fireBollPtr->release();
-	SAFE_DELETE(fireBollPtr);
-	//øﬁ¬  ≤… «ÿ¡¶
-	fireBollLeftPtr->release();
-	SAFE_DELETE(fireBollLeftPtr);
-	//ø¿∏•¬  ≤… «ÿ¡¶
-	fireBollRightPtr->release();
-	SAFE_DELETE(fireBollRightPtr);
-	//øﬁ¬  µŒπ¯¬∞ ≤… «ÿ¡¶
-	fireBollLefttwoPtr->release();
-	SAFE_DELETE(fireBollLefttwoPtr);
-	//ø¿∏•¬  µŒπ¯¬∞ ≤… «ÿ¡¶
-	fireBollRighttwoPtr->release();
-	SAFE_DELETE(fireBollRighttwoPtr);
-	//πŸ¥⁄ ≤… 2π¯¬∞ «ÿ¡¶
-	fireBollDownOnePtr->release();
-	SAFE_DELETE(fireBollDownOnePtr);
-	fireBollDownTwoPtr->release();
-	SAFE_DELETE(fireBollDownTwoPtr);
-	//¿ßø°≤… ø‹∞¢ «ÿ¡¶
-	fireBollUpOnePtr->release();
-	SAFE_DELETE(fireBollUpOnePtr);
-	fireBollUpTwoPtr->release();
-	SAFE_DELETE(fireBollUpTwoPtr);
-	//¿ßø°≤… ¡ﬂΩ… «ÿ¡¶
+	switch (StageNumber)
+	{
+	case FlowerClass::FlowerTile::Stage1:
+		break;
+	case FlowerClass::FlowerTile::BossStage:
+		//πŸ¥⁄ ≤… «ÿ¡¶
+		fireBollPtr->release();
+		SAFE_DELETE(fireBollPtr);
+		//øﬁ¬  ≤… «ÿ¡¶
+		fireBollLeftPtr->release();
+		SAFE_DELETE(fireBollLeftPtr);
+		//ø¿∏•¬  ≤… «ÿ¡¶
+		fireBollRightPtr->release();
+		SAFE_DELETE(fireBollRightPtr);
+		//øﬁ¬  µŒπ¯¬∞ ≤… «ÿ¡¶
+		fireBollLefttwoPtr->release();
+		SAFE_DELETE(fireBollLefttwoPtr);
+		//ø¿∏•¬  µŒπ¯¬∞ ≤… «ÿ¡¶
+		fireBollRighttwoPtr->release();
+		SAFE_DELETE(fireBollRighttwoPtr);
+		//πŸ¥⁄ ≤… 2π¯¬∞ «ÿ¡¶
+		fireBollDownOnePtr->release();
+		SAFE_DELETE(fireBollDownOnePtr);
+		fireBollDownTwoPtr->release();
+		SAFE_DELETE(fireBollDownTwoPtr);
+		//¿ßø°≤… ø‹∞¢ «ÿ¡¶
+		fireBollUpOnePtr->release();
+		SAFE_DELETE(fireBollUpOnePtr);
+		fireBollUpTwoPtr->release();
+		SAFE_DELETE(fireBollUpTwoPtr);
+		//¿ßø°≤… ¡ﬂΩ… «ÿ¡¶
+		break;
+	}
 }
 
 void FlowerClass::update()

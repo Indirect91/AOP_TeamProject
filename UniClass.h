@@ -123,8 +123,11 @@ private:
 	{
 		RECT rc;
 		bool isTouch;
+
 	};
 	//알파값타일 렉트
+	int imageCount;
+
 	bool ishide;
 	RECT HideRc;
 	RECT HideRcTwo;
@@ -139,7 +142,6 @@ private:
 	image* Grass;
 	image* BossTile1;
 	image* BossTile2;
-
 	//폭탄터지는 이미지 프레임
 	bool isBoom;
 	int BoomFrameX;
@@ -148,6 +150,7 @@ private:
 	int Count;
 	int frameImgX;
 	int frameImgY;
+
 	vector<Hide>HideList;
 	Hide hide;
 	HideTile StageNumber;
@@ -156,6 +159,26 @@ public:
 
 	class PlayerClass* player;
 	void setPlayer(PlayerClass* play) { player = play; }
+
+	vector<Hide> &getHideTile() { return HideList; }
+	void setHideTile(vector<Hide> _HideList) { HideList = _HideList; }
+
+	int getCount() { return Count; }
+	int getBoomFrameX() { return BoomFrameX; }
+	bool getBoom() { return isBoom; }
+
+	RECT getHideBlockTwo() { return HideRcTwo; }
+	RECT getHideBlock() { return HideRc; }
+	RECT getGrass() { return GrassRC; }
+	RECT getBossTile1() { return BossTileRCone; }
+	RECT getBossTile2() { return BossTileRCtwo; }
+
+	void setImageCount(int imagecount) { imageCount = imagecount; }
+
+
+	void setBoom(bool boom) { isBoom = boom; }
+	void setBoomFrameX(int frameX) { BoomFrameX = frameX; }
+	void setCount(int count) { Count = count; }
 
 	HRESULT init(HideTile Stage);
 	void release(void);
@@ -201,6 +224,9 @@ private:
 	//이넘클래스 생성자
 	stageNumber StageNumber;
 public:
+
+	class PlayerClass* player;
+	void setPlayer(PlayerClass* play) { player = play; }
 
 	vector<RECT> getThornStage1() { return ThornList; }
 	vector<RECT> getThornBossStage() { return ThornBossList; }

@@ -487,7 +487,37 @@ void image::alphaRender(HDC hdc, int destX, int destY, BYTE alpha)
 
 void image::alphaRender(HDC hdc, int destX, int destY, int sourX, int sourY, int sourWidth, int sourHeight, BYTE alpha)
 {
+	// 알파블렌딩 초기화
+	if (!_blendImage) this->initForAlphaBlend();
+
+	//만약 렌더링 영역이 화면 밖이라면 그리지 않는다.
+	RECT renderRC = RectMake(destX, destY, sourWidth, sourHeight);
+	if (renderRC.right < 0 || renderRC.left > WINSIZEX || renderRC.top > WINSIZEY || renderRC.bottom < 0)
+		return;
+
+
+	//알파값 ( 0 - 255 ) 수가 클수록 선명하다.
+	_blendFunc.SourceConstantAlpha = alpha;
+
+	if (_isTrans)
+	{
+		BitBlt(_blendImage->hMemDC, 0, 0, _imageInfo->width, _imageInfo->height,
+			hdc, destX, destY, SRCCOPY);
+
+		GdiTransparentBlt(_blendImage->hMemDC, 0, 0, sourWidth, sourHeight,
+			_imageInfo->hMemDC, sourX, sourY, sourWidth, sourHeight, _transColor);
+
+		AlphaBlend(hdc, destX, destY, sourWidth, sourHeight,
+			_blendImage->hMemDC, 0, 0, sourWidth, sourHeight, _blendFunc);
+	}
+	else
+	{
+		AlphaBlend(hdc, destX, destY, sourWidth, sourHeight,
+			_imageInfo->hMemDC, sourX, sourY, sourWidth, sourHeight, _blendFunc);
+	}
 }
+
+
 
 void image::frameRender(HDC hdc, int destX, int destY)
 {
@@ -767,6 +797,47 @@ void image::stretchRender(HDC hdc, int destX, int destY, float scale)
 	{
 		//원본 이미지의 크기를 확대/축소 해서 렌더 시킨다
 		StretchBlt(hdc, destX, destY, _stretchImage->width, _stretchImage->height,
+			_imageInfo->hMemDC, 0, 0, _imageInfo->width, _imageInfo->height, SRCCOPY);
+	}
+}
+
+void image::stretchRenderCenterXCenterY(HDC hdc, int destX, int destY, float scale)
+{
+	//스트레치이미지 처음 사용하냐?
+	//이미지 스케일링을 사용할 수 있도록 초기화 해라
+	if (!_stretchImage) this->initForStretchBlt();
+
+	_stretchImage->width = _imageInfo->width * scale;
+	_stretchImage->height = _imageInfo->height * scale;
+
+	if (_isTrans) //배경색 없앨꺼냐?
+	{
+		//원본이미지를 Scale값 만큼 확대/축소시켜서 그려준다
+		SetStretchBltMode(getMemDC(), COLORONCOLOR);
+		StretchBlt(_stretchImage->hMemDC, 0, 0, _stretchImage->width, _stretchImage->height,
+			_imageInfo->hMemDC, 0, 0, _imageInfo->width, _imageInfo->height, SRCCOPY);
+
+		//GdiTransparentBlt : 비트맵의 특정색상을 제외하고 고속복사 해주는 함수
+		GdiTransparentBlt(
+			hdc,					//복사할 장소의 DC
+			destX + (_imageInfo->width - _stretchImage->width) / 2, //복사될 좌표 시작점 X
+			destY,					//복사될 좌표 시작점 Y
+			_stretchImage->width,	//복사될 이미지 가로크기
+			_stretchImage->height,	//복사될 이미지 세로크기
+			_stretchImage->hMemDC,	//복사될 대상 DC
+			0, 0,					//복사 시작지점
+			_stretchImage->width,	//복사 영역 가로크기
+			_stretchImage->height,	//복사 영역 세로크기
+			_transColor);			//복사할때 제외할 색상 (마젠타)
+
+	}
+	else //원본 이미지 그래도 출력할꺼냐?
+	{
+		//원본 이미지의 크기를 확대/축소 해서 렌더 시킨다
+		StretchBlt(hdc, 
+			destX + (_imageInfo->width - _stretchImage->width) / 2,
+			destY + (_imageInfo->height - _stretchImage->height) / 2, 
+			_stretchImage->width, _stretchImage->height,
 			_imageInfo->hMemDC, 0, 0, _imageInfo->width, _imageInfo->height, SRCCOPY);
 	}
 }

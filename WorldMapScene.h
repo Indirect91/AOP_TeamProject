@@ -5,6 +5,18 @@ class WorldMapScene :	public gameNode
 	image* StageBar;
 	image* MenuBar;
 	image* WorldMap;
+	
+	bool zooming;
+	bool zoomToggle;
+	float worldMapZoom;
+	UINT totalAlpha;
+	UINT counter;
+
+	
+	bool firstPhase;
+	bool SecondPhase;
+	bool FinalPhase;
+
 public:
 
 

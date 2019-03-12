@@ -102,6 +102,7 @@ public:
 	RECT getSensorRcLeft() { return sensorLeft.sensorRc; }
 	RECT getAttackRc() { return attackRc; }
 	RECT getTileDestoryRc() { return tileDestory; }
+	RECT getEnemyCrashRc() { return fireWall; }
 	int getBombCount() { return BombCount; }
 	int getInvincibleCount() { return invincibleCount; }
 	int getPipHp() { return pipHp; }

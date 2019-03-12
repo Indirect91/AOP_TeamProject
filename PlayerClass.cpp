@@ -129,12 +129,8 @@ void PlayerClass::update(void)
 	if (BombCount <= 0)
 	{
 		BombCount = 0;
-	}
-	if (BombCount <= 0)
-	{
 		isBombCount = false;
 	}
-
 	//중력을 제일 마지막에 더해줘야한다.
 	y += gravity;
 
@@ -832,8 +828,10 @@ void PlayerClass::transForm()
 		changeForm = false;
 	}
 
-	if (changeForm) fireWall = RectMakeCenter((x + 20), y, 200, 200);
-	if (changeForm) tileDestory = RectMake((x - 80), y, 200, 200);
+
+	if (BombCount > 0) fireWall = RectMakeCenter((x + 20), y, 200, 200);
+	if (BombCount > 0) tileDestory = RectMake((x - 80), y, 500, 500);
+
 
 }
 
@@ -876,7 +874,7 @@ void PlayerClass::jellyMove()
 			//젤리 점프~
 			if (gravity > 0)												//젤리 점프 천천히 떨어지기
 			{
-				gravity -= 0.3f;											//현재 작용되고있는 중력에서 빼준다.
+				gravity = 2.5f;											//현재 작용되고있는 중력에서 빼준다.
 			}
 		}
 		if (KEYMANAGER->isOnceKeyUp('K'))

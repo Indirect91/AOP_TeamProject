@@ -110,6 +110,7 @@ public:
 //=============================================================
 	void alphaFrameRender(HDC hdc, int destX, int destY, int currentframeX, int currentframeY, int alpha);
 
+
 //=============================================================
 //	## 루프렌더 ##
 //=============================================================
@@ -120,6 +121,7 @@ public:
 //	## 스트레치렌더 ## (이미지 스케일링)
 //=============================================================
 	void stretchRender(HDC hdc, int destX, int destY, float scale = 1.0f);
+	void stretchRenderCenterXCenterY(HDC hdc, int destX, int destY, float scale = 1.0f);
 	void stretchFrameRender(HDC hdc, int destX, int destY, int currentFrameX, int currentFrameY, float scale = 1.0f);
 	void stretchFrameRenderCenterXUpY(HDC hdc, int destX, int destY, int currentFrameX, int currentFrameY, float centerX = 1.f, float upY = 1.f);
 	void stretchFrameRenderCenterXDownY(HDC hdc, int destX, int destY, int currentFrameX, int currentFrameY, float centerX = 1.f, float downY = 1.f);

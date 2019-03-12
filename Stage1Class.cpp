@@ -88,7 +88,7 @@ HRESULT Stage1Class::init(void)
 	COLLISION.setTreasureBox(&s1TreasurePtrV);
 	COLLISION.setClearPoint(s1ClearMPtr);
 	COLLISION.setUIClass(s1UIPtr);
-
+	COLLISION.setFieldManagerClass(fieldPtr);
 
 	return S_OK;
 }
@@ -190,14 +190,19 @@ void Stage1Class::update(void)
 	loopX4 = CAMERA.getCRc().left / 2;
 	loopY4 = CAMERA.getCRc().top / 2;
 
-	COLLISION.playerCrashedEnemy();
 	COLLISION.playerStepEnemy();
+	COLLISION.playerCrashedEnemy();
 	COLLISION.playerCrashedEBullet();
+	COLLISION.playerChangeEnemyCrash();
+	COLLISION.playerAttackEnemy();
 	COLLISION.playerFindPets(1);
 	COLLISION.playerSavePoint();
 	COLLISION.playerFindTreasureBox();
 	COLLISION.playerGetJewel();
 	COLLISION.playerClearPoint();
+	COLLISION.playerDamegeThorn();
+	COLLISION.playerChangeTile();
+	COLLISION.playerCollisionHideTile();
 }
 
 //=============·»´õ=============

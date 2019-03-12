@@ -62,7 +62,7 @@ HRESULT FieldManagerClass::init(string stage)
 	hideTilePtr->setPlayer(playerPtr);
 	breakTilePtr->setPlayer(playerPtr);
 	flowerPtr->setPlayer(playerPtr);
-
+	thornPtr->setPlayer(playerPtr);
 
 	return S_OK;
 }

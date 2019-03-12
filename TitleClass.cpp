@@ -194,7 +194,7 @@ void TitleClass::update(void)
 			else if (selection->getX() < fileSelect->getX() + 355+343)
 			{
 				TXTDATA.setWhichSavefile("saveSlot3.txt");
-				SCENEMANAGER->loadScene("Stage1");
+				SCENEMANAGER->loadScene("WorldMap");
 			}
 		}
 	}

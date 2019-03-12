@@ -381,7 +381,7 @@ HRESULT HideTileClass::init(HideTile Stage)
 		HideBlock = IMAGEMANAGER->addImage("투명벽", "숨은 벽.bmp", 189, 350, true, RGB(255, 0, 255));
 		HideBlockTwo = IMAGEMANAGER->addImage("위쪽투명벽", "스테이지 1번 위쪽 숨은벽.bmp", 776, 635, true, RGB(255, 0, 255));
 		HideRc = RectMake(6833, 1072, 127, 209);
-		HideRcTwo = RectMake(6933, 248, 770, 630);
+		HideRcTwo = RectMake(6933, 248, 770, 430);
 		GrassRC = RectMake(13640, 183, 178, 116);
 		break;
 	case HideTileClass::HideTile::BossStage:
@@ -398,15 +398,16 @@ HRESULT HideTileClass::init(HideTile Stage)
 				HideList.push_back(hide);
 			}
 		}
-		frameImgX = 0;
-		frameImgY = 0;
-		Count = 0;
-		BoomFrameX = 0;
-		BoomFrameY = 0;
-		isBoom = true;
 		break;
 	}
 	ishide = false;
+	frameImgX = 0;
+	frameImgY = 0;
+	Count = 0;
+	BoomFrameX = 0;
+	BoomFrameY = 0;
+	imageCount = 255;
+	isBoom = true;
 	return S_OK;
 }
 
@@ -416,60 +417,25 @@ void HideTileClass::release(void)
 
 void HideTileClass::update(void)
 {
-	//콜리젼으로 이동시켜야 하는 코드
 
-	//switch (Stage)
-	//{
-	//case HideTileClass::HideTile::Stage1:
-	//	break;
-	//case HideTileClass::HideTile::BossStage:
-	//	Count++;
-	//	if (Count % 5 == 0)
-	//	{
-	//		frameImgX++;
-	//		if (frameImgX > 27)
-	//		{
-	//			frameImgX = 0;
-	//		}
-	//		Count = 0;
-	//	}
-	//
-	//
-	//	if (Count % 5 == 0)
-	//	{
-	//		BoomFrameX++;
-	//		if (BoomFrameX > 12)
-	//		{
-	//			BoomFrameX = 0;
-	//			isBoom = true;
-	//		}
-	//		Count = 0;
-	//	}
-	//
-	//
-	//
-	//	for (int i = 0; i < HideList.size(); i++)
-	//	{
-	//		if (player->getX() < 8171)
-	//		{
-	//			HideList[i].isTouch = true;
-	//			isBoom = true;
-	//			frameImgX = 0;
-	//			BoomFrameX = 0;
-	//		}
-	//	}
-	//	if (KEYMANAGER->isOnceKeyDown('Y'))
-	//	{
-	//		for (int i = 0; i < HideList.size(); i++)
-	//		{
-	//			HideList[i].isTouch = false;
-	//			isBoom = false;
-	//		}
-	//	}
-	//
-	//	break;
-	//
-	//}
+	switch (StageNumber)
+	{
+	case HideTileClass::HideTile::Stage1:
+		break;
+	case HideTileClass::HideTile::BossStage:
+		Count++;
+
+		if (Count % 5 == 0)
+		{
+			frameImgX++;
+		}
+		if (frameImgX > 27)
+		{
+			frameImgX = 0;
+		}
+		break;
+
+	}
 
 }
 
@@ -479,15 +445,14 @@ void HideTileClass::render(void)
 	{
 	case HideTileClass::HideTile::Stage1:
 
-		HideBlock->alphaRender(getMemDC(), HideRc.left - (58) - CAMERA.getCRc().left, HideRc.top - (50) - CAMERA.getCRc().top, 255);
-		Grass->alphaRender(getMemDC(), GrassRC.left - CAMERA.getCRc().left, GrassRC.top - CAMERA.getCRc().top, 255);
-		HideBlockTwo->alphaRender(getMemDC(), HideRcTwo.left - CAMERA.getCRc().left, HideRcTwo.top - CAMERA.getCRc().top, 255);
-
+		HideBlock->alphaRender(getMemDC(), HideRc.left - (58) - CAMERA.getCRc().left, HideRc.top - (50) - CAMERA.getCRc().top, imageCount);
+		Grass->alphaRender(getMemDC(), GrassRC.left - CAMERA.getCRc().left, GrassRC.top - CAMERA.getCRc().top, imageCount);
+		HideBlockTwo->alphaRender(getMemDC(), HideRcTwo.left - CAMERA.getCRc().left, HideRcTwo.top - CAMERA.getCRc().top, imageCount);
 		break;
 	case HideTileClass::HideTile::BossStage:
 		for (int i = 0; i < HideList.size(); i++)
 		{
-			//Rectangle(getMemDC(), RelativeCameraRect(BossTileRCone));
+			Rectangle(getMemDC(), RelativeCameraRect(BossTileRCone));
 			BossTile1->alphaRender(getMemDC(), BossTileRCone.left - CAMERA.getCRc().left, BossTileRCone.top - CAMERA.getCRc().top, 255);
 			BossTile2->alphaRender(getMemDC(), BossTileRCtwo.left - CAMERA.getCRc().left, BossTileRCtwo.top - CAMERA.getCRc().top, 255);
 			//Rectangle(getMemDC(), RelativeCameraRect(HideList[i].rc));
@@ -499,7 +464,10 @@ void HideTileClass::render(void)
 			{
 				Boom->frameRender(getMemDC(), HideList[i].rc.left - CAMERA.getCRc().left, HideList[i].rc.top - CAMERA.getCRc().top, BoomFrameX, BoomFrameY);
 			}
+			//Rectangle(getMemDC(), RelativeCameraRect(HideList[i].rc));
+
 		}
+
 		break;
 	}
 

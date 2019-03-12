@@ -63,6 +63,7 @@ public:
 //	## 스트레치렌더 ## (이미지 스케일링)
 //=============================================================
 	void stretchRender(string strKey, HDC hdc, int destX, int destY, float scale = 1.0f);
+	void stretchRenderCenterXCenterY(string strkry, HDC hdc, int destX, int destY, float scale);
 	void stretchFrameRender(string strKey, HDC hdc, int destX, int destY, int currentFrameX, int currentFrameY, float scale = 1.0f);
 	void stretchFrameRenderCenterXUpY(string strKey, HDC hdc, int destX, int destY, int currentFrameX, int currentFrameY, float centerX = 1.0f, float upY = 1.f);
 	void stretchFrameRenderCenterXDownY(string strKey, HDC hdc, int destX, int destY, int currentFrameX, int currentFrameY, float centerX = 1.0f, float upY = 1.f);

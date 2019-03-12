@@ -8,6 +8,7 @@
 #include "LandmarkClass.h"
 #include "bullet.h"
 #include "UIClass.h"
+#include "UniClass.h"
 
 //플레이어가 에너미를 밟음
 void CollisionClass::playerStepEnemy()
@@ -18,8 +19,11 @@ void CollisionClass::playerStepEnemy()
 		if (IntersectRect(&cEmpty, &cPlayerPtr->getSensorRcBottom(), &cEnemyMPtr->getEEnemy1V()[i]->getEnemyRc()) && cEnemyMPtr->getEEnemy1V()[i]->getIsDie() == false)
 		{
 			//플레이어 조건
-			cPlayerPtr->setGravity(-5);
-
+			cPlayerPtr->setGravity(-5.0f);				//플레이어가 적을 밟으면 띄워준다
+			if (KEYMANAGER->isStayKeyDown('K'))
+			{
+				cPlayerPtr->setGravity(-10.0f);		//점프 키를 누르면 더 높게 뛴다.
+			}
 			//enemy조건
 			cEnemyMPtr->getEEnemy1V()[i]->setIsDie(true);
 		}
@@ -31,11 +35,15 @@ void CollisionClass::playerStepEnemy()
 		if (IntersectRect(&cEmpty, &cPlayerPtr->getSensorRcBottom(), &cEnemyMPtr->getEEnemy2V()[i]->getEnemyRc()) && cEnemyMPtr->getEEnemy2V()[i]->getIsDie() == false)
 		{
 			//플레이어 조건
-			cPlayerPtr->setGravity(-5);
-
+			cPlayerPtr->setGravity(-5.0f);				//플레이어가 적을 밟으면 띄워준다
+			if (KEYMANAGER->isStayKeyDown('K'))
+			{
+				cPlayerPtr->setGravity(-12.0f);		//점프 키를 누르면 더 높게 뛴다.
+			}
 			//enemy조건
 			cEnemyMPtr->getEEnemy2V()[i]->setIsDie(true);
 		}
+
 	}
 
 	//크리스탈이랑 충돌(Bottom 센서랑 충돌)
@@ -44,13 +52,12 @@ void CollisionClass::playerStepEnemy()
 		if (IntersectRect(&cEmpty, &cPlayerPtr->getSensorRcBottom(), &cEnemyMPtr->getEEnemy3V()[i]->getEnemyRc()) && cEnemyMPtr->getEEnemy3V()[i]->getIsDie() == false)
 		{
 			//플레이어 조건
-
-			cPlayerPtr->setGravity(-8);
+			cPlayerPtr->setGravity(-5.0f);				//플레이어가 적을 밟으면 띄워준다
 			if (KEYMANAGER->isStayKeyDown('K'))
 			{
-				cPlayerPtr->setGravity(-15);
+				cPlayerPtr->setGravity(-12.0f);		//점프 키를 누르면 더 높게 뛴다.
 			}
-			cPlayerPtr->setChangeForm(false);
+			cPlayerPtr->setChangeForm(false);		//젤리 상태일 경우 크리스탈을 밟으면 인간 핍으로 변신!!
 
 			//enemy조건
 			cEnemyMPtr->getEEnemy3V()[i]->setIsDie(true);
@@ -63,7 +70,7 @@ void CollisionClass::playerStepEnemy()
 		if (IntersectRect(&cEmpty, &cPlayerPtr->getSensorRcBottom(), &cEnemyMPtr->getEEnemy4V()[i]->getEnemyRc()) && cEnemyMPtr->getEEnemy4V()[i]->getIsDie() == false)
 		{
 			//플레이어 조건
-			cPlayerPtr->setGravity(-5);
+			cPlayerPtr->setGravity(-5.0f);
 
 			//enemy조건
 			cEnemyMPtr->getEEnemy4V()[i]->setIsDie(true);
@@ -77,52 +84,115 @@ void CollisionClass::playerCrashedEnemy()
 	//문어랑 충돌
 	for (int i = 0; i < cEnemyMPtr->getEEnemy1V().size(); i++)
 	{
-		if (IntersectRect(&cEmpty, &cPlayerPtr->getRect(), &cEnemyMPtr->getEEnemy1V()[i]->getEnemyRc()) && cEnemyMPtr->getEEnemy1V()[i]->getIsDie() == false)
+		if (!cPlayerPtr->getInvincible())
 		{
-			//플레이어 조건
-
-			//enemy조건
-			//exit(0);
+			if (IntersectRect(&cEmpty, &cPlayerPtr->getRect(), &cEnemyMPtr->getEEnemy1V()[i]->getEnemyRc()) && cEnemyMPtr->getEEnemy1V()[i]->getIsDie() == false)
+			{
+				//플레이어 조건
+				if (cPlayerPtr->getIsLeft())
+				{
+					cPlayerPtr->setY(5);
+					cPlayerPtr->setGravity(-5.0f);
+					cPlayerPtr->setX(75);
+				}
+				else
+				{
+					cPlayerPtr->setY(5);
+					cPlayerPtr->setGravity(-5.0f);
+					cPlayerPtr->setX(-75);
+				}
+				//enemy조건
+				//exit(0);
+			}
 		}
 	}
-
-	//벌레랑 충돌
-	for (int i = 0; i < cEnemyMPtr->getEEnemy2V().size(); i++)
+	if (!cPlayerPtr->getInvincible())
 	{
-		if (IntersectRect(&cEmpty, &cPlayerPtr->getRect(), &cEnemyMPtr->getEEnemy2V()[i]->getEnemyRc()) && cEnemyMPtr->getEEnemy2V()[i]->getIsDie() == false)
+		//벌레랑 충돌
+		for (int i = 0; i < cEnemyMPtr->getEEnemy2V().size(); i++)
 		{
-			//플레이어 조건
 
-			//enemy조건
-			//exit(0);
+			if (IntersectRect(&cEmpty, &cPlayerPtr->getRect(), &cEnemyMPtr->getEEnemy2V()[i]->getEnemyRc()) && cEnemyMPtr->getEEnemy2V()[i]->getIsDie() == false)
+			{
+				//플레이어 조건
+				if (cPlayerPtr->getIsLeft())
+				{
+					cPlayerPtr->setY(5);
+					cPlayerPtr->setGravity(-5.0f);
+					cPlayerPtr->setX(75);
+				}
+				else
+				{
+					cPlayerPtr->setY(5);
+					cPlayerPtr->setGravity(-5.0f);
+					cPlayerPtr->setX(-75);
+				}
+
+				cPlayerPtr->setInvincibleCount(100);
+
+				//enemy조건
+				//exit(0);
+			}
 		}
 	}
-
 	//크리스탈이랑 충돌
 	for (int i = 0; i < cEnemyMPtr->getEEnemy3V().size(); i++)
 	{
-		if (IntersectRect(&cEmpty, &cPlayerPtr->getRect(), &cEnemyMPtr->getEEnemy3V()[i]->getEnemyRc()) && cEnemyMPtr->getEEnemy3V()[i]->getIsDie() == false)
+		if (!cPlayerPtr->getInvincible())
 		{
-			//플레이어 조건
+			if (IntersectRect(&cEmpty, &cPlayerPtr->getRect(), &cEnemyMPtr->getEEnemy3V()[i]->getEnemyRc()) && cEnemyMPtr->getEEnemy3V()[i]->getIsDie() == false)
+			{
+				//플레이어 조건
+				if (cPlayerPtr->getIsLeft())
+				{
+					cPlayerPtr->setY(5);
+					cPlayerPtr->setGravity(-5.0f);
+					cPlayerPtr->setX(75);
+				}
+				else
+				{
+					cPlayerPtr->setY(5);
+					cPlayerPtr->setGravity(-5.0f);
+					cPlayerPtr->setX(-75);
+				}
 
-			//enemy조건
-			//exit(0);
+				cPlayerPtr->setInvincibleCount(100);
+				//enemy조건
+				//exit(0);
+			}
 		}
 	}
 
-	//크리스탈이랑 충돌
+	//유령이랑 충돌
 	for (int i = 0; i < cEnemyMPtr->getEEnemy4V().size(); i++)
 	{
-		if (IntersectRect(&cEmpty, &cPlayerPtr->getRect(), &cEnemyMPtr->getEEnemy4V()[i]->getEnemyRc()) && cEnemyMPtr->getEEnemy4V()[i]->getIsDie() == false)
+		if (!cPlayerPtr->getInvincible())
 		{
-			//플레이어 조건
+			if (IntersectRect(&cEmpty, &cPlayerPtr->getRect(), &cEnemyMPtr->getEEnemy4V()[i]->getEnemyRc()) && cEnemyMPtr->getEEnemy4V()[i]->getIsDie() == false)
+			{
+				//플레이어 조건
+				if (cPlayerPtr->getIsLeft())
+				{
+					cPlayerPtr->setY(5);
+					cPlayerPtr->setGravity(-5.0f);
+					cPlayerPtr->setX(75);
+				}
+				else
+				{
+					cPlayerPtr->setY(5);
+					cPlayerPtr->setGravity(-5.0f);
+					cPlayerPtr->setX(-75);
+				}
 
-			//enemy조건
-			//exit(0);
+				cPlayerPtr->setInvincibleCount(100);
+				//enemy조건
+				//exit(0);
+			}
 		}
 	}
 }
 
+//플레이어가 애너미를 공격
 void CollisionClass::playerAttackEnemy()
 {
 	//문어랑 충돌
@@ -188,6 +258,163 @@ void CollisionClass::playerAttackEnemy()
 			//exit(0);
 		}
 	}
+}
+
+//플레이어와 장애물 충돌
+void CollisionClass::playerDamegeThorn()
+{
+	if (!cPlayerPtr->getInvincible())
+	{
+		//1스테이지 가시랑 충돌
+		for (int i = 0; i < cFieldPtr->thornPtr->getThornStage1().size(); i++)
+		{
+			if (IntersectRect(&cEmpty, &cPlayerPtr->getRect(), &cFieldPtr->thornPtr->getThornStage1()[i]))
+			{
+				//플레이어 조건
+				cPlayerPtr->setPipHp(cPlayerPtr->getPipHp() - 1);
+				if (cPlayerPtr->getIsLeft())
+				{
+					cPlayerPtr->setY(5);
+					cPlayerPtr->setGravity(-5.0f);
+					cPlayerPtr->setX(75);
+				}
+				else
+				{
+					cPlayerPtr->setY(5);
+					cPlayerPtr->setGravity(-5.0f);
+					cPlayerPtr->setX(-75);
+				}
+
+				cPlayerPtr->setInvincibleCount(100);
+			}
+		}
+		//보스 스테이지 가시랑 충돌
+		for (int i = 0; i < cFieldPtr->thornPtr->getThornBossStage().size(); i++)
+		{
+			if (IntersectRect(&cEmpty, &cPlayerPtr->getRect(), &cFieldPtr->thornPtr->getThornBossStage()[i]))
+			{
+				//플레이어 조건
+				cPlayerPtr->setPipHp(cPlayerPtr->getPipHp() - 1);
+				if (cPlayerPtr->getIsLeft())
+				{
+					cPlayerPtr->setY(5);
+					cPlayerPtr->setGravity(-5.0f);
+					cPlayerPtr->setX(75);
+
+				}
+				else
+				{
+					cPlayerPtr->setY(5);
+					cPlayerPtr->setGravity(-5.0f);
+					cPlayerPtr->setX(-75);
+				}
+
+				cPlayerPtr->setInvincibleCount(100);
+			}
+		}
+	}
+}
+
+//플레이어가 변신할때 충돌
+void CollisionClass::playerChangeTile()
+{
+	for (int i = 0; i < cFieldPtr->hideTilePtr->getHideTile().size(); i++)
+	{
+		cFieldPtr->hideTilePtr->setCount(cFieldPtr->hideTilePtr->getCount() + 1);
+
+		if (cFieldPtr->hideTilePtr->getCount() % 20 == 0)
+		{
+			cFieldPtr->hideTilePtr->setBoomFrameX(cFieldPtr->hideTilePtr->getBoomFrameX() + 1);
+		}
+		if (cFieldPtr->hideTilePtr->getBoomFrameX() > 13 && cFieldPtr->hideTilePtr->getBoom() == true)
+		{
+			cFieldPtr->hideTilePtr->setBoomFrameX(0);
+		}
+		if (IntersectRect(&cEmpty, &cPlayerPtr->getTileDestoryRc(), &cFieldPtr->hideTilePtr->getHideTile()[i].rc))
+		{
+			cFieldPtr->hideTilePtr->getHideTile()[i].isTouch = false;
+			cFieldPtr->hideTilePtr->setBoom(false);
+			//cFieldPtr->hideTilePtr->setIsBoom(false);
+			if (cFieldPtr->hideTilePtr->getHideTile()[i].isTouch == false)
+			{
+				cPlayerPtr->setBombTileCrashDown(true);
+			}
+			if (cFieldPtr->hideTilePtr->getBoomFrameX() > 13)
+			{
+				cFieldPtr->hideTilePtr->setBoomFrameX(13);
+			}
+		}
+	}
+}
+
+void CollisionClass::playerCollisionHideTile()
+{
+	if (IntersectRect(&cEmpty, &cPlayerPtr->getRect(), &cFieldPtr->hideTilePtr->getHideBlock()))
+	{
+		cFieldPtr->hideTilePtr->setImageCount(100);
+	}
+	else if (IntersectRect(&cEmpty, &cPlayerPtr->getRect(), &cFieldPtr->hideTilePtr->getHideBlockTwo()))
+	{
+		cFieldPtr->hideTilePtr->setImageCount(100);
+	}
+	else if (IntersectRect(&cEmpty, &cPlayerPtr->getRect(), &cFieldPtr->hideTilePtr->getGrass()))
+	{
+		cFieldPtr->hideTilePtr->setImageCount(100);
+	}
+	else cFieldPtr->hideTilePtr->setImageCount(255);
+
+}
+
+void CollisionClass::playerChangeEnemyCrash()
+{
+	//문어랑 충돌
+	for (int i = 0; i < cEnemyMPtr->getEEnemy1V().size(); i++)
+	{
+		if (IntersectRect(&cEmpty, &cPlayerPtr->getEnemyCrashRc(), &cEnemyMPtr->getEEnemy1V()[i]->getEnemyRc()) && cEnemyMPtr->getEEnemy1V()[i]->getIsDie() == false)
+		{
+			//플레이어 조건
+
+			//enemy조건
+			cEnemyMPtr->getEEnemy1V()[i]->setIsDie(true);
+		}
+	}
+
+	//벌레랑 충돌
+	for (int i = 0; i < cEnemyMPtr->getEEnemy2V().size(); i++)
+	{
+		if (IntersectRect(&cEmpty, &cPlayerPtr->getEnemyCrashRc(), &cEnemyMPtr->getEEnemy2V()[i]->getEnemyRc()) && cEnemyMPtr->getEEnemy2V()[i]->getIsDie() == false)
+		{
+			//플레이어 조건
+
+			//enemy조건
+			cEnemyMPtr->getEEnemy2V()[i]->setIsDie(true);
+		}
+	}
+
+	//크리스탈이랑 충돌
+	for (int i = 0; i < cEnemyMPtr->getEEnemy3V().size(); i++)
+	{
+		if (IntersectRect(&cEmpty, &cPlayerPtr->getEnemyCrashRc(), &cEnemyMPtr->getEEnemy3V()[i]->getEnemyRc()) && cEnemyMPtr->getEEnemy3V()[i]->getIsDie() == false)
+		{
+			//플레이어 조건
+
+			//enemy조건
+			cEnemyMPtr->getEEnemy3V()[i]->setIsDie(true);
+		}
+	}
+
+	//유령이랑 충돌
+	for (int i = 0; i < cEnemyMPtr->getEEnemy4V().size(); i++)
+	{
+		if (IntersectRect(&cEmpty, &cPlayerPtr->getEnemyCrashRc(), &cEnemyMPtr->getEEnemy4V()[i]->getEnemyRc()) && cEnemyMPtr->getEEnemy4V()[i]->getIsDie() == false)
+		{
+			//플레이어 조건
+
+			//enemy조건
+			cEnemyMPtr->getEEnemy4V()[i]->setIsDie(true);
+		}
+	}
+
 }
 
 //플레이어가 총알에 맞음

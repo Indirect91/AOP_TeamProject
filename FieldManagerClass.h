@@ -10,7 +10,9 @@ public:
 	class PlayerClass* playerPtr;
 	class FlowerClass* flowerPtr;
 	class UniClass* uniPtr;
+
 	void setPlayerPtr(class PlayerClass* player) { playerPtr = player; }
+
 
 
 	HRESULT init(string stage);

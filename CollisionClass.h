@@ -7,7 +7,6 @@ public:
 		static CollisionClass instance;
 		return instance; //스태틱 정적변수는 초기화가 처음 한번만 이루어진다는 사실을 이용, 만약 존재하면 존재하는걸 참조자로 반환, 없다면 새로 이닛
 	}
-
 private:
 	CollisionClass() {}; //싱글톤이니 딴사람이 추가로 생성하지 못하게 막아둠
 	~CollisionClass() {}; //정적변수는 프로그램 종료시 알아서 뒤지니 외부 호출로 인한 꼬임을 막기위해 소멸자도 일단은 숨겨둠
@@ -65,6 +64,14 @@ public: //▼겟터셋터같은 원래 하던대로 여기 퍼블릭에 함수 만들면 됨!
 	void playerCrashedEnemy();
 	//플레이어가 애너미를 공격
 	void playerAttackEnemy();
+	//플레이어가 가시에 찔림
+	void playerDamegeThorn();
+	//플레이어가 부서지는 타일 뿌심
+	void playerChangeTile();
+	//숨겨진 타일 충돌
+	void playerCollisionHideTile();
+	//플레이어가 변신할때 이펙트로 애너미 죽이기
+	void playerChangeEnemyCrash();
 	//플레이어가 둥둥이 총알에 맞음
 	void playerCrashedEBullet();
 	//총알이 벽에 맞음

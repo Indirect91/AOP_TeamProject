@@ -53,15 +53,22 @@ void loadingScene::render(void)
 void loadingScene::loadingImage()
 {
 	//스테이지 1번
-	_loading->loadImage("Stage1Collision", "(수정) 다만들어진 1스테이지.bmp", 17520, 2436, true, RGB(255, 0, 255));
 	_loading->loadImage("Stage1", "Stage1_Resized.bmp", 17520, 2436, true, RGB(255, 0, 255));
+	_loading->loadImage("Stage1Collision", "Stage1_Collision.bmp", 17520, 2436, true, RGB(255, 0, 255));
+
 	//보스 스테이지
-	_loading->loadImage("BossStage", "보스 스테이지(구멍뚫음).bmp", 10976, 2436, true, RGB(255, 0, 255));
-	_loading->loadImage("BossStageCollision", "보스 스테이지.bmp", 10976, 2436, true, RGB(255, 0, 255));
+	_loading->loadImage("BossStage", "Boss_stage_Resized.bmp", 10976, 2436, true, RGB(255, 0, 255));
+	_loading->loadImage("BossStageCollision", "Boss_stage_Collision.bmp", 10976, 2436, true, RGB(255, 0, 255));
 	//마을 스테이지
 	_loading->loadImage("Village", "Stage 마을.bmp", 2750, 768, true, RGB(255, 0, 255));
 	_loading->loadImage("VillageCollision", "Stage 마을 바닥 픽셀.bmp", 2750, 768, true, RGB(255, 0, 255));
 	_loading->loadImage("Village 배경", "Stage 마을 배경.bmp", 1366, 768);
+	//월드맵 씬
+	_loading->loadImage("WorldMap", "WorldMap 1366,768.bmp", 1366, 768);
+	_loading->loadImage("WorldMapLow","WorldMapLow 1210,72.bmp", 1210, 72, true, RGB(255, 0, 255));
+	_loading->loadImage("WorldMapHigh", "WorldMapHigh 1212,163.bmp", 1212, 163, true, RGB(255, 0, 255));
+
+
 	//NPC
 	_loading->loadFrameImage("NPC-상인", "NPC-상인 할아버지_12장.bmp", 1536, 132, 12, 1, true, RGB(255, 0, 255));
 
@@ -110,6 +117,14 @@ void loadingScene::loadingImage()
 	_loading->loadFrameImage("enemy-기어다니는 벌레", "enemy-기어다니는 벌레.bmp", 940, 48, 20, 2, true, RGB(255, 0, 255));
 	_loading->loadFrameImage("enemy-떠다니는 크리스탈", "enemy-떠다니는 크리스탈.bmp", 1170, 166, 13, 2, true, RGB(255, 0, 255));
 	_loading->loadFrameImage("enemy-둥둥이 유령", "enemy-둥둥이 유령.bmp", 236, 140, 4, 2, true, RGB(255, 0, 255));
+
+	//보스
+	_loading->loadFrameImage("boss-걷기", "boss-걷기_11장.bmp", 2838, 420, 11, 2, true, RGB(255, 0, 255));
+	_loading->loadFrameImage("boss-공격1", "boss-공격1_7장.bmp", 3570, 456, 7, 2, true, RGB(255, 0, 255));
+	_loading->loadFrameImage("boss-공격2", "boss-공격2_14장.bmp", 4284, 480, 14, 2, true, RGB(255, 0, 255));
+	_loading->loadFrameImage("boss-대기", "boss-대기_8장.bmp", 1920, 420, 8, 2, true, RGB(255, 0, 255));
+	_loading->loadFrameImage("boss-죽음", "boss-죽음_25장.bmp", 10200, 420, 25, 2, true, RGB(255, 0, 255));
+	_loading->loadFrameImage("boss-피격", "boss-피격당함_4장.bmp", 984, 420, 4, 2, true, RGB(255, 0, 255));
 
 	//펫
 	_loading->loadFrameImage("pets-박쥐", "pets-박쥐.bmp", 840, 96, 10, 2, true, RGB(255, 0, 255));
