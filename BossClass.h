@@ -3,6 +3,13 @@
 
 class BossClass : public gameNode
 {
+	enum hahahaha
+	{
+		a,
+		b,
+		c
+	};
+
 	RECT BossRc;						//보스 렉트
 	RECT bossAttackRc;					//보스 공격 렉트
 	float bSpeed;						//보스 속도
