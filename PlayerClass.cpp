@@ -14,6 +14,7 @@ HRESULT PlayerClass::init(float _x, float _y, string _collisionStage)
 	speed = 5.0f;								//플레이어 스피드
 	jellySpeed = 4.0f;							//젤리 스피드
 	gravity = 0.0f;								//중력
+	pipHp = 3;
 	addtionalPower = 0.0f;						//가변점프 파워
 	leftRepulsivePower = 0.0f;					//왼쪽에서 당기는 반발력
 	rightRepulsivePower = 0.0f;					//오른쪽에서 당기는 반발력
@@ -21,18 +22,20 @@ HRESULT PlayerClass::init(float _x, float _y, string _collisionStage)
 	imgIndex = 0;								//프레임 이미지 인덱스 접근
 	changeCount = 0.0f;							//변신 시간
 	BombCount = 0;								//변신할때 터지는 공격 사라지게~할 카운트
-	//frameCount = 0;
+	invincibleCount = 0;						//무적 시간
+	changeEffectCount = 0;
 	CollisionStage = _collisionStage;			//인자 값으로 받아온 이미지 담기~
 
 	//-----bool변수-----//
 	isRepusiveCheck = false;					//반발력 체크
 	isLeftRepulsive = false;					//반발략을 어느 부분으로 줄것인가?
 	changeForm = false;							//젤리 핍인가? 픽셀 핍인가?
-	isLeft = true;								//왼쪽? 오른쪽? 방향 판단
+	isLeft = true;								//왼쪽? 오른쪽? 방향 판단(true면 오른쪽)
 	isAttack = false;							//공격중인가?
 	isDownAttack = false;						//다운 공격 중인가? 맞나?
 	isChange = false;							//변신 중인가?
-	isBombCount = false;						//
+	isBombCount = false;						//변신하면 렉트 생성후 일정 시간 지나면 사라지게 할거임
+	isInvincible = false;						//플레이어가 무적인가?
 
 
 #pragma region 센서 초기화
@@ -87,6 +90,7 @@ void PlayerClass::update(void)
 	gravity += 0.4f;
 	BombCount--;
 
+
 	if (!changeForm)						//인간 핍 상태(false)
 	{
 		this->playerMove();					//플레이어 움직임
@@ -105,8 +109,22 @@ void PlayerClass::update(void)
 	this->pixelCollision();					//픽셀 충돌
 	this->repulsive();						//반발력
 
+	//애너미와 충돌후 무적시간
+	if (invincibleCount == 100)
+	{
+		isInvincible = true;
+	}
+	if (isInvincible)
+	{
+		invincibleCount--;
+	}
+	if (invincibleCount <= 0)
+	{
+		isInvincible = false;
+		invincibleCount = 0;
+	}
 
-
+	//변신하고 렉트 생성후 사라지게~(부서지는 타일 없앨꺼임)
 	if (BombCount <= 0)
 	{
 		BombCount = 0;
@@ -226,13 +244,13 @@ void PlayerClass::playerMove()
 				if (isLeftRepulsive && !sensorLeftTop.isTouch)				//왼쪽으로 반발력을 준다면
 				{
 					x += 10;												//x축을 살짝 이격 시킨후
-					rightRepulsivePower = 10.5f;								//반발력을 준다.
+					rightRepulsivePower = 9.5f;								//반발력을 준다.
 					isLeft = true;
 				}
 				else if (!isLeftRepulsive && !sensorRightTop.isTouch)		//오른쪽으로 반발력을 준다면
 				{
 					x -= 10;												//x축을 살짝 이격 시킨후
-					leftRepulsivePower = 10.5f;								//반발력을 준다.
+					leftRepulsivePower = 9.5f;								//반발력을 준다.
 					isLeft = false;
 				}
 			}
@@ -278,11 +296,52 @@ void PlayerClass::playerMove()
 ===============================================================*/
 void PlayerClass::playerAttack()
 {
+
+	//if (KEYMANAGER->isStayKeyDown(VK_DOWN))
+	//{
+	//	isDownAttack = true;
+	//	if (!isLeft) imgCount = 0;
+	//	else imgCount = 12;
+	//}
+
+
 	//플레이어 일반 공격
-	if (KEYMANAGER->isOnceKeyDown('J'))
+	if (!KEYMANAGER->isStayKeyDown(VK_DOWN) && KEYMANAGER->isOnceKeyDown('J') && !isAttack)
 	{
 		isAttack = true;										//공격하면 true
 		if (isAttack && !isDownAttack) imgIndex = 12;			//공격하면 imgIndex12로 바꿔준다. 프레임이 더 자연스럽게 돌게 하기위해
+	}
+	else if (KEYMANAGER->isStayKeyDown(VK_DOWN) && !isDownAttack)				//플레이어 다운공격
+	{
+		if (KEYMANAGER->isOnceKeyDown('J'))
+		{
+			isAttack = true;
+			isDownAttack = true;
+			if (!isLeft) imgIndex = 0;							//왼쪽
+			else imgIndex = 11;									//오른쪽
+		}
+
+
+	}
+	if (isAttack && isDownAttack && !isLeft)
+	{
+		playerStateEnum = PlayerClass::LEFTDOWNATTACK;
+		attackRc = RectMakeCenter(sensorBottom.x, sensorBottom.y + 10, 10, 10);
+		gravity += 5.f;
+		if (gravity >= 20.f)
+		{
+			gravity = 20.f;
+		}
+	}
+	else if (isAttack && isDownAttack && isLeft)
+	{
+		playerStateEnum = PlayerClass::RIGHTDOWNATTACK;
+		attackRc = RectMakeCenter(sensorBottom.x, sensorBottom.y + 10, 10, 10);
+		gravity += 5.f;
+		if (gravity >= 20.f)
+		{
+			gravity = 20.f;
+		}
 	}
 
 	if (!isDownAttack && isAttack && !isLeft)					//일반 공격시 방향을 판단하고 렉트를 생성
@@ -296,24 +355,8 @@ void PlayerClass::playerAttack()
 		attackRc = RectMakeCenter(sensorRight.x + 35, sensorRight.y, 10, 10);
 	}
 
-	//플레이어 다운공격
-	if (KEYMANAGER->isStayKeyDown(VK_DOWN))
-	{
-		isDownAttack = true;
-		if (!isLeft) imgCount = 0;
-		else imgCount = 12;
-	}
 
-	if (isAttack && isDownAttack && !isLeft)
-	{
-		playerStateEnum = PlayerClass::LEFTDOWNATTACK;
-		attackRc = RectMakeCenter(sensorBottom.x, sensorBottom.y + 10, 10, 10);
-	}
-	else if (isAttack && isDownAttack && isLeft)
-	{
-		playerStateEnum = PlayerClass::RIGHTDOWNATTACK;
-		attackRc = RectMakeCenter(sensorBottom.x, sensorBottom.y + 10, 10, 10);
-	}
+
 
 }
 
@@ -349,7 +392,7 @@ void PlayerClass::sensorMove()
 #pragma endregion
 
 	//센서 지속 업데이트
-	sensorBottom.sensorRc = RectMakeCenter(sensorBottom.x, sensorBottom.y, 25, 5);
+	sensorBottom.sensorRc = RectMakeCenter(sensorBottom.x, sensorBottom.y, 15, 5);
 	sensorLeft.sensorRc = RectMakeCenter(sensorLeft.x, sensorLeft.y, 5, 40);
 	sensorRight.sensorRc = RectMakeCenter(sensorRight.x, sensorRight.y, 5, 40);
 	sensorTop.sensorRc = RectMakeCenter(sensorTop.x, sensorTop.y, 40, 5);
@@ -412,15 +455,15 @@ void PlayerClass::pixelCollision()
 		}
 
 		//바텀센서 X 변신으로 부서지는 타일
-		if (r == 126 && g == 206 && b == 244)
-		{
-			y = i - height;						//y축 위치보정
-			gravity = 0.0f;						//중력 0으로~
-			sensorBottom.isTouch = true;		//현재 픽셀 충돌중인지 체크
-			sensorBottom.isJump = false;		//픽셀 충돌중이면 언제든지 점프
-			isRepusiveCheck = false;			//벽점프가 아닌 점프 할 때 반발력을 안주게 하기 위해
-			break;
-		}
+		//if (r == 126 && g == 206 && b == 244)
+		//{
+		//	y = i - height;						//y축 위치보정
+		//	gravity = 0.0f;						//중력 0으로~
+		//	sensorBottom.isTouch = true;		//현재 픽셀 충돌중인지 체크
+		//	sensorBottom.isJump = false;		//픽셀 충돌중이면 언제든지 점프
+		//	isRepusiveCheck = false;			//벽점프가 아닌 점프 할 때 반발력을 안주게 하기 위해
+		//	break;
+		//}
 
 		//바텀센서 X 끊어지는 타일
 		if (r == 149 && g == 149 && b == 149)
@@ -484,18 +527,18 @@ void PlayerClass::pixelCollision()
 			}
 		}
 
-		////오른쪽 센서 X 노란색과 충돌시
-		//if (r == 255 && g == 255 && b == 0)
-		//{
-		//	x = i - width;						//위치 보정
-		//	break;
-		//}
-		////오른쪽 센서 X 검정색과 충돌시
-		//if (r == 0 && g == 0 && b == 0)
-		//{
-		//	x = i - width;						//위치 보정
-		//	break;
-		//}
+		//오른쪽 센서 X 노란색과 충돌시
+		if (r == 255 && g == 255 && b == 0)
+		{
+			x = i - width;						//위치 보정
+			break;
+		}
+		//오른쪽 센서 X 검정색과 충돌시
+		if (r == 0 && g == 0 && b == 0)
+		{
+			x = i - width;						//위치 보정
+			break;
+		}
 
 	}
 
@@ -532,7 +575,6 @@ void PlayerClass::pixelCollision()
 					if (KEYMANAGER->isStayKeyDown(VK_LEFT))
 					{
 						gravity = 0.0f;					//벽잡을 하는 중이니 중력을 0
-
 					}
 				}
 				break;
@@ -544,18 +586,18 @@ void PlayerClass::pixelCollision()
 				break;
 			}
 		}
-		////왼쪽 센서 X 노란색과 충돌시 
-		//if (r == 255 && g == 255 && b == 0)
-		//{
-		//	x = i;										//위치 보정
-		//	break;
-		//}
-		////왼쪽 센서 X 검정색과 충돌시
-		//if (r == 0 && g == 0 && b == 0)
-		//{
-		//	x = i;										//위치 보정
-		//	break;
-		//}
+		//왼쪽 센서 X 노란색과 충돌시 
+		if (r == 255 && g == 255 && b == 0)
+		{
+			x = i;										//위치 보정
+			break;
+		}
+		//왼쪽 센서 X 검정색과 충돌시
+		if (r == 0 && g == 0 && b == 0)
+		{
+			x = i;										//위치 보정
+			break;
+		}
 	}
 
 	//탑 픽셀 충돌(Top)
@@ -692,7 +734,7 @@ void PlayerClass::repulsive()
 	//반발력 힘(왼쪽)
 	if (leftRepulsivePower > 0)							//왼쪽 반발력 힘이 0 이상이면
 	{
-		leftRepulsivePower -= 0.1f;						//힘을 계속 깎아 준다.
+		leftRepulsivePower -= 0.2f;						//힘을 계속 깎아 준다.
 	}
 	else
 	{
@@ -701,7 +743,7 @@ void PlayerClass::repulsive()
 	//반발력 힘(오른쪽)
 	if (rightRepulsivePower > 0)						//오른쪽 반발력 힘이 0 이상이면
 	{
-		rightRepulsivePower -= 0.1f;					//힘을 계속 깎아 준다.
+		rightRepulsivePower -= 0.2f;					//힘을 계속 깎아 준다.
 	}
 	else
 	{
@@ -714,19 +756,20 @@ void PlayerClass::repulsive()
 ================================================================*/
 void PlayerClass::transForm()
 {
+	//변신
 	if (KEYMANAGER->isOnceKeyDown('L'))
 	{
-		isChange = false;
-		if (isLeft) imgCount = 10;
-		else imgCount = 0;
-		if (changeCount <= 2.0f)
+		if (isLeft)
 		{
-			changeCount = 0.0f;
+			imgIndex = 0;
+			changeEffectCount = 10;
+		}
+		else
+		{
+			imgIndex = 0;
+			changeEffectCount = 0;
 		}
 	}
-
-
-	//변신
 	if (KEYMANAGER->isStayKeyDown('L'))
 	{
 		changeCount += 0.05f;
@@ -734,8 +777,10 @@ void PlayerClass::transForm()
 		{
 			changeCount -= 0.05f;
 		}
+
 		if (!changeForm)	gravity = 0.0f;				//변신 중일때 중력 0
 		isChange = true;								//변신 중인지 판단
+
 		if (!isLeft)
 		{
 			playerStateEnum = playerState::LEFTCHANGEFORM;
@@ -749,8 +794,17 @@ void PlayerClass::transForm()
 	if (KEYMANAGER->isOnceKeyUp('L'))
 	{
 		isChange = false;
-		if (isLeft) imgCount = 10;
-		else imgCount = 0;
+
+		if (isLeft)
+		{
+			imgIndex = 0;
+			changeEffectCount = 10;
+		}
+		else
+		{
+			imgIndex = 0;
+			changeEffectCount = 0;
+		}
 		if (changeCount <= 2.0f)
 		{
 			changeCount = 0.0f;
@@ -1033,7 +1087,7 @@ void PlayerClass::playerStateFrameImageRender(float x, float y)
 		case PlayerClass::LEFTDOWNATTACK:
 			IMAGEMANAGER->findImage("pipDownAttack")->setFrameY(0);
 			imgCount++;
-			if (imgCount % 5 == 0)
+			if (imgCount % 4 == 0)
 			{
 				imgIndex++;
 				if (imgIndex > 10)
@@ -1053,12 +1107,12 @@ void PlayerClass::playerStateFrameImageRender(float x, float y)
 			IMAGEMANAGER->findImage("changeEffect")->setFrameY(0);
 
 			imgCount++;
-			if (imgCount % 5 == 0)
+			if (imgCount % 10 == 0)
 			{
-				imgIndex++;
-				if (imgIndex > 9)
+				changeEffectCount++;
+				if (changeEffectCount > 9)
 				{
-					imgIndex = 0;
+					changeEffectCount = 0;
 					imgCount = 0;
 				}
 				IMAGEMANAGER->findImage("pipChangeForm")->setFrameX(imgIndex);
@@ -1168,7 +1222,7 @@ void PlayerClass::playerStateFrameImageRender(float x, float y)
 		case PlayerClass::RIGHTDOWNATTACK:
 			IMAGEMANAGER->findImage("pipDownAttack")->setFrameY(1);
 			imgCount++;
-			if (imgCount % 5 == 0)
+			if (imgCount % 4 == 0)
 			{
 				imgIndex--;
 				if (imgIndex < 0)
@@ -1189,13 +1243,12 @@ void PlayerClass::playerStateFrameImageRender(float x, float y)
 			IMAGEMANAGER->findImage("changeEffect")->setFrameY(0);
 
 			imgCount++;
-			if (imgCount % 7 == 0)
+			if (imgCount % 10 == 0)
 			{
-				imgIndex--;
-				if (imgIndex < 0)
+				changeEffectCount--;
+				if (changeEffectCount < 0)
 				{
-					imgIndex = 9;
-					imgCount = 0;
+					changeEffectCount = 9;
 				}
 				IMAGEMANAGER->findImage("pipChangeForm")->setFrameX(imgIndex);
 			}
@@ -1204,6 +1257,7 @@ void PlayerClass::playerStateFrameImageRender(float x, float y)
 
 			if (imgCount % 1 == 0)
 			{
+				//changeEffectCount++;
 				imgIndex++;
 				if (imgIndex > 43)
 				{

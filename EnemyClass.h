@@ -53,10 +53,10 @@ class crawlBug : public gameNode
 	bool isRight;			//적이 오른쪽을 보고 있는가? true->오른쪽
 
 	bool isDie;				//적이 죽었는가? true->죽음
-	
+
 	float dieCount;			//죽었을때 이미지가 작아지며 사라지게 만들 카운트
 	float dieCountX;			//죽었을때 이미지가 작아지며 사라지게 만들 카운트
-	
+
 	bool firstStep;			//죽었을때 줄어들었다 늘어나며 사라지는 모양을 만들기위해 준 불변수
 
 	int reviveCount;		//다시 살아날 시간

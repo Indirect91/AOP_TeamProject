@@ -325,7 +325,7 @@ void flyCrystal::update(void)
 		{
 			dieCount = 0;
 		}
-		
+
 		if (reviveCount % 180 == 0)
 		{
 			enemyX = saveX;
@@ -380,7 +380,7 @@ void flyCrystal::update(void)
 			}
 		}
 	}
-	
+
 	//이미지 프레임
 	imgCount++;
 	if (imgCount % 5 == 0)
@@ -393,7 +393,7 @@ void flyCrystal::update(void)
 		imgCount = 0;
 	}
 
-	enemyRc = RectMakeCenter(enemyX, enemyY, 90, 83);
+	enemyRc = RectMakeCenter(enemyX, enemyY, 90, 61);
 }
 //=============렌더=============
 void flyCrystal::render(void)
@@ -405,8 +405,8 @@ void flyCrystal::render(void)
 	}
 
 	//죽어있지 않을때만 보이게
-	enemyImage->alphaFrameRender(getMemDC(), enemyRc.left - CAMERA.getCRc().left, enemyRc.top - CAMERA.getCRc().top, frameX, frameY, dieCount);
-	
+	enemyImage->alphaFrameRender(getMemDC(), enemyRc.left - CAMERA.getCRc().left, enemyRc.top - 11 - CAMERA.getCRc().top, frameX, frameY, dieCount);
+
 }
 
 #pragma endregion 날아다니는 크리스탈

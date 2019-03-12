@@ -56,8 +56,14 @@ void loadingScene::loadingImage()
 	_loading->loadImage("Stage1Collision", "(수정) 다만들어진 1스테이지.bmp", 17520, 2436, true, RGB(255, 0, 255));
 	_loading->loadImage("Stage1", "Stage1_Resized.bmp", 17520, 2436, true, RGB(255, 0, 255));
 	//보스 스테이지
-	_loading->loadImage("BossStage", "Boss_stage_Resized.bmp", 10976, 2436, true, RGB(255, 0, 255));
+	_loading->loadImage("BossStage", "보스 스테이지(구멍뚫음).bmp", 10976, 2436, true, RGB(255, 0, 255));
 	_loading->loadImage("BossStageCollision", "보스 스테이지.bmp", 10976, 2436, true, RGB(255, 0, 255));
+	//마을 스테이지
+	_loading->loadImage("Village", "Stage 마을.bmp", 2750, 768, true, RGB(255, 0, 255));
+	_loading->loadImage("VillageCollision", "Stage 마을 바닥 픽셀.bmp", 2750, 768, true, RGB(255, 0, 255));
+	_loading->loadImage("Village 배경", "Stage 마을 배경.bmp", 1366, 768);
+	//NPC
+	_loading->loadFrameImage("NPC-상인", "NPC-상인 할아버지_12장.bmp", 1536, 132, 12, 1, true, RGB(255, 0, 255));
 
 	//타이틀 씬
 	_loading->loadImage("titleBg", "titleBg.bmp", 1366, 768);
@@ -121,6 +127,7 @@ void loadingScene::loadingImage()
 	//지형
 	_loading->loadFrameImage("변신타일", "변신하면부서지는 타일.bmp", 1260, 45, 28, 1, true, RGB(255, 0, 255));
 	_loading->loadFrameImage("폭발", "변신타일 터지는모습.bmp", 540, 45, 12, 1, true, RGB(255, 0, 255));
+	_loading->loadFrameImage("무너지는타일", "무너지는 타일.bmp", 258, 41, 6, 1, true, RGB(255, 0, 255));
 
 	//총알
 	_loading->loadImage("총알", "bullet.bmp", 21, 21, true, RGB(255, 0, 255));
@@ -135,5 +142,40 @@ void loadingScene::loadingImage()
 
 void loadingScene::loadingSound()
 {
-
+	//인트로 배경음악
+	_loading->loadSound("시네마틱", "SOUND/Intro_Cinematic.ogg", true, true);
+	//스테이지 사운드
+	_loading->loadSound("스테이지", "SOUND/Forest.ogg", true, true);
+	//마을 사운드
+	_loading->loadSound("마을", "SOUND/Town.ogg", true, true);
+	//타이틀 로딩
+	_loading->loadSound("타이틀", "SOUND/Title_Theme.ogg", true, true);
+	//동물 구출
+	_loading->loadSound("구출", "SOUND/villager_save.ogg", false, false);
+	//상자열때
+	_loading->loadSound("상자깡", "SOUND/chest_small.ogg", false, false);
+	//스테이지 클리어
+	_loading->loadSound("클리어", "SOUND/Stage_clear.ogg", false, false);
+	//주먹으로 벽쳤을때
+	_loading->loadSound("벽치기", "SOUND/punch_block.ogg", false, false);
+	//주먹으로 허공치기
+	_loading->loadSound("헛치기", "SOUND/punch_air.ogg", false, false);
+	//메뉴 선택
+	_loading->loadSound("메뉴선택", "SOUND/menu_select.ogg", false, false);
+	//스테이지 선택시(월드맵)
+	_loading->loadSound("스테이지선택", "SOUND/level_selected.ogg", false, false);
+	//점프
+	_loading->loadSound("점프", "SOUND/jump_pip2.ogg", false, false);
+	//진화
+	_loading->loadSound("진화", "SOUND/evolution.ogg", false, false);
+	//에너미 사망
+	_loading->loadSound("에너미사망", "SOUND/enemy_death.ogg", false, false);
+	//플레이어 사망
+	_loading->loadSound("플레이어사망", "SOUND/devo_blast_explode.ogg", false, false);
+	//보석획득
+	_loading->loadSound("보석획득", "SOUND/collect_pixel.ogg", false, false);
+	//세이브포인트
+	_loading->loadSound("세이브", "SOUND/checkpoint.ogg", false, false);
+	//점프대
+	_loading->loadSound("점프대", "SOUND/bounce.ogg");
 }

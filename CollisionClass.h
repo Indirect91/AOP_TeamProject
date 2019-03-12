@@ -71,7 +71,7 @@ public: //▼겟터셋터같은 원래 하던대로 여기 퍼블릭에 함수 만들면 됨!
 	void bulletCrashedWall();
 
 	//플레이어가 펫을 발견
-	void playerFindPets();
+	void playerFindPets(int wherePet);
 	//플레이어가 세이브 포인트를 지남
 	void playerSavePoint();
 	//플레이어가 클리어 포인트에 닿음

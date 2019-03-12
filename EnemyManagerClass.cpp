@@ -9,6 +9,7 @@ HRESULT EnemyManagerClass::init(tagWhereStage _whereStage)
 	switch (_whereStage)
 	{
 	case EnemyManagerClass::stage1:
+		collisionS = "Stage1Collision";
 		//떠다니는 문어
 		eEnemy1 = new flyOctopus;
 		eEnemy1->init(1844, 582);
@@ -30,7 +31,7 @@ HRESULT EnemyManagerClass::init(tagWhereStage _whereStage)
 		eEnemy2 = new crawlBug;
 		eEnemy2->init(2455, 630, 2000, 2600);
 		eEnemy2V.push_back(eEnemy2);
-		
+
 		eEnemy2 = new crawlBug;
 		eEnemy2->init(5618, 501, 5538, 5695);
 		eEnemy2V.push_back(eEnemy2);
@@ -68,9 +69,14 @@ HRESULT EnemyManagerClass::init(tagWhereStage _whereStage)
 		eEnemy3->init(10112, 630, 9880, 10320);
 		eEnemy3V.push_back(eEnemy3);
 
+		eEnemy3 = new flyCrystal;
+		eEnemy3->init(15539, 458, 0, 0);
+		eEnemy3V.push_back(eEnemy3);
+
 		break;
 
 	case EnemyManagerClass::bossStage:
+		collisionS = "BossStageCollision";
 		//떠다니는 문어
 		eEnemy1 = new flyOctopus;
 		eEnemy1->init(4414, 480);
@@ -103,7 +109,7 @@ HRESULT EnemyManagerClass::init(tagWhereStage _whereStage)
 		eEnemy3V.push_back(eEnemy3);
 
 		eEnemy3 = new flyCrystal;
-		eEnemy3->init(6082, 1160, 0, 0);
+		eEnemy3->init(6082, 1222, 0, 0);
 		eEnemy3V.push_back(eEnemy3);
 
 		eEnemy3 = new flyCrystal;
@@ -203,9 +209,6 @@ void EnemyManagerClass::update(float _ePlayerX, float _ePlayerY)
 	eCount++;
 	if (eCount % 60 == 0)
 	{
-		//eAngle = GetAngle(eEnemy4V[0]->getEnemyX(), eEnemy4V[0]->getEnemyY(), _ePlayerX, _ePlayerY);
-		//eBulletV[0]->fire(eEnemy4V[0]->getEnemyX(), eEnemy4V[0]->getEnemyY(), eAngle, 3.f);
-
 		for (UINT i = 0; i < eBulletV.size(); i++)
 		{
 			if (eEnemy4V[i]->getIsDie() == true) continue;
@@ -218,7 +221,27 @@ void EnemyManagerClass::update(float _ePlayerX, float _ePlayerY)
 	for (UINT i = 0; i < eBulletV.size(); i++)
 	{
 		eBulletV[i]->update();
+
+		//바닥충돌
+		COLORREF colorB = GetPixel(IMAGEMANAGER->findImage(collisionS)->getMemDC(), eBulletV[i]->getVBullet()[0].x, eBulletV[i]->getVBullet()[0].y);
+		int rB = GetRValue(colorB);
+		int gB = GetGValue(colorB);
+		int bB = GetBValue(colorB);
+
+		if (rB == 255 && gB == 255 && bB == 0)
+		{
+			eBulletV[i]->getVBullet()[0].fire = false;
+		}
+		else if (rB == 0 && gB == 255 && bB == 0)
+		{
+			eBulletV[i]->getVBullet()[0].fire = false;
+		}
+		else if (rB == 0 && gB == 0 && bB == 255)
+		{
+			eBulletV[i]->getVBullet()[0].fire = false;
+		}
 	}
+
 
 }
 

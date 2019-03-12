@@ -193,7 +193,7 @@ void Stage1Class::update(void)
 	COLLISION.playerCrashedEnemy();
 	COLLISION.playerStepEnemy();
 	COLLISION.playerCrashedEBullet();
-	COLLISION.playerFindPets();
+	COLLISION.playerFindPets(1);
 	COLLISION.playerSavePoint();
 	COLLISION.playerFindTreasureBox();
 	COLLISION.playerGetJewel();

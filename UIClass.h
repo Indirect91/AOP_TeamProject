@@ -13,7 +13,6 @@ class UIClass : public gameNode
 		image* CheckImg;		//체크용 이미지
 		bool isCheck;			//스테이지1에서 찾았는가?
 		int framePet;			//프레임 이미지
-		POINT position;
 	};
 
 	tagPetCheck checkSealS1;
@@ -32,6 +31,24 @@ public:
 	void release();
 	void update();
 	void render();
+
+	bool getCheckSealS1_IsCheck() { return checkSealS1.isCheck; }
+	void setCheckSealS1_IsCheck(bool _isCheck) { checkSealS1.isCheck = _isCheck; }
+
+	bool getCheckBatS1_IsCheck() { return checkBatS1.isCheck; }
+	void setCheckBatS1_IsCheck(bool _isCheck) { checkBatS1.isCheck = _isCheck; }
+
+	bool getCheckSharkS1_IsCheck() { return checkSharkS1.isCheck; }
+	void setCheckSharkS1_IsCheck(bool _isCheck) { checkSharkS1.isCheck = _isCheck; }
+
+	bool getCheckSealB_IsCheck() { return checkSealB.isCheck; }
+	void setCheckSealB_IsCheck(bool _isCheck) { checkSealB.isCheck = _isCheck; }
+
+	bool getCheckBatB_IsCheck() { return checkBatB.isCheck; }
+	void setCheckBatB_IsCheck(bool _isCheck) { checkBatB.isCheck = _isCheck; }
+
+	bool getCheckSharkB_IsCheck() { return checkSharkB.isCheck; }
+	void setCheckSharkB_IsCheck(bool _isCheck) { checkSharkB.isCheck = _isCheck; }
 
 
 	UIClass() {}

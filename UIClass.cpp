@@ -17,32 +17,29 @@ HRESULT UIClass::init(string _petsWhere)
 	//¹°°³
 	checkSealS1.CheckImg = IMAGEMANAGER->findImage("UI-Æê ¹ß°ß");
 	checkSealS1.isCheck = TXTDATA.getCurrentPipData()->isFindSealS1;
-	checkSealS1.framePet = 2;
-	checkSealS1.position = {903,40};
+	checkSealS1.framePet = 0;
 	//¹ÚÁã
 	checkBatS1.CheckImg = IMAGEMANAGER->findImage("UI-Æê ¹ß°ß");
-	checkBatS1.isCheck = TXTDATA.getCurrentPipData()->isFindBatS1;
-	checkBatS1.framePet = 1;
-	checkBatS1.position = { 1003,40 };
+	checkBatS1.isCheck = false;
+	checkBatS1.framePet = 0;
 	//»ó¾î
 	checkSharkS1.CheckImg = IMAGEMANAGER->findImage("UI-Æê ¹ß°ß");
-	checkSharkS1.isCheck = TXTDATA.getCurrentPipData()->isFindSharkS1;
-	checkSharkS1.framePet = 3;
-	checkSharkS1.position = { 953,40 };
+	checkSharkS1.isCheck = false;
+	checkSharkS1.framePet = 0;
 
 	//º¸½º ½ºÅ×ÀÌÁö
 	//¹°°³
 	checkSealB.CheckImg = IMAGEMANAGER->findImage("UI-Æê ¹ß°ß");
 	checkSealB.isCheck = false;
-	checkSealB.framePet = 2;
+	checkSealB.framePet = 0;
 	//¹ÚÁã
 	checkBatB.CheckImg = IMAGEMANAGER->findImage("UI-Æê ¹ß°ß");
 	checkBatB.isCheck = false;
-	checkBatB.framePet = 1;
+	checkBatB.framePet = 0;
 	//»ó¾î
 	checkSharkB.CheckImg = IMAGEMANAGER->findImage("UI-Æê ¹ß°ß");
 	checkSharkB.isCheck = false;
-	checkSharkB.framePet = 3;
+	checkSharkB.framePet = 0;
 
 
 	return S_OK;
@@ -54,27 +51,14 @@ void UIClass::release()
 
 void UIClass::update()
 {
-	if (KEYMANAGER->isOnceKeyDown('H'))
-	{
-		if (checkSealS1.isCheck)
-			checkSealS1.isCheck = false;
-		else
-			checkSealS1.isCheck = true;
-	}
-	if (KEYMANAGER->isOnceKeyDown('Y'))
-	{
-		if (checkBatS1.isCheck)
-			checkBatS1.isCheck = false;
-		else
-			checkBatS1.isCheck = true;
-	}
-	if (KEYMANAGER->isOnceKeyDown('N'))
-	{
-		if (checkSharkS1.isCheck)
-			checkSharkS1.isCheck = false;
-		else
-			checkSharkS1.isCheck = true;
-	}
+	if (checkSealS1.isCheck == true) checkSealS1.framePet = 1;
+	if (checkSealB.isCheck == true) checkSealB.framePet = 1;
+	if (checkBatS1.isCheck == true) checkBatS1.framePet = 2;
+	if (checkBatB.isCheck == true) checkBatB.framePet = 2;
+	if (checkSharkS1.isCheck == true) checkSharkS1.framePet = 3;
+	if (checkSharkB.isCheck == true) checkSharkB.framePet = 3;
+
+
 
 }
 
@@ -82,40 +66,22 @@ void UIClass::render()
 {
 	if (petsWhere == "Stage1")
 	{
-		if (checkSealS1.isCheck)
-		{
-			checkSealS1.CheckImg->frameRender(getMemDC(), checkSealS1.position.x, checkSealS1.position.y, checkSealS1.framePet, 0);
-		}
-		else
-		{
-			checkSealS1.CheckImg->frameRender(getMemDC(), checkSealS1.position.x, checkSealS1.position.y, 0, 0);
-		}
-
-		if (checkBatS1.isCheck)
-		{
-			checkBatS1.CheckImg->frameRender(getMemDC(), checkBatS1.position.x, checkBatS1.position.y, checkBatS1.framePet,0);
-		}
-		else
-		{
-			checkBatS1.CheckImg->frameRender(getMemDC(), checkBatS1.position.x, checkBatS1.position.y, 0, 0);
-		}
-
-		if (checkSharkS1.isCheck)
-		{
-			checkSharkS1.CheckImg->frameRender(getMemDC(), checkSharkS1.position.x, checkSharkS1.position.y, checkSharkS1.framePet,0);
-		}
-		else
-		{
-			checkSharkS1.CheckImg->frameRender(getMemDC(), checkSharkS1.position.x, checkSharkS1.position.y, 0, 0);
-		}
-
+		//¹°°³
+		checkSealS1.CheckImg->frameRender(getMemDC(), 840, 30, checkSealS1.framePet, 0);
+		//¹ÚÁã
+		checkBatS1.CheckImg->frameRender(getMemDC(), 890, 30, checkBatS1.framePet, 0);
+		//»ó¾î
+		checkSharkS1.CheckImg->frameRender(getMemDC(), 940, 30, checkSharkS1.framePet, 0);
 	}
 	else if (petsWhere == "BossStage")
 	{
-
+		//¹°°³
+		checkSealB.CheckImg->frameRender(getMemDC(), 840, 30, checkSealB.framePet, 0);
+		//¹ÚÁã
+		checkBatB.CheckImg->frameRender(getMemDC(), 890, 30, checkBatB.framePet, 0);
+		//»ó¾î
+		checkSharkB.CheckImg->frameRender(getMemDC(), 940, 30, checkSharkB.framePet, 0);
 	}
-
-
 
 	jewelShapeImg->render(getMemDC(), 1083, 40);
 

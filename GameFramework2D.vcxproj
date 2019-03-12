@@ -148,6 +148,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="BossClass.h" />
     <ClInclude Include="BossStageClass.h" />
     <ClInclude Include="bullet.h" />
     <ClInclude Include="CameraClass.h" />
@@ -182,6 +183,7 @@
     <ClInclude Include="WorldMapScene.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="BossClass.cpp" />
     <ClCompile Include="BossStageClass.cpp" />
     <ClCompile Include="bullet.cpp" />
     <ClCompile Include="CameraClass.cpp" />

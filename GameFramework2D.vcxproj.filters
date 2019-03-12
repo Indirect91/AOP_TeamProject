@@ -185,6 +185,9 @@
     <ClInclude Include="FlowerClass.h">
       <Filter>MainGame\자주사용\필드\타일</Filter>
     </ClInclude>
+    <ClInclude Include="BossClass.h">
+      <Filter>MainGame\자주사용</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -279,6 +282,9 @@
     </ClCompile>
     <ClCompile Include="FlowerClass.cpp">
       <Filter>MainGame\자주사용\필드\타일</Filter>
+    </ClCompile>
+    <ClCompile Include="BossClass.cpp">
+      <Filter>MainGame\자주사용</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

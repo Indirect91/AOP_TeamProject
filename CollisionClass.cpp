@@ -7,6 +7,7 @@
 #include "FieldManagerClass.h"
 #include "LandmarkClass.h"
 #include "bullet.h"
+#include "UIClass.h"
 
 //플레이어가 에너미를 밟음
 void CollisionClass::playerStepEnemy()
@@ -198,7 +199,7 @@ void CollisionClass::playerCrashedEBullet()
 		{
 			//총알 조건
 			cEnemyMPtr->getEBullet()[i]->getVBullet()[0].fire = false;
-			
+
 			break;
 		}
 	}
@@ -209,6 +210,65 @@ void CollisionClass::bulletCrashedWall()
 
 }
 
+//플레이어가 펫을 발견
+void CollisionClass::playerFindPets(int _wherePet)
+{
+	wherePet = _wherePet;
+
+	for (int i = 0; i < cPetsPtrV->size(); i++)
+	{
+		if (IntersectRect(&cEmpty, &cPlayerPtr->getRect(), &(*cPetsPtrV)[i]->getPetRc()) && (*cPetsPtrV)[i]->getIsPetFind() == false)
+		{
+			//pets 조건
+			//스테이지1
+			if ((*cPetsPtrV)[i]->getWhichPet() == PetsClass::PetsTypes::seal && SCENEMANAGER->getCurrent() == "Stage1")
+			{
+				(*cPetsPtrV)[i]->setIsPetFind(true);
+				cUIPtr->setCheckSealS1_IsCheck(true);
+
+				TXTDATA.getCurrentPipData()->isFindSealS1 = true;
+			}
+			if ((*cPetsPtrV)[i]->getWhichPet() == PetsClass::PetsTypes::bat && SCENEMANAGER->getCurrent() == "Stage1")
+			{
+				(*cPetsPtrV)[i]->setIsPetFind(true);
+				cUIPtr->setCheckBatS1_IsCheck(true);
+
+				TXTDATA.getCurrentPipData()->isFindBatS1 = true;
+			}
+			if ((*cPetsPtrV)[i]->getWhichPet() == PetsClass::PetsTypes::shark && SCENEMANAGER->getCurrent() == "Stage1")
+			{
+				(*cPetsPtrV)[i]->setIsPetFind(true);
+				cUIPtr->setCheckSharkS1_IsCheck(true);
+
+				TXTDATA.getCurrentPipData()->isFindSharkS1 = true;
+			}
+			//보스 스테이지
+			if ((*cPetsPtrV)[i]->getWhichPet() == PetsClass::PetsTypes::seal && SCENEMANAGER->getCurrent() == "BossStage")
+			{
+				(*cPetsPtrV)[i]->setIsPetFind(true);
+				cUIPtr->setCheckSealB_IsCheck(true);
+
+				TXTDATA.getCurrentPipData()->isFindSealB = true;
+			}
+			if ((*cPetsPtrV)[i]->getWhichPet() == PetsClass::PetsTypes::bat && SCENEMANAGER->getCurrent() == "BossStage")
+			{
+				(*cPetsPtrV)[i]->setIsPetFind(true);
+				cUIPtr->setCheckBatB_IsCheck(true);
+
+				TXTDATA.getCurrentPipData()->isFindBatB = true;
+			}
+			if ((*cPetsPtrV)[i]->getWhichPet() == PetsClass::PetsTypes::shark && SCENEMANAGER->getCurrent() == "BossStage")
+			{
+				(*cPetsPtrV)[i]->setIsPetFind(true);
+				cUIPtr->setCheckSharkB_IsCheck(true);
+
+				TXTDATA.getCurrentPipData()->isFindSharkB = true;
+			}
+
+		}
+	}
+}
+
 
 //플레이어가 클리어 포인트에 닿음
 void CollisionClass::playerClearPoint()
@@ -217,22 +277,6 @@ void CollisionClass::playerClearPoint()
 	{
 		//clearPoint 조건
 		exit(0);
-	}
-}
-
-
-void CollisionClass::playerFindPets()
-{
-	for (int i = 0; i < cPetsPtrV->size(); i++)
-	{
-		if (IntersectRect(&cEmpty, &cPlayerPtr->getRect(), &(*cPetsPtrV)[i]->getPetRc()) && (*cPetsPtrV)[i]->getIsPetFind() == false)
-		{
-			//pets 조건
-			//(*cPetsPtrV)[i]->setIsPetFind(true);
-			if ((*cPetsPtrV)[i]->getWhichPet() == PetsClass::PetsTypes::bat && SCENEMANAGER->getCurrent() == "Stage1")
-				TXTDATA.getCurrentPipData()->isFindBatS1 = true;
-
-		}
 	}
 }
 

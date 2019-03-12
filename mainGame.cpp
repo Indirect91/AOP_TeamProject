@@ -16,6 +16,7 @@ HRESULT mainGame::init(void)
 	SCENEMANAGER->addScene("Stage1", new Stage1Class);
 	SCENEMANAGER->addScene("BossStage", new BossStageClass);
 	SCENEMANAGER->addScene("Title", new TitleClass);
+	SCENEMANAGER->addScene("Village", new VillageClass);
 
 	//현재씬 설정
 	SCENEMANAGER->loadScene("로딩화면");
@@ -41,6 +42,7 @@ void mainGame::update(void)
 
 	//씬매니져 업데이트
 	SCENEMANAGER->update();
+	SOUNDMANAGER->update();
 	
 }
 

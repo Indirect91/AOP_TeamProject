@@ -77,7 +77,7 @@ HRESULT BossStageClass::init(void)
 	COLLISION.setEnemyManagerClass(bEnemyMPtr);
 	COLLISION.setClearPoint(bClearMPtr);
 	COLLISION.setUIClass(bUIPtr);
-
+	SOUNDMANAGER->play("스테이지");
 
 	return S_OK;
 }
@@ -178,7 +178,7 @@ void BossStageClass::update(void)
 	COLLISION.playerStepEnemy();
 	COLLISION.playerCrashedEBullet();
 	COLLISION.playerAttackEnemy();
-	COLLISION.playerFindPets();
+	COLLISION.playerFindPets(2);
 	COLLISION.playerSavePoint();
 	COLLISION.playerFindTreasureBox();
 	COLLISION.playerGetJewel();

@@ -11,17 +11,159 @@ HRESULT BreakTileClass::init(BreakTile stage)
 	case BreakTileClass::BreakTile::Stage1:
 		for (int i = 0; i < 8; i++)
 		{
-			tile.point.x = 8716;
-			tile.point.y = 469;
-			tile.rc = RectMake(tile.point.x + (i * 41), tile.point.y, 41, 37);
-			tile.isTouch = false;
-			tile.isMode = true;
-			tile.TouchCount = 4;
-			tile.Count = 1;
-			TileList.push_back(tile);
+			tile = new Tile;
+			tile->block = IMAGEMANAGER->findImage("무너지는타일");
+			tile->point.x = 8716;
+			tile->point.y = 469;
+			tile->rc = RectMake(tile->point.x + (i * 41), tile->point.y, 41, 37);
+			tile->isTouch = false;
+			tile->isMode = true;
+			tile->TouchCount = 4;
+			tile->Count = 1;
+			tile->FrameCount = 0;
+			tile->FrameX = 0;
+			tile->FrameY = 0;
+			TileListone.push_back(tile);
+		}
+		for (int i = 0; i < 4; i++)
+		{
+			tile = new Tile;
+			tile->block = IMAGEMANAGER->findImage("무너지는타일");
+			tile->point.x = 9800;
+			tile->point.y = 493;
+			tile->rc = RectMake(tile->point.x + (i * 43), tile->point.y, 43, 37);
+			tile->isMode = true;
+			tile->isTouch = false;
+			tile->TouchCount = 4;
+			tile->Count = 1;
+			tile->FrameCount = 0;
+			tile->FrameX = 0;
+			tile->FrameY = 0;
+			TileListtwo.push_back(tile);
+		}
+		for (int i = 0; i < 4; i++)
+		{
+			tile = new Tile;
+			tile->block = IMAGEMANAGER->findImage("무너지는타일");
+			tile->point.x = 10083;
+			tile->point.y = 430;
+			tile->rc = RectMake(tile->point.x + (i * 43), tile->point.y, 43, 37);
+			tile->isMode = true;
+			tile->isTouch = false;
+			tile->TouchCount = 4;
+			tile->Count = 1;
+			tile->FrameCount = 0;
+			tile->FrameX = 0;
+			tile->FrameY = 0;
+			TileListthree.push_back(tile);
+		}
+		for (int i = 0; i < 8; i++)
+		{
+			tile = new Tile;
+			tile->block = IMAGEMANAGER->findImage("무너지는타일");
+			tile->point.x = 12179;
+			tile->point.y = 407;
+			tile->rc = RectMake(tile->point.x + (i * 43), tile->point.y, 43, 37);
+			tile->isMode = true;
+			tile->isTouch = false;
+			tile->TouchCount = 4;
+			tile->Count = 1;
+			tile->FrameCount = 0;
+			tile->FrameX = 0;
+			tile->FrameY = 0;
+			TileListfour.push_back(tile);
+		}
+		for (int i = 0; i < 8; i++)
+		{
+			tile = new Tile;
+			tile->block = IMAGEMANAGER->findImage("무너지는타일");
+			tile->point.x = 12350;
+			tile->point.y = 259;
+			tile->rc = RectMake(tile->point.x + (i * 43), tile->point.y, 43, 37);
+			tile->isMode = true;
+			tile->isTouch = false;
+			tile->TouchCount = 4;
+			tile->Count = 1;
+			tile->FrameCount = 0;
+			tile->FrameX = 0;
+			tile->FrameY = 0;
+			TileListfive.push_back(tile);
 		}
 		break;
 	case BreakTileClass::BreakTile::BossStage:
+		for (int i = 0; i < 4; i++)
+		{
+			tile = new Tile;
+			tile->block = IMAGEMANAGER->findImage("무너지는타일");
+			tile->point.x = 2479;
+			tile->point.y = 344;
+			tile->rc = RectMake(tile->point.x + (i * 43), tile->point.y, 43, 37);
+			tile->isMode = true;
+			tile->isTouch = false;
+			tile->TouchCount = 4;
+			tile->Count = 1;
+			tile->FrameCount = 0;
+			tile->FrameX = 0;
+			tile->FrameY = 0;
+			TileListBossone.push_back(tile);
+		}
+		for (int i = 0; i < 4; i++)
+		{
+			tile = new Tile;
+			tile->block = IMAGEMANAGER->findImage("무너지는타일");
+			tile->point.x = 3066;
+			tile->point.y = 344;
+			tile->rc = RectMake(tile->point.x + (i * 43), tile->point.y, 43, 37);
+			tile->isMode = true;
+			tile->isTouch = false;
+			tile->TouchCount = 4;
+			tile->Count = 1;
+			tile->FrameCount = 0;
+			tile->FrameX = 0;
+			tile->FrameY = 0;
+			TileListBosstwo.push_back(tile);
+		}
+		for (int i = 0; i < 9; i++)
+		{
+			tile = new Tile;
+			tile->block = IMAGEMANAGER->findImage("무너지는타일");
+			tile->point.x = 8452;
+			tile->point.y = 2310;
+			tile->rc = RectMake(tile->point.x + (i * 43), tile->point.y, 43, 37);
+			tile->isMode = true;
+			tile->isTouch = false;
+			tile->TouchCount = 4;
+			tile->Count = 1;
+			tile->FrameCount = 0;
+			tile->FrameX = 0;
+			tile->FrameY = 0;
+			TileListBossthree.push_back(tile);
+		}
+		for (int i = 0; i < 9; i++)
+		{
+			tile = new Tile;
+			tile->block = IMAGEMANAGER->findImage("무너지는타일");
+			tile->point.x = 8452;
+			tile->point.y = 2310;
+			tile->rc = RectMake(tile->point.x + (i * 43), tile->point.y, 43, 37);
+			tile->isMode = true;
+			tile->isTouch = false;
+			tile->TouchCount = 4;
+			tile->Count = 1;
+			tile->FrameCount = 0;
+			tile->FrameX = 0;
+			tile->FrameY = 0;
+			TileListBossfour.push_back(tile);
+		}
+
+		for (int i = 0; i < 1; i++)
+		{
+			TileListStage.push_back(&TileListone);
+			TileListStage.push_back(&TileListtwo);
+			TileListStage.push_back(&TileListthree);
+			TileListStage.push_back(&TileListfour);
+			TileListStage.push_back(&TileListfive);
+		}
 		break;
 	}
 
@@ -34,6 +176,90 @@ void BreakTileClass::release(void)
 
 void BreakTileClass::update(void)
 {
+
+	switch (StageNumber)
+	{
+	case BreakTileClass::BreakTile::Stage1:
+		//스테이지 1번 업데이트
+		for (int i = 0; i < TileListone.size(); i++)
+		{
+			TileListone[i]->FrameCount++;
+			if (TileListone[i]->FrameCount % 10 == 0)
+			{
+				TileListone[i]->FrameX++;
+			}
+
+		}
+		for (int i = 0; i < TileListtwo.size(); i++)
+		{
+			TileListtwo[i]->FrameCount++;
+			if (TileListtwo[i]->FrameCount % 10 == 0)
+			{
+				TileListtwo[i]->FrameX++;
+			}
+		}
+		for (int i = 0; i < TileListthree.size(); i++)
+		{
+			TileListthree[i]->FrameCount++;
+			if (TileListthree[i]->FrameCount % 10 == 0)
+			{
+				TileListthree[i]->FrameX++;
+			}
+		}
+		for (int i = 0; i < TileListfour.size(); i++)
+		{
+			TileListfour[i]->FrameCount++;
+			if (TileListfour[i]->FrameCount % 10 == 0)
+			{
+				TileListfour[i]->FrameX++;
+			}
+		}
+		for (int i = 0; i < TileListfive.size(); i++)
+		{
+			TileListfive[i]->FrameCount++;
+			if (TileListfive[i]->FrameCount % 10 == 0)
+			{
+				TileListfive[i]->FrameX++;
+			}
+		}
+		break;
+	case BreakTileClass::BreakTile::BossStage:
+		for (int i = 0; i < TileListBossone.size(); i++)
+		{
+			TileListBossone[i]->FrameCount++;
+			if (TileListBossone[i]->FrameCount % 10 == 0)
+			{
+				TileListBossone[i]->FrameX++;
+			}
+		}
+		for (int i = 0; i < TileListBosstwo.size(); i++)
+		{
+			TileListBosstwo[i]->FrameCount++;
+			if (TileListBosstwo[i]->FrameCount % 10 == 0)
+			{
+				TileListBosstwo[i]->FrameX++;
+			}
+		}
+		for (int i = 0; i < TileListBossthree.size(); i++)
+		{
+			TileListBossthree[i]->FrameCount++;
+			if (TileListBossthree[i]->FrameCount % 10 == 0)
+			{
+				TileListBossthree[i]->FrameX++;
+			}
+		}
+		for (int i = 0; i < TileListBossfour.size(); i++)
+		{
+			TileListBossfour[i]->FrameCount++;
+			if (TileListBossfour[i]->FrameCount % 10 == 0)
+			{
+				TileListBossfour[i]->FrameX++;
+			}
+		}
+		break;
+	}
+
+
 
 	//콜리전 클래스로 이동시켜야 합니다. 플레이어 충돌시 전 코드가 작동되기 때문에 여기있으면 의미없음
 
@@ -87,13 +313,53 @@ void BreakTileClass::render()
 	switch (StageNumber)
 	{
 	case BreakTileClass::BreakTile::Stage1:
-		for (int i = 0; i < TileList.size(); i++)
+		for (int i = 0; i < TileListone.size(); i++)
 		{
-			Rectangle(getMemDC(), RelativeCameraRect(TileList[i].rc));
-
+			TileListone[i]->block->frameRender(getMemDC(), TileListone[i]->rc.left - CAMERA.getCRc().left,
+				TileListone[i]->rc.top - CAMERA.getCRc().top, TileListone[i]->FrameX, TileListone[i]->FrameY);
+		}
+		for (int i = 0; i < TileListtwo.size(); i++)
+		{
+			TileListtwo[i]->block->frameRender(getMemDC(), TileListtwo[i]->rc.left - CAMERA.getCRc().left,
+				TileListtwo[i]->rc.top - CAMERA.getCRc().top, TileListtwo[i]->FrameX, TileListtwo[i]->FrameY);
+		}
+		for (int i = 0; i < TileListthree.size(); i++)
+		{
+			TileListthree[i]->block->frameRender(getMemDC(), TileListthree[i]->rc.left - CAMERA.getCRc().left,
+				TileListthree[i]->rc.top - CAMERA.getCRc().top, TileListthree[i]->FrameX, TileListthree[i]->FrameY);
+		}
+		for (int i = 0; i < TileListfour.size(); i++)
+		{
+			TileListfour[i]->block->frameRender(getMemDC(), TileListfour[i]->rc.left - CAMERA.getCRc().left,
+				TileListfour[i]->rc.top - CAMERA.getCRc().top, TileListfour[i]->FrameX, TileListfour[i]->FrameY);
+		}
+		for (int i = 0; i < TileListfive.size(); i++)
+		{
+			TileListfive[i]->block->frameRender(getMemDC(), TileListfive[i]->rc.left - CAMERA.getCRc().left,
+				TileListfive[i]->rc.top - CAMERA.getCRc().top, TileListfive[i]->FrameX, TileListfive[i]->FrameY);
 		}
 		break;
 	case BreakTileClass::BreakTile::BossStage:
+		for (int i = 0; i < TileListBossone.size(); i++)
+		{
+			TileListBossone[i]->block->frameRender(getMemDC(), TileListBossone[i]->rc.left - CAMERA.getCRc().left,
+				TileListBossone[i]->rc.top - CAMERA.getCRc().top, TileListBossone[i]->FrameX, TileListBossone[i]->FrameY);
+		}
+		for (int i = 0; i < TileListBosstwo.size(); i++)
+		{
+			TileListBosstwo[i]->block->frameRender(getMemDC(), TileListBosstwo[i]->rc.left - CAMERA.getCRc().left,
+				TileListBosstwo[i]->rc.top - CAMERA.getCRc().top, TileListBosstwo[i]->FrameX, TileListBosstwo[i]->FrameY);
+		}
+		for (int i = 0; i < TileListBossthree.size(); i++)
+		{
+			TileListBossthree[i]->block->frameRender(getMemDC(), TileListBossthree[i]->rc.left - CAMERA.getCRc().left,
+				TileListBossthree[i]->rc.top - CAMERA.getCRc().top, TileListBossthree[i]->FrameX, TileListBossthree[i]->FrameY);
+		}
+		for (int i = 0; i < TileListBossfour.size(); i++)
+		{
+			TileListBossfour[i]->block->frameRender(getMemDC(), TileListBossfour[i]->rc.left - CAMERA.getCRc().left,
+				TileListBossfour[i]->rc.top - CAMERA.getCRc().top, TileListBossfour[i]->FrameX, TileListBossfour[i]->FrameY);
+		}
 		break;
 	}
 
@@ -267,6 +533,18 @@ HRESULT ThorntrapClass::init(stageNumber Stage)
 		break;
 
 	case stageNumber::BossStage:
+		ThornBossone = RectMake(4487, 456, 85, 22);
+		ThornBosstwo = RectMake(4747, 456, 80, 22);
+		ThornBossthree = RectMake(4727, 515, 27, 167);
+		ThornBossfour = RectMake(4942, 0, 24, 468);
+		ThornBossfive = RectMake(8452, 2385, 395, 10);
+		ThornBosssix = RectMake(8965, 2385, 395, 10);
+		ThornBossList.push_back(ThornBossone);
+		ThornBossList.push_back(ThornBosstwo);
+		ThornBossList.push_back(ThornBossthree);
+		ThornBossList.push_back(ThornBossfour);
+		ThornBossList.push_back(ThornBossfive);
+		ThornBossList.push_back(ThornBosssix);
 		break;
 	}
 
@@ -291,13 +569,17 @@ void ThorntrapClass::render(void)
 	{
 	case ThorntrapClass::stageNumber::Stage1:
 		//스테이지 1번 랜더
-		for (int i = 0; i < ThornList.size(); i++)
-		{
-			Rectangle(getMemDC(), RelativeCameraRect(ThornList[i]));
-		}
+		//for (int i = 0; i < ThornList.size(); i++)
+		//{
+		//	Rectangle(getMemDC(), RelativeCameraRect(ThornList[i]));
+		//}
 		break;
 	case ThorntrapClass::stageNumber::BossStage:
 		//보스스테이지 렌더
+		for (int i = 0; i < ThornBossList.size(); i++)
+		{
+			Rectangle(getMemDC(), RelativeCameraRect(ThornBossList[i]));
+		}
 		break;
 	}
 

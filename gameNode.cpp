@@ -21,6 +21,8 @@ HRESULT gameNode::init(bool managerInit)
 		IMAGEMANAGER->init();				//이미지 매니져 초기화
 		SCENEMANAGER->init();				//씬매니져 초기화
 		TIMEMANAGER->init();				//타임매니져 초기화
+		SOUNDMANAGER->init();				//사운드 매니저 초기화
+
 		srand(GetTickCount());
 	}
 
@@ -49,6 +51,9 @@ void gameNode::release(void)
 
 		TIMEMANAGER->release();
 		TIMEMANAGER->releaseSingleton();
+
+		SOUNDMANAGER->release();
+		SOUNDMANAGER->releaseSingleton();
 	}
 	
 	//DC 해제

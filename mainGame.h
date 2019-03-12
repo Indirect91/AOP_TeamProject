@@ -5,6 +5,7 @@
 #include "Stage1Class.h"
 #include "BossStageClass.h"
 #include "TitleClass.h"
+#include "VillageClass.h"
 
 class mainGame : public gameNode
 {

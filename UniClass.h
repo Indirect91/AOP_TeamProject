@@ -62,21 +62,38 @@ public:
 private:
 	struct Tile
 	{
+		image* block;
 		RECT rc;
 		POINT point;
 		bool isTouch;
 		bool isMode;
 		int TouchCount;
 		int Count;
+		int FrameCount;
+		int FrameX;
+		int FrameY;
 	};
-	vector<Tile>TileList;
-
+	//스테이지 1번
+	vector<Tile*>TileListone;
+	vector<Tile*>TileListtwo;
+	vector<Tile*>TileListthree;
+	vector<Tile*>TileListfour;
+	vector<Tile*>TileListfive;
+	vector<vector<Tile*>*>TileListStage;
+	//보스 스테이지
+	vector<Tile*>TileListBossone;
+	vector<Tile*>TileListBosstwo;
+	vector<Tile*>TileListBossthree;
+	vector<Tile*>TileListBossfour;
+	//enum클래스 생성
 	BreakTile StageNumber;
 public:
-	Tile tile;
+	Tile* tile;
 
 	class PlayerClass* player;
 	void setPlayer(PlayerClass* play) { player = play; }
+
+	vector<vector<Tile*>*> getBreakTileV() { return TileListStage; }
 
 
 	HRESULT init(BreakTile Stage);
@@ -174,9 +191,19 @@ private:
 	RECT ThornSeven;
 	vector<RECT>ThornList;
 	//보스 스테이지
-
+	RECT ThornBossone;
+	RECT ThornBosstwo;
+	RECT ThornBossthree;
+	RECT ThornBossfour;
+	RECT ThornBossfive;
+	RECT ThornBosssix;
+	vector<RECT>ThornBossList;
+	//이넘클래스 생성자
 	stageNumber StageNumber;
 public:
+
+	vector<RECT> getThornStage1() { return ThornList; }
+	vector<RECT> getThornBossStage() { return ThornBossList; }
 
 	HRESULT init(stageNumber Stage);
 	void release(void);

@@ -11,7 +11,7 @@ struct tagSensor
 class PlayerClass : public gameNode
 {
 private:
-	enum playerState		//플레이어 상태(이미지)
+	enum playerState		//플레이어 상태(인간 핍)
 	{
 		//왼쪽 
 		LEFTIDLE,
@@ -32,7 +32,7 @@ private:
 		RIGHTDOWNATTACK,
 		RIGHTCHANGEFORM,
 	};
-	enum changeFormEnum			//플레이어가 변신 상태
+	enum changeFormEnum			//플레이어가 변신 상태(젤리 핍)
 	{
 		//젤리
 		JELLYIDLE,
@@ -46,7 +46,7 @@ private:
 	RECT playerRc;					//플레이어 렉트
 	RECT changeEffectRc;			//변신 이펙트 씌울 렉트
 	RECT attackRc;					//공격 판정 렉트
-	RECT fireWall;					//파이어월 렉트?
+	RECT fireWall;					//파이어월 렉트?(변신하면 적 공격)
 	RECT tileDestory;				//부서지는 타일 부시는 렉트
 	float x, y;						//플레이어 좌표
 	float width;					//플레이어 가로
@@ -58,11 +58,13 @@ private:
 	float leftRepulsivePower;		//왼쪽에서 당기는 힘(반발력)
 	float rightRepulsivePower;		//오른쪽에서 당기는 힘(반발력)
 	float changeCount;				//변신 시간
+	int pipHp;						//핍 체력
 	int imgCount;					//이미지 프레임 돌릴 카운트
 	int imgIndex;					//이미지 프레임 인덱스 돌릴 카운트
-	int BombCount;				//변신할때 터지는 공격 사라지게 할 카운트
-	bool isBombCount;
-	//int frameCount;				
+	int changeEffectCount;			//변신 이펙트 프레임 따로돌릴 변수
+	int BombCount;					//변신할때 터지는 공격 사라지게 할 카운트
+	int invincibleCount;			//무적 시간
+	bool isBombCount;				//변신하면 렉트 생성후 일정 시간 지나면 사라지게할 변수
 	bool isRepusiveCheck;			//반발력 점프
 	bool isLeftRepulsive;			//왼쪽으로 반발력을 줄것인가?
 	bool changeForm;				//젤리 핍인가? 픽셀 핍인가?
@@ -70,10 +72,10 @@ private:
 	bool isAttack;					//공격중인가?
 	bool isDownAttack;				//다운 공격 중인가?
 	bool isChange;					//변신중인가?
-
+	bool isInvincible;				//플레이어가 무적인가?
 	string CollisionStage;			//스테이지 이름을 담기위해
 
-	//센서 
+	// 센서 //
 	tagSensor sensorBottom;			//아래
 	tagSensor sensorTop;			//위
 	tagSensor sensorLeft;			//왼쪽
@@ -98,18 +100,28 @@ public:
 	RECT getSensorRcRight() { return sensorRight.sensorRc; }
 	RECT getSensorRcLeft() { return sensorLeft.sensorRc; }
 	RECT getAttackRc() { return attackRc; }
+	RECT getTileDestoryRc() { return tileDestory; }
 	int getBombCount() { return BombCount; }
+	int getInvincibleCount() { return invincibleCount; }
+	int getPipHp() { return pipHp; }
 	float getX() { return x; }
 	float getY() { return y; }
+	float getHeight() { return height; }
 	float getLeftRepulsiver() { return leftRepulsivePower; }
 	float getRightRepulsive() { return rightRepulsivePower; }
 	float getGravity() { return gravity; }
 	float getChangeCount() { return changeCount; }
+	bool getIsLeft() { return isLeft; }
 	bool getChangeForm() { return changeForm; }
 	bool getIsAttack() { return isAttack; }
+	bool getInvincible() { return isInvincible; }
 	void setX(float _x) { x -= _x; }
+	void setY(float _y) { y -= _y; }
+	void setPipHp(int _pipHp) { pipHp = _pipHp; }
 	void setChangeForm(bool _changeForm) { changeForm = _changeForm; }
 	void setGravity(float _gravity) { gravity = _gravity; }
+	void setInvincible(bool _invincible) { isInvincible = _invincible; }
+	void setInvincibleCount(int _invincibleCount) { invincibleCount = _invincibleCount; }
 
 	void playerMove();					//플레이어(픽셀 핍) 움직임
 	void playerAttack();				//플레이어 공격
