@@ -58,11 +58,11 @@ private:
 	float leftRepulsivePower;		//왼쪽에서 당기는 힘(반발력)
 	float rightRepulsivePower;		//오른쪽에서 당기는 힘(반발력)
 	float changeCount;				//변신 시간
+	float BombCount;				//변신할때 터지는 공격 사라지게 할 카운트
 	int pipHp;						//핍 체력
 	int imgCount;					//이미지 프레임 돌릴 카운트
 	int imgIndex;					//이미지 프레임 인덱스 돌릴 카운트
 	int changeEffectCount;			//변신 이펙트 프레임 따로돌릴 변수
-	int BombCount;					//변신할때 터지는 공격 사라지게 할 카운트
 	int invincibleCount;			//무적 시간
 	bool isBombCount;				//변신하면 렉트 생성후 일정 시간 지나면 사라지게할 변수
 	bool isRepusiveCheck;			//반발력 점프
@@ -73,6 +73,7 @@ private:
 	bool isDownAttack;				//다운 공격 중인가?
 	bool isChange;					//변신중인가?
 	bool isInvincible;				//플레이어가 무적인가?
+	bool isBombTileCrashDown;		//변신으로 타일 뿌시면 떨어지자~
 	string CollisionStage;			//스테이지 이름을 담기위해
 
 	// 센서 //
@@ -122,6 +123,7 @@ public:
 	void setGravity(float _gravity) { gravity = _gravity; }
 	void setInvincible(bool _invincible) { isInvincible = _invincible; }
 	void setInvincibleCount(int _invincibleCount) { invincibleCount = _invincibleCount; }
+	void setBombTileCrashDown(bool _BombTileCrashDown) { isBombTileCrashDown = _BombTileCrashDown; }
 
 	void playerMove();					//플레이어(픽셀 핍) 움직임
 	void playerAttack();				//플레이어 공격

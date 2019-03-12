@@ -36,6 +36,7 @@ HRESULT PlayerClass::init(float _x, float _y, string _collisionStage)
 	isChange = false;							//변신 중인가?
 	isBombCount = false;						//변신하면 렉트 생성후 일정 시간 지나면 사라지게 할거임
 	isInvincible = false;						//플레이어가 무적인가?
+	isBombTileCrashDown = false;
 
 
 #pragma region 센서 초기화
@@ -392,7 +393,7 @@ void PlayerClass::sensorMove()
 #pragma endregion
 
 	//센서 지속 업데이트
-	sensorBottom.sensorRc = RectMakeCenter(sensorBottom.x, sensorBottom.y, 15, 5);
+	sensorBottom.sensorRc = RectMakeCenter(sensorBottom.x, sensorBottom.y, 40, 5);
 	sensorLeft.sensorRc = RectMakeCenter(sensorLeft.x, sensorLeft.y, 5, 40);
 	sensorRight.sensorRc = RectMakeCenter(sensorRight.x, sensorRight.y, 5, 40);
 	sensorTop.sensorRc = RectMakeCenter(sensorTop.x, sensorTop.y, 40, 5);
@@ -454,17 +455,19 @@ void PlayerClass::pixelCollision()
 			break;
 		}
 
-		//바텀센서 X 변신으로 부서지는 타일
-		//if (r == 126 && g == 206 && b == 244)
-		//{
-		//	y = i - height;						//y축 위치보정
-		//	gravity = 0.0f;						//중력 0으로~
-		//	sensorBottom.isTouch = true;		//현재 픽셀 충돌중인지 체크
-		//	sensorBottom.isJump = false;		//픽셀 충돌중이면 언제든지 점프
-		//	isRepusiveCheck = false;			//벽점프가 아닌 점프 할 때 반발력을 안주게 하기 위해
-		//	break;
-		//}
-
+		if (!isBombTileCrashDown)
+		{
+			//바텀센서 X 변신으로 부서지는 타일
+			if (r == 126 && g == 206 && b == 244)
+			{
+				y = i - height;						//y축 위치보정
+				gravity = 0.0f;						//중력 0으로~
+				sensorBottom.isTouch = true;		//현재 픽셀 충돌중인지 체크
+				sensorBottom.isJump = false;		//픽셀 충돌중이면 언제든지 점프
+				isRepusiveCheck = false;			//벽점프가 아닌 점프 할 때 반발력을 안주게 하기 위해
+				break;
+			}
+		}
 		//바텀센서 X 끊어지는 타일
 		if (r == 149 && g == 149 && b == 149)
 		{
@@ -527,18 +530,18 @@ void PlayerClass::pixelCollision()
 			}
 		}
 
-		//오른쪽 센서 X 노란색과 충돌시
-		if (r == 255 && g == 255 && b == 0)
-		{
-			x = i - width;						//위치 보정
-			break;
-		}
-		//오른쪽 센서 X 검정색과 충돌시
-		if (r == 0 && g == 0 && b == 0)
-		{
-			x = i - width;						//위치 보정
-			break;
-		}
+		////오른쪽 센서 X 노란색과 충돌시
+		//if (r == 255 && g == 255 && b == 0)
+		//{
+		//	x = i - width;						//위치 보정
+		//	break;
+		//}
+		////오른쪽 센서 X 검정색과 충돌시
+		//if (r == 0 && g == 0 && b == 0)
+		//{
+		//	x = i - width;						//위치 보정
+		//	break;
+		//}
 
 	}
 
@@ -570,34 +573,33 @@ void PlayerClass::pixelCollision()
 				{
 					gravity = 15.0f;
 				}
-				if (!changeForm)
+
+				if (KEYMANAGER->isStayKeyDown(VK_LEFT))
 				{
-					if (KEYMANAGER->isStayKeyDown(VK_LEFT))
-					{
-						gravity = 0.0f;					//벽잡을 하는 중이니 중력을 0
-					}
+					gravity = 0.0f;					//벽잡을 하는 중이니 중력을 0
 				}
+
 				break;
 			}
 			else                                        //젤리 핍 상태일때
 			{
-				x = i + 1;						    	//x축 위치 보정
+				x = i + 2;						    	//x축 위치 보정
 				sensorLeft.isTouch = true;				//왼쪽 센서가 충돌이 되고있는지?
 				break;
 			}
 		}
-		//왼쪽 센서 X 노란색과 충돌시 
-		if (r == 255 && g == 255 && b == 0)
-		{
-			x = i;										//위치 보정
-			break;
-		}
-		//왼쪽 센서 X 검정색과 충돌시
-		if (r == 0 && g == 0 && b == 0)
-		{
-			x = i;										//위치 보정
-			break;
-		}
+		////왼쪽 센서 X 노란색과 충돌시 
+		//if (r == 255 && g == 255 && b == 0)
+		//{
+		//	x = i;										//위치 보정
+		//	break;
+		//}
+		////왼쪽 센서 X 검정색과 충돌시
+		//if (r == 0 && g == 0 && b == 0)
+		//{
+		//	x = i;										//위치 보정
+		//	break;
+		//}
 	}
 
 	//탑 픽셀 충돌(Top)
@@ -611,7 +613,7 @@ void PlayerClass::pixelCollision()
 		//탑 센서 X 픽셀(검정)
 		if (r == 0 && g == 0 && b == 0)
 		{
-			y += 5;								//y축을 이격시켜준다.
+			y += 10;								//y축을 이격시켜준다.
 			gravity = 0.0f;						//중력을 0으로 만들어 자연스럽게 떨어지게
 			sensorTop.isTouch = true;			//탑 센서가 충돌 중인지?
 			break;
@@ -769,17 +771,19 @@ void PlayerClass::transForm()
 			imgIndex = 0;
 			changeEffectCount = 0;
 		}
+
+
 	}
 	if (KEYMANAGER->isStayKeyDown('L'))
 	{
 		changeCount += 0.05f;
+		isChange = true;								//변신 중인지 판단
 		if (changeForm)
 		{
 			changeCount -= 0.05f;
 		}
 
-		if (!changeForm)	gravity = 0.0f;				//변신 중일때 중력 0
-		isChange = true;								//변신 중인지 판단
+		if (!changeForm) gravity = 0.0f;				//변신 중일때 중력 0
 
 		if (!isLeft)
 		{
@@ -791,10 +795,10 @@ void PlayerClass::transForm()
 		}
 	}
 
+
 	if (KEYMANAGER->isOnceKeyUp('L'))
 	{
 		isChange = false;
-
 		if (isLeft)
 		{
 			imgIndex = 0;
@@ -813,13 +817,13 @@ void PlayerClass::transForm()
 
 	if (changeCount >= 2.0f)
 	{
-		changeCount = 2.0f;
+		changeCount = 0.0f;
 		changeForm = true;
 
 		if (changeForm)
 		{
 			isBombCount = true;
-			BombCount = 5;
+			BombCount = 0.5f;
 		}
 	}
 
@@ -829,7 +833,7 @@ void PlayerClass::transForm()
 	}
 
 	if (changeForm) fireWall = RectMakeCenter((x + 20), y, 200, 200);
-	if (changeForm) tileDestory = RectMake((x - 80), y, 200, 300);
+	if (changeForm) tileDestory = RectMake((x - 80), y, 200, 200);
 
 }
 
