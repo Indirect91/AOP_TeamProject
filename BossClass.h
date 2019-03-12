@@ -10,6 +10,13 @@ class BossClass : public gameNode
 		c
 	};
 
+	enum DOLTAN
+	{
+		stupid,
+		smartALittle,
+		lol
+	};
+
 	RECT BossRc;						//보스 렉트
 	RECT bossAttackRc;					//보스 공격 렉트
 	float bSpeed;						//보스 속도
