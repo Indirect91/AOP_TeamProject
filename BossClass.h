@@ -8,6 +8,7 @@ class BossClass : public gameNode
 		a,
 		b,
 		c
+		// 하늘이 빠규
 	};
 
 	enum DOLTAN
