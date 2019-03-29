@@ -58,19 +58,19 @@ HRESULT EnemyManagerClass::init(tagWhereStage _whereStage)
 
 		//날아다니는 크리스탈
 		eEnemy3 = new flyCrystal;
-		eEnemy3->init(7218, 2170, 7156, 7283);
+		eEnemy3->init(7218, 2170, 7156, 7283, true);
 		eEnemy3V.push_back(eEnemy3);
 
 		eEnemy3 = new flyCrystal;
-		eEnemy3->init(8934, 640, 8846, 9096);
+		eEnemy3->init(8934, 640, 8846, 9096, true);
 		eEnemy3V.push_back(eEnemy3);
 
 		eEnemy3 = new flyCrystal;
-		eEnemy3->init(10112, 630, 9880, 10320);
+		eEnemy3->init(10112, 630, 9880, 10320, true);
 		eEnemy3V.push_back(eEnemy3);
 
 		eEnemy3 = new flyCrystal;
-		eEnemy3->init(15539, 458, 0, 0);
+		eEnemy3->init(15539, 458, 0, 0, false);
 		eEnemy3V.push_back(eEnemy3);
 
 		break;
@@ -79,11 +79,11 @@ HRESULT EnemyManagerClass::init(tagWhereStage _whereStage)
 		collisionS = "BossStageCollision";
 		//떠다니는 문어
 		eEnemy1 = new flyOctopus;
-		eEnemy1->init(4414, 480);
+		eEnemy1->init(4414, 436);
 		eEnemy1V.push_back(eEnemy1);
 
 		eEnemy1 = new flyOctopus;
-		eEnemy1->init(4664, 480);
+		eEnemy1->init(4664, 436);
 		eEnemy1V.push_back(eEnemy1);
 
 		//기어다니는 벌레
@@ -101,23 +101,31 @@ HRESULT EnemyManagerClass::init(tagWhereStage _whereStage)
 
 		//크리스탈
 		eEnemy3 = new flyCrystal;
-		eEnemy3->init(1858, 645, 0, 0);
+		eEnemy3->init(1858, 645, 0, 0, false);
 		eEnemy3V.push_back(eEnemy3);
 
 		eEnemy3 = new flyCrystal;
-		eEnemy3->init(2557, 598, 2404, 2756);
+		eEnemy3->init(2557, 598, 2404, 2756, true);
 		eEnemy3V.push_back(eEnemy3);
 
 		eEnemy3 = new flyCrystal;
-		eEnemy3->init(6082, 1222, 0, 0);
+		eEnemy3->init(6082, 1222, 0, 0, false);
 		eEnemy3V.push_back(eEnemy3);
 
 		eEnemy3 = new flyCrystal;
-		eEnemy3->init(7273, 2010, 7141, 7673);
+		eEnemy3->init(7273, 2010, 7141, 7673, true);
 		eEnemy3V.push_back(eEnemy3);
 
 		eEnemy3 = new flyCrystal;
-		eEnemy3->init(9336, 1358, 9266, 9376);
+		eEnemy3->init(9336, 1358, 9266, 9376, true);
+		eEnemy3V.push_back(eEnemy3);
+
+		eEnemy3 = new flyCrystal;
+		eEnemy3->init(8460, 2168, 0, 0, true);
+		eEnemy3V.push_back(eEnemy3);
+
+		eEnemy3 = new flyCrystal;
+		eEnemy3->init(9350, 2168, 0, 0, false);
 		eEnemy3V.push_back(eEnemy3);
 
 		//둥둥이 유령으로 바꿔주기
@@ -207,7 +215,7 @@ void EnemyManagerClass::update(float _ePlayerX, float _ePlayerY)
 	}
 
 	eCount++;
-	if (eCount % 60 == 0)
+	if (eCount % 120 == 0)
 	{
 		for (UINT i = 0; i < eBulletV.size(); i++)
 		{

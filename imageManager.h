@@ -67,7 +67,7 @@ public:
 	void stretchFrameRender(string strKey, HDC hdc, int destX, int destY, int currentFrameX, int currentFrameY, float scale = 1.0f);
 	void stretchFrameRenderCenterXUpY(string strKey, HDC hdc, int destX, int destY, int currentFrameX, int currentFrameY, float centerX = 1.0f, float upY = 1.f);
 	void stretchFrameRenderCenterXDownY(string strKey, HDC hdc, int destX, int destY, int currentFrameX, int currentFrameY, float centerX = 1.0f, float upY = 1.f);
-
+	void zoomCenterXCenterY(string strKey, HDC hdc, int centerX, int centerY, float scale);
 
 	imageManager() {}
 	~imageManager() {}

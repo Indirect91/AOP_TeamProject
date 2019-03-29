@@ -6,11 +6,15 @@ class BossClass : public gameNode
 	enum BossState
 	{
 		idle,		//대기
-		move,		//움직임
+		shout,		//고함
+		change,		//변신
+		walk,		//걷기
+		run,		//달리기
 		attack1,	//공격1
 		attack2,	//공격2
 		attacked,	//피격당함
-		die			//죽음
+		die,		//죽음
+		end			//아무 조건도 끝
 	}bossState;
 
 	RECT bossRc;						//보스 렉트
@@ -18,16 +22,18 @@ class BossClass : public gameNode
 	float bossSpeed;						//보스 속도
 	float bossGravity;					//보스 중력
 	float bossX, bossY;					//보스 중심좌표
-	int bossHp;
+	int bossHp;							//보스 체력
 
+	bool isMeet;						//보스와 만났는가?
 	bool isStart;						//보스 스테이지에서 전투가 시작하는가?
-
 	bool isRight;						//보스가 오른쪽인가?
-	bool isMove;						//보스가 움직이는가?
-	bool isAttak;						//보스가 공격하는가?
+	bool isDie;							//보스가 죽었는가?
 
 	image* bossIdleImg;					//보스가 대기하는 이미지
-	image* bossMoveImg;					//보스가 움직이는 이미지
+	image* bossShoutImg;				//보스가 대기하는 이미지
+	image* bossChangeImg;				//보스가 변신하는 이미지
+	image* bossWalkImg;					//보스가 움직이는 이미지
+	image* bossRunImg;					//보스가 움직이는 이미지
 	image* bossAttack1Img;				//보스가 공격하는 이미지1
 	image* bossAttack2Img;				//보스가 공격하는 이미지2
 	image* bossAttackedImg;				//보스가 공격받는 이미지
@@ -51,6 +57,8 @@ public:
 	void render(void);
 
 	void setBPLayerClass(class PlayerClass* _bPlayerPtr) { bPlayerPtr = _bPlayerPtr; }
+
+	bool getIsDie() { return isDie; }
 
 	BossClass() {}
 	~BossClass() {}

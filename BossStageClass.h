@@ -20,7 +20,9 @@ class BossStageClass :public gameNode
 
 	class PetsClass* bPetPtr;					//보스 스테이지에 있는 펫 클래스 포인터
 	vector <PetsClass*> bPetPtrV;				//보스 스테이지에 있는 펫 클래스 포인터를 담는 벡터
-	
+	image * respawnImg;							
+	UINT respawnFrame;							
+
 	class savePoint* bSaveMPtr;					//보스 스테이지에 있는 세이브포인터 클래스 포인터
 	class clearPoint* bClearMPtr;				//보스 스테이지에 있는 클리어포인터 클래스 포인터
 

@@ -124,13 +124,12 @@ HRESULT treasureBox::init(float _x, float _y, bool _isRight, string _collisionSt
 	{
 		jewel.jewelImg = IMAGEMANAGER->findImage("보석");
 		jewel.jewelType = rand() % 13;
-
+		jewel.blockCollect = 0;
 		jewel.jewelX = treasureX;
 		jewel.jewelY = treasureY - 20;
 		jewel.jAngle = rand() % 30 + 75;
 		jewel.jGravity = 0;
 		jewel.jSpeed = 8;
-		jewel.jewelPrice = 1;
 		jewel.isJewelGet = false;
 		jewel.jewelVisible = true;
 
@@ -151,12 +150,6 @@ void treasureBox::release(void)
 //=============업데이트=============
 void treasureBox::update(void)
 {
-	//확인을 위해 임시로 넣은 키
-	//if (KEYMANAGER->isStayKeyDown('N'))
-	//{
-	//	isOpen = true;
-	//}
-
 	if (isOpen == true)
 	{
 		imgCount++;
@@ -181,73 +174,13 @@ void treasureBox::update(void)
 		}
 	}
 
-	//상자를 열었을때 보석이 튀어나옴
-	//if (isOpen == true)
-	//{
-	//	for (int i = 0; i < jewelV.size(); i++)
-	//	{
-	//		if (jewelV[i].isJewelGet == true) continue;
-	//
-	//		jewelV[i].jGravity += 0.25f;
-	//		jewelV[i].jewelX += cosf(jewelV[i].jAngle * PI / 180) * jewelV[i].jSpeed;
-	//		jewelV[i].jewelY += -sinf(jewelV[i].jAngle * PI / 180) * jewelV[i].jSpeed + jewelV[i].jGravity;
-	//	}
-	//}
-	//
-	//
-	//for (int i = 0; i < jewelV.size(); i++)
-	//{
-	//	if (jewelV[i].isJewelGet == false)
-	//	{
-	//		//보석 픽셀 충돌
-	//		if (jewelV[i].isJewelGet == false)
-	//		{
-	//			//바닥충돌
-	//			COLORREF colorBottom = GetPixel(IMAGEMANAGER->findImage(collisionStage)->getMemDC(), jewelV[i].jewelX, jewelV[i].jewelRc.bottom);
-	//			int rBottom = GetRValue(colorBottom);
-	//			int gBottom = GetGValue(colorBottom);
-	//			int bBottom = GetBValue(colorBottom);
-	//
-	//			if (rBottom == 255 && gBottom == 255 && bBottom == 0)
-	//			{
-	//				jewelV[i].jGravity = 0;
-	//				jewelV[i].jSpeed = 0;
-	//				jewelV[i].jewelY = jewelV[i].jewelRc.bottom - 8;
-	//
-	//			}
-	//
-	//			//왼쪽 벽 충돌
-	//			COLORREF colorLeft = GetPixel(IMAGEMANAGER->findImage(collisionStage)->getMemDC(), jewelV[i].jewelRc.left, jewelV[i].jewelY);
-	//			int rLeft = GetRValue(colorLeft);
-	//			int gLeft = GetGValue(colorLeft);
-	//			int bLeft = GetBValue(colorLeft);
-	//
-	//			if (rLeft == 0 && gLeft == 255 && bLeft == 0)
-	//			{
-	//				jewelV[i].jewelX = jewelV[i].jewelRc.left + 8;
-	//			}
-	//
-	//			//오른쪽 벽 충돌
-	//			COLORREF colorRight = GetPixel(IMAGEMANAGER->findImage(collisionStage)->getMemDC(), jewelV[i].jewelRc.right, jewelV[i].jewelY);
-	//			int rRight = GetRValue(colorLeft);
-	//			int gRight = GetGValue(colorLeft);
-	//			int bRight = GetBValue(colorLeft);
-	//
-	//			if (rRight == 0 && gRight == 0 && bRight == 255)
-	//			{
-	//				jewelV[i].jewelX = jewelV[i].jewelRc.right - 8;
-	//			}
-	//		}
-	//	}
-	//
-	//	
-	//}
-
 	for (int i = 0; i < jewelV.size(); i++)
 	{
 		//보석 픽셀 충돌
 		if (jewelV[i].isJewelGet == false && isOpen)
 		{
+			jewelV[i].jGravity += 0.4f;
+			jewelV[i].blockCollect++;
 			jewelV[i].jewelX += cosf(jewelV[i].jAngle * PI / 180) * jewelV[i].jSpeed;
 			jewelV[i].jewelY += -sinf(jewelV[i].jAngle * PI / 180) * jewelV[i].jSpeed + jewelV[i].jGravity;
 
@@ -303,7 +236,6 @@ void treasureBox::render(void)
 	//확인용 토글키
 	if (KEYMANAGER->isToggleKey('T'))
 	{
-		Rectangle(getMemDC(), saveJewelRc);
 		Rectangle(getMemDC(), RelativeCameraRect(treasureBoxRc));
 	}
 	treasureBoxImg->frameRender(getMemDC(), treasureBoxRc.left - CAMERA.getCRc().left, treasureBoxRc.top - CAMERA.getCRc().top, frameX, frameY);
@@ -313,7 +245,7 @@ void treasureBox::render(void)
 	{
 		for (int i = 0; i < jewelV.size(); i++)
 		{
-			if(jewelV[i].jewelVisible)
+			if (jewelV[i].jewelVisible)
 				jewelV[i].jewelImg->frameRender(getMemDC(), jewelV[i].jewelRc.left - CAMERA.getCRc().left, jewelV[i].jewelRc.top - CAMERA.getCRc().top, jewelV[i].jewelType, 0);
 		}
 	}

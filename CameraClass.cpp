@@ -53,6 +53,34 @@ void CameraClass::cameraRevision(float _bgWidth, float _bgHeight)
 
 }
 
+void CameraClass::cameraRevisionWorldMap(float _bgWidth, float _bgHeight, float zoom)
+{
+	//카메라가 배경의 왼쪽 밖으로 나갈때
+	if (cRc.left < _bgWidth/2 - (_bgWidth/2)*zoom)
+	{
+		cX = WINSIZEX/2;
+	}
+	//카메라가 배경의 오른쪽 밖으로 나갈때(배경에 맞추어)
+	else if (cRc.right > _bgWidth / 2 + _bgWidth * zoom / 2)
+	{
+		cX = _bgWidth - WINSIZEX / 2;
+	}
+	//카메라가 배경의 위쪽 밖으로 나갈때
+	if (cRc.top < 0)
+	{
+		//cY = WINSIZEY / 2;
+	}
+	//카메라가 배경의 아래쪽 밖으로 나갈때(배경에 맞추어)
+	else if (cRc.bottom > _bgHeight)
+	{
+		//cY = _bgHeight - WINSIZEY / 2;
+	}
+
+	//보정후 또 그리기
+	cRc = RectMakeCenter(cX, cY, cWidth, cHeight);
+
+}
+
 //카메라가 구간에 따라 보정되게 하는 함수
 void CameraClass::cameraRevision(float _startCX, float _startCY, float _endCX, float _endCY)
 {

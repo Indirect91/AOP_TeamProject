@@ -20,6 +20,7 @@ private: //▼ 원래 하던대로 프라이빗에 들어갈 변수들 넣고 진행하면 됩니다
 	class UIClass* cUIPtr;
 
 	class EnemyManagerClass* cEnemyMPtr;
+	class BossClass* cBossPtr;
 
 	int wherePet;
 	int whichPet;
@@ -56,6 +57,8 @@ public: //▼겟터셋터같은 원래 하던대로 여기 퍼블릭에 함수 만들면 됨!
 
 	void setClearPoint(class clearPoint* _cClearPointPtr) { cClearPointPtr = _cClearPointPtr; }
 
+	void setBossClass(class BossClass* _cBossPtr) { cBossPtr = _cBossPtr; }
+
 	//void setCEBullet(vector<class bullet*>* _cEBulletV) { cEBulletV = _cEBulletV; }
 
 	//플레이어가 에너미를 밟음
@@ -72,11 +75,20 @@ public: //▼겟터셋터같은 원래 하던대로 여기 퍼블릭에 함수 만들면 됨!
 	void playerCollisionHideTile();
 	//플레이어가 변신할때 이펙트로 애너미 죽이기
 	void playerChangeEnemyCrash();
+	//플레이어가 점프대 밟아서 점프
+	void playerJumpJump();
+	//플레이어 vs 보스 충돌
+	void playerBossCollision();
 	//플레이어가 둥둥이 총알에 맞음
 	void playerCrashedEBullet();
 	//총알이 벽에 맞음
 	void bulletCrashedWall();
-
+	//플레이어가 바닥타일을 끊음
+	void playerVineCut();
+	//플레이어가 브레이크 타일과 부딪혔을 경우(스테이지 1)
+	void playerBreakTileStage1();
+	//플레이어가 브레이크 타일과 부딛혔을 경우 (보스 스테이지)
+	void playerBreakTileBossStage();
 	//플레이어가 펫을 발견
 	void playerFindPets(int wherePet);
 	//플레이어가 세이브 포인트를 지남

@@ -18,6 +18,8 @@ HRESULT mainGame::init(void)
 	SCENEMANAGER->addScene("Title", new TitleClass);
 	SCENEMANAGER->addScene("WorldMap", new WorldMapScene);
 	SCENEMANAGER->addScene("Village", new VillageClass);
+	SCENEMANAGER->addScene("Cinema", new CinematicClass);
+	SCENEMANAGER->addScene("Ending", new EndingSceneClass);
 
 	//현재씬 설정
 	SCENEMANAGER->loadScene("로딩화면");

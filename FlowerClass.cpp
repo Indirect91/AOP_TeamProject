@@ -253,46 +253,46 @@ void FlowerClass::render()
 	case FlowerClass::FlowerTile::Stage1:
 		break;
 	case FlowerClass::FlowerTile::BossStage:
-		for (int i = 0; i < FlowerList.size(); i++)
-		{
-			Rectangle(getMemDC(), RelativeCameraRect(FlowerList[i]->rc));
-		}
-		for (int i = 0; i < FlowerListLeft.size(); i++)
-		{
-			Rectangle(getMemDC(), RelativeCameraRect(FlowerListLeft[i]->rc));
-		}
-		for (int i = 0; i < FlowerListRight.size(); i++)
-		{
-			Rectangle(getMemDC(), RelativeCameraRect(FlowerListRight[i]->rc));
-		}
-		for (int i = 0; i < FlowerListLefttwo.size(); i++)
-		{
-			Rectangle(getMemDC(), RelativeCameraRect(FlowerListLefttwo[i]->rc));
-		}
-		for (int i = 0; i < FlowerListRighttwo.size(); i++)
-		{
-			Rectangle(getMemDC(), RelativeCameraRect(FlowerListRighttwo[i]->rc));
-		}
-		for (int i = 0; i < FlowerListDownoen.size(); i++)
-		{
-			Rectangle(getMemDC(), RelativeCameraRect(FlowerListDownoen[i]->rc));
-		}
-		for (int i = 0; i < FlowerListDowntwo.size(); i++)
-		{
-			Rectangle(getMemDC(), RelativeCameraRect(FlowerListDowntwo[i]->rc));
-		}
-		for (int i = 0; i < FlowerListUpone.size(); i++)
-		{
-			Rectangle(getMemDC(), RelativeCameraRect(FlowerListUpone[i]->rc));
-		}
-		for (int i = 0; i < FlowerListUptwo.size(); i++)
-		{
-			Rectangle(getMemDC(), RelativeCameraRect(FlowerListUptwo[i]->rc));
-		}
-		for (int i = 0; i < FlowerListUpthree.size(); i++)
-		{
-			Rectangle(getMemDC(), RelativeCameraRect(FlowerListUpthree[i]->rc));
-		}
+		//for (int i = 0; i < FlowerList.size(); i++)
+		//{
+		//	Rectangle(getMemDC(), RelativeCameraRect(FlowerList[i]->rc));
+		//}
+		//for (int i = 0; i < FlowerListLeft.size(); i++)
+		//{
+		//	Rectangle(getMemDC(), RelativeCameraRect(FlowerListLeft[i]->rc));
+		//}
+		//for (int i = 0; i < FlowerListRight.size(); i++)
+		//{
+		//	Rectangle(getMemDC(), RelativeCameraRect(FlowerListRight[i]->rc));
+		//}
+		//for (int i = 0; i < FlowerListLefttwo.size(); i++)
+		//{
+		//	Rectangle(getMemDC(), RelativeCameraRect(FlowerListLefttwo[i]->rc));
+		//}
+		//for (int i = 0; i < FlowerListRighttwo.size(); i++)
+		//{
+		//	Rectangle(getMemDC(), RelativeCameraRect(FlowerListRighttwo[i]->rc));
+		//}
+		//for (int i = 0; i < FlowerListDownoen.size(); i++)
+		//{
+		//	Rectangle(getMemDC(), RelativeCameraRect(FlowerListDownoen[i]->rc));
+		//}
+		//for (int i = 0; i < FlowerListDowntwo.size(); i++)
+		//{
+		//	Rectangle(getMemDC(), RelativeCameraRect(FlowerListDowntwo[i]->rc));
+		//}
+		//for (int i = 0; i < FlowerListUpone.size(); i++)
+		//{
+		//	Rectangle(getMemDC(), RelativeCameraRect(FlowerListUpone[i]->rc));
+		//}
+		//for (int i = 0; i < FlowerListUptwo.size(); i++)
+		//{
+		//	Rectangle(getMemDC(), RelativeCameraRect(FlowerListUptwo[i]->rc));
+		//}
+		//for (int i = 0; i < FlowerListUpthree.size(); i++)
+		//{
+		//	Rectangle(getMemDC(), RelativeCameraRect(FlowerListUpthree[i]->rc));
+		//}
 
 		fireBollPtr->render();
 		fireBollLeftPtr->render();
@@ -311,8 +311,8 @@ void FlowerClass::render()
 
 void FlowerClass::flowerOne()
 {
-	//바닥 꽃 카운트 (100초당 전부 1번씩 쏘기)
-	if (Count % 100 == 0)
+	//바닥 꽃 카운트 (150초당 전부 1번씩 쏘기)
+	if (Count % 150 == 0)
 	{
 		for (int i = 0; i < FlowerList.size(); i++)
 		{
@@ -320,43 +320,43 @@ void FlowerClass::flowerOne()
 		}
 	}
 	//왼쪽 꽃 카운트 (각각 시간차로 쏘게 만들기)
-	if (LeftCountone % 100 == 0)
+	if (LeftCountone % 150 == 0)
 	{
 		fireBollLeftPtr->fire(FlowerListLeft[0]->rc.right, FlowerListLeft[0]->rc.top + 22, 0, 5.0f);
 	}
-	if (LeftCounttwo % 110 == 0)
+	if (LeftCounttwo % 160 == 0)
 	{
 		fireBollLeftPtr->fire(FlowerListLeft[1]->rc.right, FlowerListLeft[1]->rc.top + 22, 0, 5.0f);
 		LeftCounttwo = 10;
 	}
-	if (LeftCountthree % 120 == 0)
+	if (LeftCountthree % 170 == 0)
 	{
 		fireBollLeftPtr->fire(FlowerListLeft[2]->rc.right, FlowerListLeft[2]->rc.top + 22, 0, 5.0f);
 		LeftCountthree = 20;
 	}
-	if (LeftCountfour % 130 == 0)
+	if (LeftCountfour % 180 == 0)
 	{
 		fireBollLeftPtr->fire(FlowerListLeft[3]->rc.right, FlowerListLeft[3]->rc.top + 22, 0, 5.0f);
 		LeftCountfour = 30;
 	}
 
 	//오른쪽 꽃 카운트 (각각 시간차로 쏘게 만들기)
-	if (RightCountone % 100 == 0)
+	if (RightCountone % 150 == 0)
 	{
 		fireBollRightPtr->fire(FlowerListRight[0]->rc.left, FlowerListRight[0]->rc.top + 22, PI, 5.0f);
 
 	}
-	if (RightCounttwo % 110 == 0)
+	if (RightCounttwo % 160 == 0)
 	{
 		fireBollRightPtr->fire(FlowerListRight[1]->rc.left, FlowerListRight[1]->rc.top + 22, PI, 5.0f);
 		RightCounttwo = 10;
 	}
-	if (RightCountthree % 120 == 0)
+	if (RightCountthree % 170 == 0)
 	{
 		fireBollRightPtr->fire(FlowerListRight[2]->rc.left, FlowerListRight[2]->rc.top + 22, PI, 5.0f);
 		RightCountthree = 20;
 	}
-	if (RightCountfour % 130 == 0)
+	if (RightCountfour % 180 == 0)
 	{
 		fireBollRightPtr->fire(FlowerListRight[3]->rc.left, FlowerListRight[3]->rc.top + 22, PI, 5.0f);
 		RightCountfour = 30;
@@ -382,7 +382,7 @@ void FlowerClass::flowerOne()
 		RightTwoCounttwo = 40;
 	}
 
-	if (DownoneCount % 150 == 0)
+	if (DownoneCount % 160 == 0)
 	{
 		for (int i = 0; i < FlowerListDownoen.size(); i++)
 		{
@@ -391,7 +391,7 @@ void FlowerClass::flowerOne()
 
 	}
 
-	if (DowntwoCount % 150 == 0)
+	if (DowntwoCount % 160 == 0)
 	{
 		for (int i = 0; i < FlowerListDowntwo.size(); i++)
 		{
@@ -399,7 +399,7 @@ void FlowerClass::flowerOne()
 		}
 	}
 
-	if (UponeCount % 150 == 0)
+	if (UponeCount % 160 == 0)
 	{
 		for (int i = 0; i < FlowerListUpone.size(); i++)
 		{
@@ -412,7 +412,7 @@ void FlowerClass::flowerOne()
 
 	}
 
-	if (UpthreeCount % 150 == 0)
+	if (UpthreeCount % 160 == 0)
 	{
 		for (int i = 0; i < FlowerListUpthree.size(); i++)
 		{

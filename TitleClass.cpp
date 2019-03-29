@@ -16,13 +16,36 @@ HRESULT TitleClass::init(void)
 	ESC_YSetting = IMAGEMANAGER->findImage("ESC_YSetting");
 	newEmpty = IMAGEMANAGER->findImage("newEmpty");
 	selection = IMAGEMANAGER->findImage("selection");
+	rescueAnimal = IMAGEMANAGER->findImage("UI-숫자");
+	maxHeart = IMAGEMANAGER->findImage("UI-숫자");
+	continueimg = IMAGEMANAGER->findImage("Continue");
 
+	for (int i = 0; i < 4; i++)
+	{
+		moneyNum[i] = IMAGEMANAGER->findImage("UI-숫자");
+	}
+	SOUNDMANAGER->play("타이틀",TXTDATA.refBGMSound());
+	slot1Pets = IMAGEMANAGER->findImage("UI-숫자");
+	slot2Pets = IMAGEMANAGER->findImage("UI-숫자");
+	slot3Pets = IMAGEMANAGER->findImage("UI-숫자");
 	//▼세이브슬롯별 이닛
-	if (TXTDATA.getPip1Cinematic()==1) saveSlot1 = IMAGEMANAGER->findImage("loadFile");
+	if (TXTDATA.getPip1Cinematic() == 1)
+	{
+		saveSlot1 = IMAGEMANAGER->findImage("loadFile");
+		slot1Pets = IMAGEMANAGER->findImage("UI-숫자");
+	}
 	else saveSlot1 = IMAGEMANAGER->findImage("newEmpty");
-	if (TXTDATA.getPip2Cinematic()==1) saveSlot2 = IMAGEMANAGER->findImage("loadFile");
+	if (TXTDATA.getPip2Cinematic() == 1)
+	{
+		saveSlot2 = IMAGEMANAGER->findImage("loadFile");
+		slot2Pets = IMAGEMANAGER->findImage("UI-숫자");
+	}
 	else saveSlot2 = IMAGEMANAGER->findImage("newEmpty");
-	if (TXTDATA.getPip3Cinematic()==1) saveSlot3 = IMAGEMANAGER->findImage("loadFile");
+	if (TXTDATA.getPip3Cinematic() == 1)
+	{
+		saveSlot3 = IMAGEMANAGER->findImage("loadFile");
+		slot3Pets = IMAGEMANAGER->findImage("UI-숫자");
+	}
 	else saveSlot3 = IMAGEMANAGER->findImage("newEmpty");
 
 
@@ -50,6 +73,33 @@ HRESULT TitleClass::init(void)
 	saveSlot1Pos = { fileSelect->getX() + 90 , fileSelect->getY() + 205 };
 	saveSlot2Pos = { fileSelect->getX() + 423 , fileSelect->getY() + 205 };
 	saveSlot3Pos = { fileSelect->getX() + 759 , fileSelect->getY() + 205 };
+
+	Pip1Pets = 0;
+	Pip2Pets = 0;
+	Pip3Pets = 0;
+
+	if (TXTDATA.getData1().isFindBatS1 == true) Pip1Pets++;
+	if (TXTDATA.getData1().isFindSealS1 == true) Pip1Pets++;
+	if (TXTDATA.getData1().isFindSharkS1 == true) Pip1Pets++;
+	if (TXTDATA.getData1().isFindBatB == true) Pip1Pets++;
+	if (TXTDATA.getData1().isFindSealB == true) Pip1Pets++;
+	if (TXTDATA.getData1().isFindSharkB == true) Pip1Pets++;
+
+	if (TXTDATA.getData2().isFindBatS1 == true) Pip2Pets++;
+	if (TXTDATA.getData2().isFindSealS1 == true) Pip2Pets++;
+	if (TXTDATA.getData2().isFindSharkS1 == true) Pip2Pets++;
+	if (TXTDATA.getData2().isFindBatB == true) Pip2Pets++;
+	if (TXTDATA.getData2().isFindSealB == true) Pip2Pets++;
+	if (TXTDATA.getData2().isFindSharkB == true) Pip2Pets++;
+
+	if (TXTDATA.getData3().isFindBatS1 == true) Pip3Pets++;
+	if (TXTDATA.getData3().isFindSealS1 == true) Pip3Pets++;
+	if (TXTDATA.getData3().isFindSharkS1 == true) Pip3Pets++;
+	if (TXTDATA.getData3().isFindBatB == true) Pip3Pets++;
+	if (TXTDATA.getData3().isFindSealB == true) Pip3Pets++;
+	if (TXTDATA.getData3().isFindSharkB == true) Pip3Pets++;
+
+
 
 	counter = 0;
 	SecondPhase = false;
@@ -92,6 +142,7 @@ void TitleClass::update(void)
 	{
 		if (KEYMANAGER->isOnceKeyDown(VK_RETURN))
 		{
+			SOUNDMANAGER->play("메뉴선택", TXTDATA.refSFXSound());
 			SecondPhase = true; //둘째 페이즈로 넘어가게 true
 			counter = 0; //카운터 다시 사용하게 0으로 돌림
 		}
@@ -141,6 +192,7 @@ void TitleClass::update(void)
 			{
 				if (selection->getX() != WINSIZEX / 2 - fileSelect->getWidth() / 2)
 				{
+					SOUNDMANAGER->play("메뉴이동", TXTDATA.refSFXSound());
 					selection->setX(selection->getX() - 333);
 				}
 
@@ -149,6 +201,7 @@ void TitleClass::update(void)
 			{
 				if (selection->getX() != WINSIZEX / 2 - fileSelect->getWidth() / 2 + 666)
 				{
+					SOUNDMANAGER->play("메뉴이동", TXTDATA.refSFXSound());
 					selection->setX(selection->getX() + 333);
 				}
 
@@ -183,18 +236,41 @@ void TitleClass::update(void)
 		{
 			if (selection->getX() < fileSelect->getX() + 10)
 			{
+				
+				SOUNDMANAGER->play("세이브", TXTDATA.refSFXSound());
 				TXTDATA.setWhichSavefile("saveSlot1.txt");
-				SCENEMANAGER->loadScene("BossStage");
+				if(TXTDATA.getPip1Cinematic()==1) SCENEMANAGER->loadScene("WorldMap");
+				else if (TXTDATA.getPip1Cinematic() == 0)
+				{
+					SOUNDMANAGER->pause("타이틀");
+					SCENEMANAGER->loadScene("Cinema");
+				}
+
 			}
 			else if (selection->getX() < fileSelect->getX() + 355)
 			{
+				
+				SOUNDMANAGER->play("세이브", TXTDATA.refSFXSound());
 				TXTDATA.setWhichSavefile("saveSlot2.txt");
-				SCENEMANAGER->loadScene("Stage1");
+				if (TXTDATA.getPip2Cinematic() == 1) SCENEMANAGER->loadScene("WorldMap");
+				else if (TXTDATA.getPip2Cinematic() == 0)
+				{
+					SOUNDMANAGER->pause("타이틀");
+					SCENEMANAGER->loadScene("Cinema");
+				}
 			}
 			else if (selection->getX() < fileSelect->getX() + 355+343)
 			{
+				SOUNDMANAGER->play("세이브", TXTDATA.refSFXSound());
 				TXTDATA.setWhichSavefile("saveSlot3.txt");
-				SCENEMANAGER->loadScene("WorldMap");
+				if (TXTDATA.getPip3Cinematic() == 1) SCENEMANAGER->loadScene("WorldMap");
+				else if (TXTDATA.getPip3Cinematic() == 0)
+				{
+					SOUNDMANAGER->pause("타이틀");
+					SCENEMANAGER->loadScene("Cinema");
+				}
+				
+				
 			}
 		}
 	}
@@ -225,5 +301,731 @@ void TitleClass::render(void)
 	saveSlot1->render(getMemDC(), saveSlot1Pos.x, saveSlot1Pos.y);
 	saveSlot2->render(getMemDC(), saveSlot2Pos.x, saveSlot2Pos.y);
 	saveSlot3->render(getMemDC(), saveSlot3Pos.x, saveSlot3Pos.y);
-	TIMEMANAGER->render(getMemDC());
+
+	//slot1Pets->frameRender(getMemDC(), 400, 300, Pip1Pets, 0);
+	//slot1Pets->frameRender(getMemDC(), 600, 300, Pip2Pets, 0);
+	//slot1Pets->frameRender(getMemDC(), 900, 300, Pip3Pets, 0);
+
+
+	if (SecondPhase && TXTDATA.getPip1Cinematic() == 1) slot1Pets->frameRender(getMemDC(), saveSlot1Pos.x + 85, saveSlot1Pos.y + 160, Pip1Pets, 0);
+	if (SecondPhase && TXTDATA.getPip2Cinematic() == 1) slot2Pets->frameRender(getMemDC(), saveSlot2Pos.x + 85, saveSlot2Pos.y + 160, Pip2Pets, 0);
+	if (SecondPhase&& TXTDATA.getPip3Cinematic() == 1) slot3Pets->frameRender(getMemDC(), saveSlot3Pos.x + 85, saveSlot3Pos.y + 160, Pip3Pets, 0);
+
+	//1Slot Hp
+	if (SecondPhase && TXTDATA.getPip1Cinematic()==1)
+	{
+		continueimg->render(getMemDC(), saveSlot1Pos.x+30 , saveSlot1Pos.y+3 );
+		heratNum = TXTDATA.getData1().pipMaxHP;
+
+		switch (heratNum)
+		{
+		case 0:
+			maxHeart->frameRender(getMemDC(), saveSlot1Pos.x, saveSlot1Pos.y, 0, 0);
+			break;
+
+		case 1:
+			maxHeart->frameRender(getMemDC(), 410, 354, 1, 0);
+			break;
+
+		case 2:
+			maxHeart->frameRender(getMemDC(), 410, 354, 2, 0);
+			break;
+
+		case 3:
+			maxHeart->frameRender(getMemDC(), saveSlot1Pos.x+130, saveSlot1Pos.y+103, 3, 0);
+			break;
+
+		case 4:
+			maxHeart->frameRender(getMemDC(), saveSlot1Pos.x + 130, saveSlot1Pos.y + 103, 4, 0);
+			break;
+
+		case 5:
+			maxHeart->frameRender(getMemDC(), saveSlot1Pos.x + 130, saveSlot1Pos.y + 103, 5, 0);
+			break;
+		}
+	}
+
+	//2Slot Hp
+	if (SecondPhase && TXTDATA.getPip2Cinematic() == 1)
+	{
+		continueimg->render(getMemDC(), saveSlot2Pos.x + 30, saveSlot2Pos.y + 3);
+		heratNum = TXTDATA.getData2().pipMaxHP;
+	
+		switch (heratNum)
+		{
+		case 0:
+			maxHeart->frameRender(getMemDC(), 765, 354, 0, 0);
+			break;
+	
+		case 1:
+			maxHeart->frameRender(getMemDC(), 765, 354, 1, 0);
+			break;
+	
+		case 2:
+			maxHeart->frameRender(getMemDC(), 765, 354, 2, 0);
+			break;
+	
+		case 3:
+			maxHeart->frameRender(getMemDC(), saveSlot2Pos.x + 130, saveSlot2Pos.y + 103, 3, 0);
+			break;
+	
+		case 4:
+			maxHeart->frameRender(getMemDC(), saveSlot2Pos.x + 130, saveSlot2Pos.y + 103, 4, 0);
+			break;
+	
+		case 5:
+			maxHeart->frameRender(getMemDC(), saveSlot2Pos.x + 130, saveSlot2Pos.y + 103, 5, 0);
+			break;
+		}
+	}
+
+	//3Slot Hp
+	if (SecondPhase&& TXTDATA.getPip3Cinematic() == 1)
+	{
+		continueimg->render(getMemDC(), saveSlot3Pos.x + 30, saveSlot3Pos.y + 3);
+		heratNum = TXTDATA.getData3().pipMaxHP;
+
+		switch (heratNum)
+		{
+		case 0:
+			maxHeart->frameRender(getMemDC(), 1077, 354, 0, 0);
+			break;
+
+		case 1:
+			maxHeart->frameRender(getMemDC(), 1077, 354, 1, 0);
+			break;
+
+		case 2:
+			maxHeart->frameRender(getMemDC(), 1077, 354, 2, 0);
+			break;
+
+		case 3:
+			maxHeart->frameRender(getMemDC(), saveSlot3Pos.x + 130, saveSlot3Pos.y + 103, 3, 0);
+			break;
+
+		case 4:
+			maxHeart->frameRender(getMemDC(), saveSlot3Pos.x + 130, saveSlot3Pos.y + 103, 4, 0);
+			break;
+
+		case 5:
+			maxHeart->frameRender(getMemDC(), saveSlot3Pos.x + 130, saveSlot3Pos.y + 103, 5, 0);
+			break;
+		}
+	}
+
+	//1Slot Money
+	if (SecondPhase && TXTDATA.getPip1Cinematic()==1)
+	{
+		for (int i = 0; i < 5; i++)
+		{
+			if (i == 0)
+			{
+				jNum = TXTDATA.getData1().pipMoney % 10;
+				switch (jNum)
+				{
+				case 0:
+					moneyNum[i]->frameRender(getMemDC(), saveSlot1Pos.x + 150 - 20 * i, saveSlot1Pos.y + 218, 0, 0);
+					break;
+
+				case 1:
+					moneyNum[i]->frameRender(getMemDC(), saveSlot1Pos.x + 150 - 20 * i, saveSlot1Pos.y + 218, 1, 0);
+					break;
+
+				case 2:
+					moneyNum[i]->frameRender(getMemDC(), saveSlot1Pos.x + 150 - 20 * i, saveSlot1Pos.y + 218, 2, 0);
+					break;
+
+				case 3:
+					moneyNum[i]->frameRender(getMemDC(), saveSlot1Pos.x + 150 - 20 * i, saveSlot1Pos.y + 218, 3, 0);
+					break;
+
+				case 4:
+					moneyNum[i]->frameRender(getMemDC(), saveSlot1Pos.x + 150 - 20 * i, saveSlot1Pos.y + 218, 4, 0);
+					break;
+
+				case 5:
+					moneyNum[i]->frameRender(getMemDC(), saveSlot1Pos.x + 150 - 20 * i, saveSlot1Pos.y + 218, 5, 0);
+					break;
+
+				case 6:
+					moneyNum[i]->frameRender(getMemDC(), saveSlot1Pos.x + 150 - 20 * i, saveSlot1Pos.y + 218, 6, 0);
+					break;
+
+				case 7:
+					moneyNum[i]->frameRender(getMemDC(), saveSlot1Pos.x + 150 - 20 * i, saveSlot1Pos.y + 218, 7, 0);
+					break;
+
+				case 8:
+					moneyNum[i]->frameRender(getMemDC(), saveSlot1Pos.x + 150 - 20 * i, saveSlot1Pos.y + 218, 8, 0);
+					break;
+
+				case 9:
+					moneyNum[i]->frameRender(getMemDC(), saveSlot1Pos.x + 150 - 20 * i, saveSlot1Pos.y + 218, 9, 0);
+					break;
+				}
+			}
+			if (i == 1)
+			{
+				jNum = TXTDATA.getData1().pipMoney / 10;
+				jNum = jNum % 10;
+				switch (jNum)
+				{
+				case 0:
+					moneyNum[i]->frameRender(getMemDC(), saveSlot1Pos.x + 150 - 20 * i, saveSlot1Pos.y + 218, 0, 0);
+					break;
+
+				case 1:
+					moneyNum[i]->frameRender(getMemDC(), saveSlot1Pos.x + 150 - 20 * i, saveSlot1Pos.y + 218, 1, 0);
+					break;
+
+				case 2:
+					moneyNum[i]->frameRender(getMemDC(), saveSlot1Pos.x + 150 - 20 * i, saveSlot1Pos.y + 218, 2, 0);
+					break;
+
+				case 3:
+					moneyNum[i]->frameRender(getMemDC(), saveSlot1Pos.x + 150 - 20 * i, saveSlot1Pos.y + 218, 3, 0);
+					break;
+
+				case 4:
+					moneyNum[i]->frameRender(getMemDC(), saveSlot1Pos.x + 150 - 20 * i, saveSlot1Pos.y + 218, 4, 0);
+					break;
+
+				case 5:
+					moneyNum[i]->frameRender(getMemDC(), saveSlot1Pos.x + 150 - 20 * i, saveSlot1Pos.y + 218, 5, 0);
+					break;
+
+				case 6:
+					moneyNum[i]->frameRender(getMemDC(), saveSlot1Pos.x + 150 - 20 * i, saveSlot1Pos.y + 218, 6, 0);
+					break;
+
+				case 7:
+					moneyNum[i]->frameRender(getMemDC(), saveSlot1Pos.x + 150 - 20 * i, saveSlot1Pos.y + 218, 7, 0);
+					break;
+
+				case 8:
+					moneyNum[i]->frameRender(getMemDC(), saveSlot1Pos.x + 150 - 20 * i, saveSlot1Pos.y + 218, 8, 0);
+					break;
+
+				case 9:
+					moneyNum[i]->frameRender(getMemDC(), saveSlot1Pos.x + 150 - 20 * i, saveSlot1Pos.y + 218, 9, 0);
+					break;
+				}
+			}
+			if (i == 2)
+			{
+				jNum = TXTDATA.getData1().pipMoney / 100;
+				jNum = jNum % 10;
+				switch (jNum)
+				{
+				case 0:
+					moneyNum[i]->frameRender(getMemDC(), saveSlot1Pos.x + 150 - 20 * i, saveSlot1Pos.y + 218, 0, 0);
+					break;
+
+				case 1:
+					moneyNum[i]->frameRender(getMemDC(), saveSlot1Pos.x + 150 - 20 * i, saveSlot1Pos.y + 218, 1, 0);
+					break;
+
+				case 2:
+					moneyNum[i]->frameRender(getMemDC(), saveSlot1Pos.x + 150 - 20 * i, saveSlot1Pos.y + 218, 2, 0);
+					break;
+
+				case 3:
+					moneyNum[i]->frameRender(getMemDC(), saveSlot1Pos.x + 150 - 20 * i, saveSlot1Pos.y + 218, 3, 0);
+					break;
+
+				case 4:
+					moneyNum[i]->frameRender(getMemDC(), saveSlot1Pos.x + 150 - 20 * i, saveSlot1Pos.y + 218, 4, 0);
+					break;
+
+				case 5:
+					moneyNum[i]->frameRender(getMemDC(), saveSlot1Pos.x + 150 - 20 * i, saveSlot1Pos.y + 218, 5, 0);
+					break;
+
+				case 6:
+					moneyNum[i]->frameRender(getMemDC(), saveSlot1Pos.x + 150 - 20 * i, saveSlot1Pos.y + 218, 6, 0);
+					break;
+
+				case 7:
+					moneyNum[i]->frameRender(getMemDC(), saveSlot1Pos.x + 150 - 20 * i, saveSlot1Pos.y + 218, 7, 0);
+					break;
+
+				case 8:
+					moneyNum[i]->frameRender(getMemDC(), saveSlot1Pos.x + 150 - 20 * i, saveSlot1Pos.y + 218, 8, 0);
+					break;
+
+				case 9:
+					moneyNum[i]->frameRender(getMemDC(), saveSlot1Pos.x + 150 - 20 * i, saveSlot1Pos.y + 218, 9, 0);
+					break;
+				}
+			}
+			if (i == 4)
+			{
+				jNum = TXTDATA.getData1().pipMoney / 1000;
+				jNum = jNum % 10;
+				switch (jNum)
+				{
+				case 0:
+					moneyNum[i]->frameRender(getMemDC(), saveSlot1Pos.x + 150 - 20 * i, saveSlot1Pos.y + 218, 0, 0);
+					break;
+
+				case 1:
+					moneyNum[i]->frameRender(getMemDC(), saveSlot1Pos.x + 150 - 20 * i, saveSlot1Pos.y + 218, 1, 0);
+					break;
+
+				case 2:
+					moneyNum[i]->frameRender(getMemDC(), saveSlot1Pos.x + 150 - 20 * i, saveSlot1Pos.y + 218, 2, 0);
+					break;
+
+				case 3:
+					moneyNum[i]->frameRender(getMemDC(), saveSlot1Pos.x + 150 - 20 * i, saveSlot1Pos.y + 218, 3, 0);
+					break;
+
+				case 4:
+					moneyNum[i]->frameRender(getMemDC(), saveSlot1Pos.x + 150 - 20 * i, saveSlot1Pos.y + 218, 4, 0);
+					break;
+
+				case 5:
+					moneyNum[i]->frameRender(getMemDC(), saveSlot1Pos.x + 150 - 20 * i, saveSlot1Pos.y + 218, 5, 0);
+					break;
+
+				case 6:
+					moneyNum[i]->frameRender(getMemDC(), saveSlot1Pos.x + 150 - 20 * i, saveSlot1Pos.y + 218, 6, 0);
+					break;
+
+				case 7:
+					moneyNum[i]->frameRender(getMemDC(), saveSlot1Pos.x + 150 - 20 * i, saveSlot1Pos.y + 218, 7, 0);
+					break;
+
+				case 8:
+					moneyNum[i]->frameRender(getMemDC(), saveSlot1Pos.x + 150 - 20 * i, saveSlot1Pos.y + 218, 8, 0);
+					break;
+
+				case 9:
+					moneyNum[i]->frameRender(getMemDC(), saveSlot1Pos.x + 150 - 20 * i, saveSlot1Pos.y + 218, 9, 0);
+					break;
+				}
+			}
+
+			if (i == 3)
+			{
+				moneyNum[i]->frameRender(getMemDC(), saveSlot1Pos.x + 150 - 20 * i, saveSlot1Pos.y + 218, 11, 0);
+				continue;
+			}
+			if (i == 0 && TXTDATA.getData1().pipMoney < 10) break;
+			else if (i == 1 && TXTDATA.getData1().pipMoney < 100) break;
+			else if (i == 2 && TXTDATA.getData1().pipMoney < 1000) break;
+			else if (i == 4 && TXTDATA.getData1().pipMoney < 10000) break;
+		}
+	}
+
+	//2Slot Money
+	if (SecondPhase&& TXTDATA.getPip2Cinematic() == 1)
+	{
+		for (int i = 0; i < 5; i++)
+		{
+			if (i == 0)
+			{
+				jNum = TXTDATA.getData2().pipMoney % 10;
+				switch (jNum)
+				{
+				case 0:
+					moneyNum[i]->frameRender(getMemDC(), saveSlot1Pos.x + 490 - 20 * i, saveSlot1Pos.y + 218, 0, 0);
+					break;
+	
+				case 1:
+					moneyNum[i]->frameRender(getMemDC(), saveSlot1Pos.x + 490 - 20 * i, saveSlot1Pos.y + 218, 1, 0);
+					break;
+	
+				case 2:
+					moneyNum[i]->frameRender(getMemDC(), saveSlot1Pos.x + 490 - 20 * i, saveSlot1Pos.y + 218, 2, 0);
+					break;
+	
+				case 3:
+					moneyNum[i]->frameRender(getMemDC(), saveSlot1Pos.x + 490 - 20 * i, saveSlot1Pos.y + 218, 3, 0);
+					break;
+	
+				case 4:
+					moneyNum[i]->frameRender(getMemDC(), saveSlot1Pos.x + 490 - 20 * i, saveSlot1Pos.y + 218, 4, 0);
+					break;
+	
+				case 5:
+					moneyNum[i]->frameRender(getMemDC(), saveSlot1Pos.x + 490 - 20 * i, saveSlot1Pos.y + 218, 5, 0);
+					break;
+	
+				case 6:
+					moneyNum[i]->frameRender(getMemDC(), saveSlot1Pos.x + 490 - 20 * i, saveSlot1Pos.y + 218, 6, 0);
+					break;
+	
+				case 7:
+					moneyNum[i]->frameRender(getMemDC(), saveSlot1Pos.x + 490 - 20 * i, saveSlot1Pos.y + 218, 7, 0);
+					break;
+	
+				case 8:
+					moneyNum[i]->frameRender(getMemDC(), saveSlot1Pos.x + 490 - 20 * i, saveSlot1Pos.y + 218, 8, 0);
+					break;
+	
+				case 9:
+					moneyNum[i]->frameRender(getMemDC(), saveSlot1Pos.x + 490 - 20 * i, saveSlot1Pos.y + 218, 9, 0);
+					break;
+				}
+			}
+			if (i == 1)
+			{
+				jNum = TXTDATA.getData2().pipMoney / 10;
+				jNum = jNum % 10;
+				switch (jNum)
+				{
+				case 0:
+					moneyNum[i]->frameRender(getMemDC(), saveSlot1Pos.x + 490 - 20 * i, saveSlot1Pos.y + 218, 0, 0);
+					break;
+	
+				case 1:
+					moneyNum[i]->frameRender(getMemDC(), saveSlot1Pos.x + 490 - 20 * i, saveSlot1Pos.y + 218, 1, 0);
+					break;
+	
+				case 2:
+					moneyNum[i]->frameRender(getMemDC(), saveSlot1Pos.x + 490 - 20 * i, saveSlot1Pos.y + 218, 2, 0);
+					break;
+	
+				case 3:
+					moneyNum[i]->frameRender(getMemDC(), saveSlot1Pos.x + 490 - 20 * i, saveSlot1Pos.y + 218, 3, 0);
+					break;
+	
+				case 4:
+					moneyNum[i]->frameRender(getMemDC(), saveSlot1Pos.x + 490 - 20 * i, saveSlot1Pos.y + 218, 4, 0);
+					break;
+	
+				case 5:
+					moneyNum[i]->frameRender(getMemDC(), saveSlot1Pos.x + 490 - 20 * i, saveSlot1Pos.y + 218, 5, 0);
+					break;
+	
+				case 6:
+					moneyNum[i]->frameRender(getMemDC(), saveSlot1Pos.x + 490 - 20 * i, saveSlot1Pos.y + 218, 6, 0);
+					break;
+	
+				case 7:
+					moneyNum[i]->frameRender(getMemDC(), saveSlot1Pos.x + 490 - 20 * i, saveSlot1Pos.y + 218, 7, 0);
+					break;
+	
+				case 8:
+					moneyNum[i]->frameRender(getMemDC(), saveSlot1Pos.x + 490 - 20 * i, saveSlot1Pos.y + 218, 8, 0);
+					break;
+	
+				case 9:
+					moneyNum[i]->frameRender(getMemDC(), saveSlot1Pos.x + 490 - 20 * i, saveSlot1Pos.y + 218, 9, 0);
+					break;
+				}
+			}
+			if (i == 2)
+			{
+				jNum = TXTDATA.getData2().pipMoney / 100;
+				jNum = jNum % 10;
+				switch (jNum)
+				{
+				case 0:
+					moneyNum[i]->frameRender(getMemDC(), saveSlot1Pos.x + 490 - 20 * i, saveSlot1Pos.y + 218, 0, 0);
+					break;
+	
+				case 1:
+					moneyNum[i]->frameRender(getMemDC(), saveSlot1Pos.x + 490 - 20 * i, saveSlot1Pos.y + 218, 1, 0);
+					break;
+	
+				case 2:
+					moneyNum[i]->frameRender(getMemDC(), saveSlot1Pos.x + 490 - 20 * i, saveSlot1Pos.y + 218, 2, 0);
+					break;
+	
+				case 3:
+					moneyNum[i]->frameRender(getMemDC(), saveSlot1Pos.x + 490 - 20 * i, saveSlot1Pos.y + 218, 3, 0);
+					break;
+	
+				case 4:
+					moneyNum[i]->frameRender(getMemDC(), saveSlot1Pos.x + 490 - 20 * i, saveSlot1Pos.y + 218, 4, 0);
+					break;
+	
+				case 5:
+					moneyNum[i]->frameRender(getMemDC(), saveSlot1Pos.x + 490 - 20 * i, saveSlot1Pos.y + 218, 5, 0);
+					break;
+	
+				case 6:
+					moneyNum[i]->frameRender(getMemDC(), saveSlot1Pos.x + 490 - 20 * i, saveSlot1Pos.y + 218, 6, 0);
+					break;
+	
+				case 7:
+					moneyNum[i]->frameRender(getMemDC(), saveSlot1Pos.x + 490 - 20 * i, saveSlot1Pos.y + 218, 7, 0);
+					break;
+	
+				case 8:
+					moneyNum[i]->frameRender(getMemDC(), saveSlot1Pos.x + 490 - 20 * i, saveSlot1Pos.y + 218, 8, 0);
+					break;
+	
+				case 9:
+					moneyNum[i]->frameRender(getMemDC(), saveSlot1Pos.x + 490 - 20 * i, saveSlot1Pos.y + 218, 9, 0);
+					break;
+				}
+			}
+			if (i == 4)
+			{
+				jNum = TXTDATA.getData2().pipMoney / 1000;
+				jNum = jNum % 10;
+				switch (jNum)
+				{
+				case 0:
+					moneyNum[i]->frameRender(getMemDC(), saveSlot1Pos.x + 490 - 20 * i, saveSlot1Pos.y + 218, 0, 0);
+					break;
+	
+				case 1:
+					moneyNum[i]->frameRender(getMemDC(), saveSlot1Pos.x + 490 - 20 * i, saveSlot1Pos.y + 218, 1, 0);
+					break;
+	
+				case 2:
+					moneyNum[i]->frameRender(getMemDC(), saveSlot1Pos.x + 490 - 20 * i, saveSlot1Pos.y + 218, 2, 0);
+					break;
+	
+				case 3:
+					moneyNum[i]->frameRender(getMemDC(), saveSlot1Pos.x + 490 - 20 * i, saveSlot1Pos.y + 218, 3, 0);
+					break;
+	
+				case 4:
+					moneyNum[i]->frameRender(getMemDC(), saveSlot1Pos.x + 490 - 20 * i, saveSlot1Pos.y + 218, 4, 0);
+					break;
+	
+				case 5:
+					moneyNum[i]->frameRender(getMemDC(), saveSlot1Pos.x + 490 - 20 * i, saveSlot1Pos.y + 218, 5, 0);
+					break;
+	
+				case 6:
+					moneyNum[i]->frameRender(getMemDC(), saveSlot1Pos.x + 490 - 20 * i, saveSlot1Pos.y + 218, 6, 0);
+					break;
+	
+				case 7:
+					moneyNum[i]->frameRender(getMemDC(), saveSlot1Pos.x + 490 - 20 * i, saveSlot1Pos.y + 218, 7, 0);
+					break;
+	
+				case 8:
+					moneyNum[i]->frameRender(getMemDC(), saveSlot1Pos.x + 490 - 20 * i, saveSlot1Pos.y + 218, 8, 0);
+					break;
+	
+				case 9:
+					moneyNum[i]->frameRender(getMemDC(), saveSlot1Pos.x + 490 - 20 * i, saveSlot1Pos.y + 218, 9, 0);
+					break;
+				}
+			}
+	
+			if (i == 3)
+			{
+				moneyNum[i]->frameRender(getMemDC(), saveSlot1Pos.x + 490 - 20 * i, saveSlot1Pos.y + 218, 11, 0);
+				continue;
+			}
+			if (i == 0 && TXTDATA.getData2().pipMoney < 10) break;
+			else if (i == 1 && TXTDATA.getData2().pipMoney < 100) break;
+			else if (i == 2 && TXTDATA.getData2().pipMoney < 1000) break;
+			else if (i == 4 && TXTDATA.getData2().pipMoney < 10000) break;
+		}
+	}
+
+	//3Slot Money
+	if (SecondPhase&& TXTDATA.getPip3Cinematic() == 1)
+	{
+		for (int i = 0; i < 5; i++)
+		{
+			if (i == 0)
+			{
+				jNum = TXTDATA.getData3().pipMoney % 10;
+				switch (jNum)
+				{
+				case 0:
+					moneyNum[i]->frameRender(getMemDC(), saveSlot1Pos.x + 825 - 20 * i, saveSlot1Pos.y + 218, 0, 0);
+					break;
+
+				case 1:
+					moneyNum[i]->frameRender(getMemDC(), saveSlot1Pos.x + 825 - 20 * i, saveSlot1Pos.y + 218, 1, 0);
+					break;
+
+				case 2:
+					moneyNum[i]->frameRender(getMemDC(), saveSlot1Pos.x + 825 - 20 * i, saveSlot1Pos.y + 218, 2, 0);
+					break;
+
+				case 3:
+					moneyNum[i]->frameRender(getMemDC(), saveSlot1Pos.x + 825 - 20 * i, saveSlot1Pos.y + 218, 3, 0);
+					break;
+
+				case 4:
+					moneyNum[i]->frameRender(getMemDC(), saveSlot1Pos.x + 825 - 20 * i, saveSlot1Pos.y + 218, 4, 0);
+					break;
+
+				case 5:
+					moneyNum[i]->frameRender(getMemDC(), saveSlot1Pos.x + 825 - 20 * i, saveSlot1Pos.y + 218, 5, 0);
+					break;
+
+				case 6:
+					moneyNum[i]->frameRender(getMemDC(), saveSlot1Pos.x + 825 - 20 * i, saveSlot1Pos.y + 218, 6, 0);
+					break;
+
+				case 7:
+					moneyNum[i]->frameRender(getMemDC(), saveSlot1Pos.x + 825 - 20 * i, saveSlot1Pos.y + 218, 7, 0);
+					break;
+
+				case 8:
+					moneyNum[i]->frameRender(getMemDC(), saveSlot1Pos.x + 825 - 20 * i, saveSlot1Pos.y + 218, 8, 0);
+					break;
+
+				case 9:
+					moneyNum[i]->frameRender(getMemDC(), saveSlot1Pos.x + 825 - 20 * i, saveSlot1Pos.y + 218, 9, 0);
+					break;
+				}
+			}
+			if (i == 1)
+			{
+				jNum = TXTDATA.getData3().pipMoney / 10;
+				jNum = jNum % 10;
+				switch (jNum)
+				{
+				case 0:
+					moneyNum[i]->frameRender(getMemDC(), saveSlot1Pos.x + 825 - 20 * i, saveSlot1Pos.y + 218, 0, 0);
+					break;
+
+				case 1:
+					moneyNum[i]->frameRender(getMemDC(), saveSlot1Pos.x + 825 - 20 * i, saveSlot1Pos.y + 218, 1, 0);
+					break;
+
+				case 2:
+					moneyNum[i]->frameRender(getMemDC(), saveSlot1Pos.x + 825 - 20 * i, saveSlot1Pos.y + 218, 2, 0);
+					break;
+
+				case 3:
+					moneyNum[i]->frameRender(getMemDC(), saveSlot1Pos.x + 825 - 20 * i, saveSlot1Pos.y + 218, 3, 0);
+					break;
+
+				case 4:
+					moneyNum[i]->frameRender(getMemDC(), saveSlot1Pos.x + 825 - 20 * i, saveSlot1Pos.y + 218, 4, 0);
+					break;
+
+				case 5:
+					moneyNum[i]->frameRender(getMemDC(), saveSlot1Pos.x + 825 - 20 * i, saveSlot1Pos.y + 218, 5, 0);
+					break;
+
+				case 6:
+					moneyNum[i]->frameRender(getMemDC(), saveSlot1Pos.x + 825 - 20 * i, saveSlot1Pos.y + 218, 6, 0);
+					break;
+
+				case 7:
+					moneyNum[i]->frameRender(getMemDC(), saveSlot1Pos.x + 825 - 20 * i, saveSlot1Pos.y + 218, 7, 0);
+					break;
+
+				case 8:
+					moneyNum[i]->frameRender(getMemDC(), saveSlot1Pos.x + 825 - 20 * i, saveSlot1Pos.y + 218, 8, 0);
+					break;
+
+				case 9:
+					moneyNum[i]->frameRender(getMemDC(), saveSlot1Pos.x + 825 - 20 * i, saveSlot1Pos.y + 218, 9, 0);
+					break;
+				}
+			}
+			if (i == 2)
+			{
+				jNum = TXTDATA.getData3().pipMoney / 100;
+				jNum = jNum % 10;
+				switch (jNum)
+				{
+				case 0:
+					moneyNum[i]->frameRender(getMemDC(), saveSlot1Pos.x + 825 - 20 * i, saveSlot1Pos.y + 218, 0, 0);
+					break;
+
+				case 1:
+					moneyNum[i]->frameRender(getMemDC(), saveSlot1Pos.x + 825 - 20 * i, saveSlot1Pos.y + 218, 1, 0);
+					break;
+
+				case 2:
+					moneyNum[i]->frameRender(getMemDC(), saveSlot1Pos.x + 825 - 20 * i, saveSlot1Pos.y + 218, 2, 0);
+					break;
+
+				case 3:
+					moneyNum[i]->frameRender(getMemDC(), saveSlot1Pos.x + 825 - 20 * i, saveSlot1Pos.y + 218, 3, 0);
+					break;
+
+				case 4:
+					moneyNum[i]->frameRender(getMemDC(), saveSlot1Pos.x + 825 - 20 * i, saveSlot1Pos.y + 218, 4, 0);
+					break;
+
+				case 5:
+					moneyNum[i]->frameRender(getMemDC(), saveSlot1Pos.x + 825 - 20 * i, saveSlot1Pos.y + 218, 5, 0);
+					break;
+
+				case 6:
+					moneyNum[i]->frameRender(getMemDC(), saveSlot1Pos.x + 825 - 20 * i, saveSlot1Pos.y + 218, 6, 0);
+					break;
+
+				case 7:
+					moneyNum[i]->frameRender(getMemDC(), saveSlot1Pos.x + 825 - 20 * i, saveSlot1Pos.y + 218, 7, 0);
+					break;
+
+				case 8:
+					moneyNum[i]->frameRender(getMemDC(), saveSlot1Pos.x + 825 - 20 * i, saveSlot1Pos.y + 218, 8, 0);
+					break;
+
+				case 9:
+					moneyNum[i]->frameRender(getMemDC(), saveSlot1Pos.x + 825 - 20 * i, saveSlot1Pos.y + 218, 9, 0);
+					break;
+				}
+			}
+			if (i == 4)
+			{
+				jNum = TXTDATA.getData3().pipMoney / 1000;
+				jNum = jNum % 10;
+				switch (jNum)
+				{
+				case 0:
+					moneyNum[i]->frameRender(getMemDC(), saveSlot1Pos.x + 825 - 20 * i, saveSlot1Pos.y + 218, 0, 0);
+					break;
+
+				case 1:
+					moneyNum[i]->frameRender(getMemDC(), saveSlot1Pos.x + 825 - 20 * i, saveSlot1Pos.y + 218, 1, 0);
+					break;
+
+				case 2:
+					moneyNum[i]->frameRender(getMemDC(), saveSlot1Pos.x + 825 - 20 * i, saveSlot1Pos.y + 218, 2, 0);
+					break;
+
+				case 3:
+					moneyNum[i]->frameRender(getMemDC(), saveSlot1Pos.x + 825 - 20 * i, saveSlot1Pos.y + 218, 3, 0);
+					break;
+
+				case 4:
+					moneyNum[i]->frameRender(getMemDC(), saveSlot1Pos.x + 825 - 20 * i, saveSlot1Pos.y + 218, 4, 0);
+					break;
+
+				case 5:
+					moneyNum[i]->frameRender(getMemDC(), saveSlot1Pos.x + 825 - 20 * i, saveSlot1Pos.y + 218, 5, 0);
+					break;
+
+				case 6:
+					moneyNum[i]->frameRender(getMemDC(), saveSlot1Pos.x + 825 - 20 * i, saveSlot1Pos.y + 218, 6, 0);
+					break;
+
+				case 7:
+					moneyNum[i]->frameRender(getMemDC(), saveSlot1Pos.x + 825 - 20 * i, saveSlot1Pos.y + 218, 7, 0);
+					break;
+
+				case 8:
+					moneyNum[i]->frameRender(getMemDC(), saveSlot1Pos.x + 825 - 20 * i, saveSlot1Pos.y + 218, 8, 0);
+					break;
+
+				case 9:
+					moneyNum[i]->frameRender(getMemDC(), saveSlot1Pos.x + 825 - 20 * i, saveSlot1Pos.y + 218, 9, 0);
+					break;
+				}
+			}
+
+			if (i == 3)
+			{
+				moneyNum[i]->frameRender(getMemDC(), saveSlot1Pos.x + 825 - 20 * i, saveSlot1Pos.y + 218, 11, 0);
+				continue;
+			}
+			if (i == 0 && TXTDATA.getData3().pipMoney < 10) break;
+			else if (i == 1 && TXTDATA.getData3().pipMoney < 100) break;
+			else if (i == 2 && TXTDATA.getData3().pipMoney < 1000) break;
+			else if (i == 4 && TXTDATA.getData3().pipMoney < 10000) break;
+		}
+	}
+	
 }

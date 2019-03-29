@@ -49,9 +49,9 @@ using namespace std;
 
 
 //▼윈도우 
-#define WINNAME (LPTSTR)(TEXT(" Adventure of Pip Practice 3월 11일자 종합"))
-#define WINSTARTX	200
-#define WINSTARTY	200
+#define WINNAME (LPTSTR)(TEXT(" Adventure of Pip, TEAM 최현민,신한영,현하늘,박근진"))
+#define WINSTARTX	100
+#define WINSTARTY	50
 #define WINSIZEX		1366
 #define WINSIZEY		768
 #define WINSTYLE	WS_CAPTION | WS_SYSMENU

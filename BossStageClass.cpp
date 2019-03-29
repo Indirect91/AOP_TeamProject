@@ -11,9 +11,11 @@
 //=============초기화=============
 HRESULT BossStageClass::init(void)
 {
+	SOUNDMANAGER->play("스테이지", TXTDATA.refBGMSound());
 	//보스 스테이지 이미지 렌더
 	BossStageImg = IMAGEMANAGER->findImage("BossStage");
 	BossCollisionImg = IMAGEMANAGER->findImage("BossStageCollision");
+	respawnImg = IMAGEMANAGER->findImage("portl");
 
 	IMAGEMANAGER->findImage("나무배경1");
 	loopX1 = loopY1 = 0;
@@ -33,7 +35,7 @@ HRESULT BossStageClass::init(void)
 	fieldPtr->init("BossStage");
 
 	playerPtr = new PlayerClass;
-	playerPtr->init(100,340,"BossStageCollision");
+	playerPtr->init(100,100,"BossStageCollision");
 
 	fieldPtr->setPlayerPtr(playerPtr);
 
@@ -48,7 +50,15 @@ HRESULT BossStageClass::init(void)
 
 	//펫 생성 및 초기화
 	bPetPtr = new PetsClass;
-	bPetPtr->init(PetsClass::PetsTypes::seal, 7087, 1166);
+	bPetPtr->init(PetsClass::PetsTypes::seal, 3548, 568, TXTDATA.getCurrentPipData()->isFindSealB);
+	bPetPtrV.push_back(bPetPtr);
+
+	bPetPtr = new PetsClass;
+	bPetPtr->init(PetsClass::PetsTypes::bat, 5293, 546, TXTDATA.getCurrentPipData()->isFindBatB);
+	bPetPtrV.push_back(bPetPtr);
+
+	bPetPtr = new PetsClass;
+	bPetPtr->init(PetsClass::PetsTypes::shark, 7087, 1166, TXTDATA.getCurrentPipData()->isFindSharkB);
 	bPetPtrV.push_back(bPetPtr);
 
 	//세이브 포인트 생성 및 초기화
@@ -85,7 +95,7 @@ HRESULT BossStageClass::init(void)
 	COLLISION.setUIClass(bUIPtr);
 	COLLISION.setFieldManagerClass(fieldPtr);
 	COLLISION.playerCollisionHideTile();
-	//SOUNDMANAGER->play("스테이지");
+	bUIPtr->setUiPlayerPtr(playerPtr);
 
 	return S_OK;
 }
@@ -190,9 +200,17 @@ void BossStageClass::update(void)
 	loopX4 = CAMERA.getCRc().left / 2;
 	loopY4 = CAMERA.getCRc().top / 2;
 	
+
+
 	COLLISION.playerStepEnemy();
 	COLLISION.playerCrashedEnemy();
-	COLLISION.playerCrashedEBullet();
+
+	if (KEYMANAGER->isToggleKey('R'))
+	{
+		COLLISION.playerCrashedEBullet();
+	}
+	
+
 	COLLISION.playerChangeEnemyCrash();
 	COLLISION.playerAttackEnemy();
 	COLLISION.playerFindPets(2);
@@ -202,7 +220,43 @@ void BossStageClass::update(void)
 	COLLISION.playerClearPoint();
 	COLLISION.playerDamegeThorn();
 	COLLISION.playerChangeTile();
+	COLLISION.playerCollisionHideTile();
+	COLLISION.playerVineCut();
+	COLLISION.playerJumpJump();
+	COLLISION.playerBreakTileBossStage();
+
+	if (bBossPtr->getIsDie() == true)
+	{
+		SOUNDMANAGER->pause("스테이지");
+		
+		SCENEMANAGER->loadScene("Ending");
+	}
+	if (bSaveMPtr->getIsSave() == false && playerPtr->getPipHp() == 0)
+	{
+		SOUNDMANAGER->play("플레이어사망", TXTDATA.refSFXSound());
+		playerPtr->setPipHp(TXTDATA.getCurrentPipData()->pipMaxHP);
+		playerPtr->setRealX(100);
+		playerPtr->setRealY(300);
+
+		playerPtr->refResPawnFrame() = 0;
+		playerPtr->refResPawn() = true;
+		playerPtr->refCounter() = 0;
+	}
+	else if (bSaveMPtr->getIsSave() == true && playerPtr->getPipHp() == 0)
+	{
+		SOUNDMANAGER->play("플레이어사망", TXTDATA.refSFXSound());
+		playerPtr->setPipHp(TXTDATA.getCurrentPipData()->pipMaxHP);
+		playerPtr->setRealX(8530);
+		playerPtr->setRealY(1306);
+
+		playerPtr->refResPawnFrame() = 0;
+		playerPtr->refResPawn() = true;
+		playerPtr->refCounter() = 0;
+
+	}
+
 }
+
 
 //=============렌더=============
 void BossStageClass::render(void)
@@ -216,9 +270,7 @@ void BossStageClass::render(void)
 
 	BossStageImg->render(getMemDC(), 0, 0, CAMERA.getCRc().left, CAMERA.getCRc().top, WINSIZEX, WINSIZEY);
 	
-	fieldPtr->render("BossStage");
-
-	bUIPtr->render();
+	
 
 	//보물상자 클래스 렌더
 	for (UINT i = 0; i < bTreasurePtrV.size(); i++)
@@ -235,17 +287,22 @@ void BossStageClass::render(void)
 	//적 클래스 렌더
 	bEnemyMPtr->render();
 
-	//보스 클래스 렌더
-	bBossPtr->render();
-
 	//펫 클래스 렌더
 	for (UINT i = 0; i < bPetPtrV.size(); i++)
 	{
 		bPetPtrV[i]->render();
 	}
+	fieldPtr->render("BossStage");
+	//보스 클래스 렌더
+	bBossPtr->render();	
+
+	playerPtr->render();
+
+	//UI 클래스 렌더
+	bUIPtr->render();
 	
 	//플레이어 클래스 렌더
-	playerPtr->render();
+	
 
 	if (KEYMANAGER->isToggleKey(VK_F1))
 	{
@@ -257,5 +314,5 @@ void BossStageClass::render(void)
 	//TextOutfloat(getMemDC(), 10, 10, "마우스 X", _ptMouse.x + CAMERA.getCRc().left);
 	//TextOutfloat(getMemDC(), 10, 30, "마우스 Y", _ptMouse.y + CAMERA.getCRc().top);
 	//TextOutfloat(getMemDC(), 10, 50, "카메라 left", CAMERA.getCRc().left);
-	TIMEMANAGER->render(getMemDC());
+	//TIMEMANAGER->render(getMemDC());
 }

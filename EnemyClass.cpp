@@ -277,7 +277,7 @@ void crawlBug::render(void)
 //===================================
 #pragma region 날아다니는 크리스탈
 //=============초기화=============
-HRESULT flyCrystal::init(float _x, float _y, float _scaleLeftX, float _scaleRightX)
+HRESULT flyCrystal::init(float _x, float _y, float _scaleLeftX, float _scaleRightX, bool _isRight)
 {
 	enemyImage = IMAGEMANAGER->findImage("enemy-떠다니는 크리스탈");
 
@@ -286,7 +286,7 @@ HRESULT flyCrystal::init(float _x, float _y, float _scaleLeftX, float _scaleRigh
 	enemyX = saveX;
 	enemyY = saveY;
 	enemySpeed = 1.f;
-	isRight = true;
+	isRight = _isRight;
 	isDie = false;
 	reviveCount = 0;
 	isRevive = false;
@@ -379,6 +379,17 @@ void flyCrystal::update(void)
 				isRight = false;
 			}
 		}
+		else
+		{
+			if (isRight == true)
+			{
+				frameY = 0;
+			}
+			else if (isRight == false)
+			{
+				frameY = 1;
+			}
+		}
 	}
 
 	//이미지 프레임
@@ -393,7 +404,7 @@ void flyCrystal::update(void)
 		imgCount = 0;
 	}
 
-	enemyRc = RectMakeCenter(enemyX, enemyY, 90, 61);
+	enemyRc = RectMakeCenter(enemyX, enemyY, 60, 50);
 }
 //=============렌더=============
 void flyCrystal::render(void)
@@ -405,7 +416,7 @@ void flyCrystal::render(void)
 	}
 
 	//죽어있지 않을때만 보이게
-	enemyImage->alphaFrameRender(getMemDC(), enemyRc.left - CAMERA.getCRc().left, enemyRc.top - 11 - CAMERA.getCRc().top, frameX, frameY, dieCount);
+	enemyImage->alphaFrameRender(getMemDC(), enemyRc.left - 15 - CAMERA.getCRc().left, enemyRc.top - 16 - CAMERA.getCRc().top, frameX, frameY, dieCount);
 
 }
 

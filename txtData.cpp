@@ -1,9 +1,13 @@
 #include "stdafx.h"
 #include "txtData.h"
 
+
+//▼핍게임 전용 세이브슬롯 
 txtData::txtData()
 {
 	PipLoad("saveSlot1.txt", "saveSlot2.txt", "saveSlot3.txt");
+	BGMSound = 1.f;
+	SFXSound = 1.f;
 }
 
 //세이브
@@ -13,7 +17,7 @@ void txtData::txtSave(const char * fileName, vector<string> vStr)
 
 	HANDLE file; //저장할 파일의 핸들을 임시로 만듦
 	DWORD write; //그냥 더블 워드 하나
-	char str[128]; //적을 내용이 담길 임시 스트링
+	char str[255]; //적을 내용이 담길 임시 스트링
 	ZeroMemory(str, sizeof(str)); //임시 스트링 메모리 초기화
 
 	strcpy(str, vectorArrayCombine(vStr)); //받아온 백터를 스트링으로 바꾼다. 하는 방법은 아래 벡터어레이컴바인 함수에 적혀있음
@@ -30,7 +34,7 @@ void txtData::txtSave(const char * fileName, vector<string> vStr)
 	//FILE_ATTRIBUTE_NORMAL		파일 속성을 지시하는곳이야 File_attribute_normal에 F12 눌러보면 다른 현 파일이 임시파일인지등 옵션들도 나오고 이름들도 직관적이니 볼만 한데, 보통은 0 입력한다네
 	//NULL						보안수준 혹은 방식을 지정하는곳이야. 배우는 단계인 우리는 그냥 Null을 입력하자
 
-	WriteFile(file, str, 128, &write, NULL);
+	WriteFile(file, str, strlen(str), &write, NULL);
 	//file						아까 우리가 만들었던 파일을 여기에 담자. 이 파일에 쓰겠다는 뜻이거든 
 	//str						적을 내용이 여기에 들어가. 우린 차포인터, 스트링을 담을거야
 	//128						어느 크기만큼 쓸것인가에 대한 인자값이야
@@ -43,7 +47,7 @@ void txtData::txtSave(const char * fileName, vector<string> vStr)
 //세이브 여러 정보 담을 백터
 char * txtData::vectorArrayCombine(vector<string> vArray)
 {
-	char str[128]; //받아온 벡터를 스트링으로 만들어서 반환할 생각이니, 임시 스트링 생성
+	char str[255]; //받아온 벡터를 스트링으로 만들어서 반환할 생각이니, 임시 스트링 생성
 	ZeroMemory(str, sizeof(str)); //임시 스트링 쓰레기값 안들어가있게 초기화
 
 	for (int i = 0; i < vArray.size(); i++) //벡터에 들어있는 스트링 숫자만큼
@@ -66,7 +70,7 @@ vector<string> txtData::txtLoad(const char * fileName)
 	//▼인자값으로 사용될것들, 세이브와 중복되는 부분이므로 설명 스킵
 	HANDLE file; 
 	DWORD read;
-	char str[128];
+	char str[255];
 	ZeroMemory(str, sizeof(str));
 
 	
@@ -80,7 +84,7 @@ vector<string> txtData::txtLoad(const char * fileName)
 	//FILE_ATTRIBUTE_NORMAL		write와 중복설명, 기본값
 	//NULL						write와 중복설명, NULL
 
-	ReadFile(file, str, 128, &read, NULL); 
+	ReadFile(file, str, 255, &read, NULL); 
 	//file						만들어진 파일핸들 넣어줌
 	//str						str에 담을거임
 	//128						128바이트 사이즈만큼.
@@ -134,8 +138,11 @@ void txtData::PipLoad(const char * saveSlot1, const char * saveSlot2, const char
 	saveData1.isFindSealB = atoi(pip1V[7].c_str());
 	saveData1.isFindBatB = atoi(pip1V[8].c_str());
 	saveData1.isFindSharkB = atoi(pip1V[9].c_str());
+	saveData1.firstItem = pip1V[10];
+	saveData1.secondItem = pip1V[11];
+	saveData1.thirdItem = pip1V[12];
 
-	saveData2.pipMaxHP	= atoi(pip2V[0].c_str()); //담겨진 벡터에 있는 요소 하나씩 꺼내서 여기 변수들에게 줌
+	saveData2.pipMaxHP = atoi(pip2V[0].c_str()); //담겨진 벡터에 있는 요소 하나씩 꺼내서 여기 변수들에게 줌
 	saveData2.pipRescued = atoi(pip2V[1].c_str());
 	saveData2.pipMoney = atoi(pip2V[2].c_str());
 	saveData2.pipCinematic = atoi(pip2V[3].c_str());
@@ -145,6 +152,9 @@ void txtData::PipLoad(const char * saveSlot1, const char * saveSlot2, const char
 	saveData2.isFindSealB = atoi(pip2V[7].c_str());
 	saveData2.isFindBatB = atoi(pip2V[8].c_str());
 	saveData2.isFindSharkB = atoi(pip2V[9].c_str());
+	saveData2.firstItem = pip2V[10];
+	saveData2.secondItem = pip2V[11];
+	saveData2.thirdItem = pip2V[12];
 
 	saveData3.pipMaxHP = atoi(pip3V[0].c_str()); //담겨진 벡터에 있는 요소 하나씩 꺼내서 여기 변수들에게 줌
 	saveData3.pipRescued = atoi(pip3V[1].c_str());
@@ -156,26 +166,12 @@ void txtData::PipLoad(const char * saveSlot1, const char * saveSlot2, const char
 	saveData3.isFindSealB = atoi(pip3V[7].c_str());
 	saveData3.isFindBatB = atoi(pip3V[8].c_str());
 	saveData3.isFindSharkB = atoi(pip3V[9].c_str());
-
-
-
-	//▼아래같은 방식으로 한줄로 코딩도 가능하나, 코드는 깔끔해져도 텍스트 로드 함수를 무지 많이 호출한다. 참고로 데이터입출력은 꽤나 무겁다.
-	//pip3MaxHP = atoi(txtLoad(saveSlot3)[0].c_str());
-	//pip3Saved = atoi(txtLoad(saveSlot3)[1].c_str());
-	//pip3Money = atoi(txtLoad(saveSlot3)[2].c_str());
-
-
-	//char temp[128];
-	//vector<string> vStr;
-	//vStr.push_back(itoa(_rocket->getX(), temp, 10));
-	//vStr.push_back(itoa(_rocket->getY(), temp, 10));
-	//vStr.push_back(itoa(_currentHp, temp, 10));
-	
-	//
-	//TXTDATA->txtSave("save.txt", vStr);
+	saveData3.firstItem = pip3V[10];
+	saveData3.secondItem = pip3V[11];
+	saveData3.thirdItem = pip3V[12];
 
 }
-
+//▼어느 세이브파일 사용중인지에 따라 주는 포인터가 달라짐
 void txtData::setWhichSavefile(const char * selectedSaveFile)
 {
 	whichFileLoaded = selectedSaveFile;

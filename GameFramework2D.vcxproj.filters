@@ -87,6 +87,9 @@
     <Filter Include="MainGame\자주사용\필드\타일">
       <UniqueIdentifier>{0bf180af-0779-467d-bd10-e6ef7768c3f3}</UniqueIdentifier>
     </Filter>
+    <Filter Include="MainGame\Scene들\Cinematic Scene">
+      <UniqueIdentifier>{ab5fa20e-7455-4a5a-83cc-62f6fcf26254}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="gameNode.h">
@@ -188,6 +191,15 @@
     <ClInclude Include="BossClass.h">
       <Filter>MainGame\자주사용</Filter>
     </ClInclude>
+    <ClInclude Include="resource.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="CinematicClass.h">
+      <Filter>MainGame\Scene들\Cinematic Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="EndingSceneClass.h">
+      <Filter>MainGame\Scene들\Cinematic Scene</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -286,5 +298,17 @@
     <ClCompile Include="BossClass.cpp">
       <Filter>MainGame\자주사용</Filter>
     </ClCompile>
+    <ClCompile Include="CinematicClass.cpp">
+      <Filter>MainGame\Scene들\Cinematic Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="EndingSceneClass.cpp">
+      <Filter>MainGame\Scene들\Cinematic Scene</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="AdventureOfPip.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="image\핍아이콘.ico" />
   </ItemGroup>
 </Project>

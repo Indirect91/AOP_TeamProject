@@ -152,8 +152,10 @@
     <ClInclude Include="BossStageClass.h" />
     <ClInclude Include="bullet.h" />
     <ClInclude Include="CameraClass.h" />
+    <ClInclude Include="CinematicClass.h" />
     <ClInclude Include="CollisionClass.h" />
     <ClInclude Include="commonMacroFunction.h" />
+    <ClInclude Include="EndingSceneClass.h" />
     <ClInclude Include="EnemyClass.h" />
     <ClInclude Include="EnemyManagerClass.h" />
     <ClInclude Include="FieldManagerClass.h" />
@@ -169,6 +171,7 @@
     <ClInclude Include="PetsClass.h" />
     <ClInclude Include="PlayerClass.h" />
     <ClInclude Include="progressBar.h" />
+    <ClInclude Include="resource.h" />
     <ClInclude Include="sceneManager.h" />
     <ClInclude Include="singletonBase.h" />
     <ClInclude Include="soundManager.h" />
@@ -187,7 +190,9 @@
     <ClCompile Include="BossStageClass.cpp" />
     <ClCompile Include="bullet.cpp" />
     <ClCompile Include="CameraClass.cpp" />
+    <ClCompile Include="CinematicClass.cpp" />
     <ClCompile Include="CollisionClass.cpp" />
+    <ClCompile Include="EndingSceneClass.cpp" />
     <ClCompile Include="EnemyClass.cpp" />
     <ClCompile Include="EnemyManagerClass.cpp" />
     <ClCompile Include="FieldManagerClass.cpp" />
@@ -220,6 +225,12 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="WorldMapScene.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="AdventureOfPip.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="image\핍아이콘.ico" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

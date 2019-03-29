@@ -122,6 +122,7 @@ public:
 //=============================================================
 	void stretchRender(HDC hdc, int destX, int destY, float scale = 1.0f);
 	void stretchRenderCenterXCenterY(HDC hdc, int destX, int destY, float scale = 1.0f);
+	void zoomCenterXCenterY(HDC hdc, int destX, int destY, float scale = 1.0f);
 	void stretchFrameRender(HDC hdc, int destX, int destY, int currentFrameX, int currentFrameY, float scale = 1.0f);
 	void stretchFrameRenderCenterXUpY(HDC hdc, int destX, int destY, int currentFrameX, int currentFrameY, float centerX = 1.f, float upY = 1.f);
 	void stretchFrameRenderCenterXDownY(HDC hdc, int destX, int destY, int currentFrameX, int currentFrameY, float centerX = 1.f, float downY = 1.f);

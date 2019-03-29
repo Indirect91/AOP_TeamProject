@@ -3,6 +3,7 @@
 //=============================================================
 #include "stdafx.h"
 #include "mainGame.h"
+#include "resource.h"
 
 //=============================================================
 //	## 전역변수 써준다 ##
@@ -36,16 +37,16 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 
 	//윈도우 구조체 선언 및 초기화
 	WNDCLASS wndClass;
-	wndClass.cbClsExtra = 0;										//클래스 여분 메모리
-	wndClass.cbWndExtra = 0;										//윈도우 여분 메모리
-	wndClass.hbrBackground = (HBRUSH)GetStockObject(LTGRAY_BRUSH);	//백그라운드
-	wndClass.hCursor = LoadCursor(NULL, IDC_ARROW);					//마우스 커서
-	wndClass.hIcon = LoadIcon(NULL, IDI_APPLICATION);				//아이콘
-	wndClass.hInstance = hInstance;									//인스턴스
-	wndClass.lpfnWndProc = (WNDPROC)WndProc;						//윈도우 프로시져
-	wndClass.lpszClassName = WINNAME;								//클래스 이름
-	wndClass.lpszMenuName = NULL;									//메뉴이름
-	wndClass.style = CS_HREDRAW | CS_VREDRAW;						//윈도우 스타일
+	wndClass.cbClsExtra = 0;													//클래스 여분 메모리
+	wndClass.cbWndExtra = 0;													//윈도우 여분 메모리
+	wndClass.hbrBackground = (HBRUSH)GetStockObject(LTGRAY_BRUSH);				//백그라운드
+	wndClass.hCursor = LoadCursor(NULL, IDC_ARROW);								//마우스 커서
+	wndClass.hIcon = LoadIcon(hInstance, MAKEINTRESOURCE(IDI_ICON1));			//아이콘
+	wndClass.hInstance = hInstance;												//인스턴스
+	wndClass.lpfnWndProc = (WNDPROC)WndProc;									//윈도우 프로시져
+	wndClass.lpszClassName = WINNAME;											//클래스 이름
+	wndClass.lpszMenuName = NULL;												//메뉴이름
+	wndClass.style = CS_HREDRAW | CS_VREDRAW;									//윈도우 스타일
 
 	//윈도우 클래스 등록																//윈도우 클래스 등록
 	RegisterClass(&wndClass);
@@ -109,13 +110,13 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 		DispatchMessage(&message);
 	}
 	
-
+	
 	//메인게임 클래스 해제
 	_mg->release();
-
+	
 	//윈도우 클래스 등록 해제
 	UnregisterClass(WINNAME, hInstance);
-
+	
 	return message.wParam;
 }
 

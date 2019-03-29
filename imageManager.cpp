@@ -317,3 +317,9 @@ void imageManager::stretchFrameRenderCenterXDownY(string strKey, HDC hdc, int de
 	if (img) img->stretchFrameRenderCenterXDownY(hdc, destX, destY, currentFrameX, currentFrameY, centerX, downY);
 }
 
+void imageManager::zoomCenterXCenterY(string strKey, HDC hdc, int centerX, int centerY, float scale)
+{
+	image* img = findImage(strKey);
+	if (img) img->zoomCenterXCenterY(hdc, centerX, centerY, scale);
+}
+

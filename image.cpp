@@ -2,9 +2,9 @@
 #include "image.h"
 #pragma comment (lib, "msimg32.lib")
 
-image::image() 
-	: _imageInfo(NULL), 
-	_fileName(NULL), 
+image::image()
+	: _imageInfo(NULL),
+	_fileName(NULL),
 	_isTrans(FALSE),
 	_blendImage(NULL),
 	_stretchImage(NULL)
@@ -123,7 +123,7 @@ HRESULT image::init(const char * fileName, int width, int height, bool isTrans, 
 		this->release();
 		return E_FAIL;
 	}
-	
+
 	//DC 해제
 	ReleaseDC(_hWnd, hdc);
 
@@ -426,7 +426,7 @@ void image::alphaRender(HDC hdc, BYTE alpha)
 			_imageInfo->width,		//복사 영역 가로크기
 			_imageInfo->height,		//복사 영역 세로크기
 			_transColor);			//복사할때 제외할 색상(마젠타)
-		
+
 		//알파블렌딩
 		AlphaBlend(hdc, 0, 0, _imageInfo->width, _imageInfo->height,
 			_blendImage->hMemDC, 0, 0, _imageInfo->width, _imageInfo->height, _blendFunc);
@@ -834,13 +834,87 @@ void image::stretchRenderCenterXCenterY(HDC hdc, int destX, int destY, float sca
 	else //원본 이미지 그래도 출력할꺼냐?
 	{
 		//원본 이미지의 크기를 확대/축소 해서 렌더 시킨다
-		StretchBlt(hdc, 
+		StretchBlt(hdc,
 			destX + (_imageInfo->width - _stretchImage->width) / 2,
-			destY + (_imageInfo->height - _stretchImage->height) / 2, 
+			destY + (_imageInfo->height - _stretchImage->height) / 2,
 			_stretchImage->width, _stretchImage->height,
 			_imageInfo->hMemDC, 0, 0, _imageInfo->width, _imageInfo->height, SRCCOPY);
 	}
 }
+
+void image::zoomCenterXCenterY(HDC hdc, int centerX, int centerY, float scale)
+{
+	//스트레치이미지 처음 사용하냐?
+	//이미지 스케일링을 사용할 수 있도록 초기화 해라
+	if (!_stretchImage) this->initForStretchBlt();
+
+	_stretchImage->width = _imageInfo->width * scale;
+	_stretchImage->height = _imageInfo->height * scale;
+
+	if (_isTrans) //배경색 없앨꺼냐?
+	{
+		//원본이미지를 Scale값 만큼 확대/축소시켜서 그려준다
+		SetStretchBltMode(getMemDC(), COLORONCOLOR);
+		StretchBlt(_stretchImage->hMemDC, 0, 0, _stretchImage->width, _stretchImage->height,
+			_imageInfo->hMemDC, 0, 0, _imageInfo->width, _imageInfo->height, SRCCOPY);
+
+		//GdiTransparentBlt : 비트맵의 특정색상을 제외하고 고속복사 해주는 함수
+		GdiTransparentBlt(
+			hdc,					//복사할 장소의 DC
+			0,			//복사될 좌표 시작점 X
+			0,			//복사될 좌표 시작점 Y
+			_stretchImage->width,	//복사될 이미지 가로크기
+			_stretchImage->height,	//복사될 이미지 세로크기
+			_stretchImage->hMemDC,	//복사될 대상 DC
+			centerX - _imageInfo->width / 2 / scale,
+			centerY - _imageInfo->height / 2 / scale,
+			_imageInfo->width,		//복사 영역 가로크기
+			_imageInfo->height,		//복사 영역 세로크기
+			_transColor);			//복사할때 제외할 색상 (마젠타)
+
+	}
+	else //원본 이미지 그래도 출력할꺼냐?
+	{
+		//원본 이미지의 크기를 확대/축소 해서 렌더 시킨다
+		StretchBlt(hdc,
+			0,
+			0,
+			_stretchImage->width,
+			_stretchImage->height,
+			_imageInfo->hMemDC,
+			centerX - _imageInfo->width / 2/scale,
+			centerY - _imageInfo->height / 2 / scale,
+			_imageInfo->width,
+			_imageInfo->height,
+			SRCCOPY);
+	}
+}
+
+//void image::render(HDC hdc, int destX, int destY, int sourX, int sourY, int sourWidth, int sourHeight)
+//{
+//	if (_isTrans)//배경색 없애고 출력
+//	{
+//		//GdiTransparentBlt : 비트맵의 특정색상을 제외하고 고속복사 해주는 함수
+//		GdiTransparentBlt(
+//			hdc,					//복사할 장소의 DC
+//			destX,					//복사할 좌표 시작점 x
+//			destY,					//복사할 좌표 시작점 y
+//			sourWidth,				//복사될 이미지 가로크기
+//			sourHeight,				//복사될 이미지 세로크기
+//			_imageInfo->hMemDC,		//복사될 대상 DC
+//			sourX, sourY,			//복사 시작지점
+//			sourWidth,				//복사 영역 가로크기
+//			sourHeight,				//복사 영역 세로크기
+//			_transColor);			//복사할때 제외할 색상(마젠타)
+//	}
+//	else //원본 이미지 그대로 출력
+//	{
+//		//BitBlt : DC간의 영역끼리 서로 고속복사 해주는 함수
+//		BitBlt(hdc, destX, destY, sourWidth, sourHeight,
+//			_imageInfo->hMemDC, sourX, sourY, SRCCOPY);
+//	}
+//}
+
 
 void image::stretchFrameRender(HDC hdc, int destX, int destY, int currentFrameX, int currentFrameY, float scale)
 {

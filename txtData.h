@@ -22,7 +22,12 @@ public:
 		BOOL isFindSealB;	//보스스테이지 물개 구출여부
 		BOOL isFindBatB;	//보스스테이지 박쥐 구출여부
 		BOOL isFindSharkB;	//보스스테이지 상어 구출여부
+		string firstItem;	//첫째 아이템
+		string secondItem;	//둘째 아이템
+		string thirdItem;	//셋째 아이템
 	};
+
+	
 
 private:
 	txtData(); //싱글톤이니 딴사람이 추가로 생성하지 못하게 막아둠
@@ -40,6 +45,8 @@ private:
 	tagSavedata saveData2;
 	tagSavedata saveData3;
 	tagSavedata * CurrentPipData; 
+	float BGMSound;
+	float SFXSound;
 
 public:
 
@@ -56,12 +63,16 @@ public:
 	BOOL getPip1Cinematic() { return saveData1.pipCinematic; }
 	BOOL getPip2Cinematic() { return saveData2.pipCinematic; }
 	BOOL getPip3Cinematic() { return saveData3.pipCinematic; }
+	tagSavedata &getData1() { return saveData1; }
+	tagSavedata &getData2() { return saveData2; }
+	tagSavedata &getData3() { return saveData3; }
 
 
 	const char* getWhichfile() { return whichFileLoaded; }
 
 
 	void setWhichSavefile(const char* selectedSaveFile);
-
+	float &refBGMSound() { return BGMSound; }
+	float &refSFXSound() { return SFXSound; }
 };
 

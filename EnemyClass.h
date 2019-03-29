@@ -113,7 +113,7 @@ class flyCrystal : public gameNode
 	int scaleRightX;		//움직일 범위의 오른쪽 끝
 
 public:
-	HRESULT init(float _x, float _y, float _scaleLeftX, float _scaleRightX);
+	HRESULT init(float _x, float _y, float _scaleLeftX, float _scaleRightX, bool _isRight);
 	void release(void);
 	void update(void);
 	void render(void);

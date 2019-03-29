@@ -6,10 +6,12 @@
 #include "PetsClass.h"
 #include "FieldManagerClass.h"
 #include "LandmarkClass.h"
+#include "UniClass.h"
 
 //=============초기화=============
 HRESULT Stage1Class::init(void)
 {
+	SOUNDMANAGER->play("스테이지", TXTDATA.refBGMSound());
 	//스테이지 1 이미지
 	stage1Img = IMAGEMANAGER->findImage("Stage1");
 	stage1CollisionImg = IMAGEMANAGER->findImage("Stage1Collision");
@@ -23,6 +25,7 @@ HRESULT Stage1Class::init(void)
 	loopX3 = loopY3 = 0;
 	IMAGEMANAGER->findImage("나무배경4");
 	loopX4 = loopY4 = 0;
+	respawnImg = IMAGEMANAGER->findImage("portl");
 
 	//UI 클래스 생성 및 초기화
 	s1UIPtr = new UIClass;
@@ -30,11 +33,12 @@ HRESULT Stage1Class::init(void)
 
 	//플레이어 클래스 생성 및 초기화
 	playerPtr = new PlayerClass;
-	playerPtr->init(100,400,"Stage1Collision");
+	playerPtr->init(100, 400, "Stage1Collision");
 
 	//필드 클래스 생성 및 초기화
 	fieldPtr = new FieldManagerClass;
 	fieldPtr->init("Stage1");
+	fieldPtr->uniPtr->setPlayerPtr(playerPtr);
 
 	//에너미 매니저 클래스 생성 및 초기화
 	s1EnemyMPtr = new EnemyManagerClass;
@@ -43,17 +47,17 @@ HRESULT Stage1Class::init(void)
 	//펫 생성 및 초기화
 	//박쥐
 	s1PetPtr = new PetsClass;
-	s1PetPtr->init(PetsClass::PetsTypes::bat, 7748, 1705);
+	s1PetPtr->init(PetsClass::PetsTypes::bat, 7748, 1705, TXTDATA.getCurrentPipData()->isFindBatS1);
 	s1PetPtrV.push_back(s1PetPtr);
 
 	//물개
 	s1PetPtr = new PetsClass;
-	s1PetPtr->init(PetsClass::PetsTypes::seal, 3317, 607);
+	s1PetPtr->init(PetsClass::PetsTypes::seal, 3317, 607, TXTDATA.getCurrentPipData()->isFindSealS1);
 	s1PetPtrV.push_back(s1PetPtr);
 
 	//상어
 	s1PetPtr = new PetsClass;
-	s1PetPtr->init(PetsClass::PetsTypes::shark, 13712, 249);
+	s1PetPtr->init(PetsClass::PetsTypes::shark, 13712, 249, TXTDATA.getCurrentPipData()->isFindSharkS1);
 	s1PetPtrV.push_back(s1PetPtr);
 
 	//세이브 포인트 클래스 생성 및 초기화
@@ -68,15 +72,15 @@ HRESULT Stage1Class::init(void)
 	s1TreasurePtr = new treasureBox;
 	s1TreasurePtr->init(2189, 406, true, "Stage1Collision");
 	s1TreasurePtrV.push_back(s1TreasurePtr);
-	
+
 	s1TreasurePtr = new treasureBox;
 	s1TreasurePtr->init(4922, 620, false, "Stage1Collision");
 	s1TreasurePtrV.push_back(s1TreasurePtr);
-	
+
 	s1TreasurePtr = new treasureBox;
 	s1TreasurePtr->init(6890, 1261, true, "Stage1Collision");
 	s1TreasurePtrV.push_back(s1TreasurePtr);
-	
+
 	s1TreasurePtr = new treasureBox;
 	s1TreasurePtr->init(9591, 578, true, "Stage1Collision");
 	s1TreasurePtrV.push_back(s1TreasurePtr);
@@ -89,6 +93,8 @@ HRESULT Stage1Class::init(void)
 	COLLISION.setClearPoint(s1ClearMPtr);
 	COLLISION.setUIClass(s1UIPtr);
 	COLLISION.setFieldManagerClass(fieldPtr);
+	s1UIPtr->setUiPlayerPtr(playerPtr);
+	isAllStop = true;								//true면 esc를 누를 수 있음
 
 	return S_OK;
 }
@@ -120,7 +126,7 @@ void Stage1Class::release(void)
 	//세이브 포인트 해제
 	s1SaveMPtr->release();
 	SAFE_DELETE(s1SaveMPtr);
-	
+
 	//클리어 포인트 클래스 해제
 	s1ClearMPtr->release();
 	SAFE_DELETE(s1ClearMPtr);
@@ -131,83 +137,122 @@ void Stage1Class::release(void)
 		s1TreasurePtrV[i]->release();
 		SAFE_DELETE(s1TreasurePtrV[i])
 	}
-
 }
 
 //=============업데이트=============
 void Stage1Class::update(void)
 {
-	playerPtr->update();
-
-	//UI 업데이트
-	s1UIPtr->update();
-
-	//에너미 업데이트
-	if (playerPtr->getChangeCount() == 0)
+	if (KEYMANAGER->isOnceKeyDown(VK_ESCAPE) && isAllStop == true)
 	{
-		s1EnemyMPtr->update(playerPtr->getX(), playerPtr->getY());
+		isAllStop = false;
+	}
+	else if (KEYMANAGER->isOnceKeyUp(VK_RETURN) && isAllStop == false)
+	{
+		isAllStop = true;
+	}
 
-		//펫 업데이트
-		for (int i = 0; i < s1PetPtrV.size(); i++)
+	if (isAllStop == true)
+	{
+		playerPtr->update();
+
+		//UI 업데이트
+		s1UIPtr->update();
+
+		//에너미 업데이트
+		if (playerPtr->getChangeCount() == 0)
 		{
-			s1PetPtrV[i]->update();
+			s1EnemyMPtr->update(playerPtr->getX(), playerPtr->getY());
+
+			//펫 업데이트
+			for (int i = 0; i < s1PetPtrV.size(); i++)
+			{
+				s1PetPtrV[i]->update();
+			}
+			fieldPtr->update("Stage1");
 		}
-		fieldPtr->update("Stage1");
+		//세이브 포인터 업데이트
+		s1SaveMPtr->update();
+		//클리어 포인터 업데이트
+		s1ClearMPtr->update();
+
+		//보물상자 업데이트
+		for (int i = 0; i < s1TreasurePtrV.size(); i++)
+		{
+			s1TreasurePtrV[i]->update();
+		}
+
+		//카메라 앵글을 플레이어에게 줌
+		CAMERA.cameraFollow(playerPtr->getX(), playerPtr->getY());
+
+		//일반루트
+		CAMERA.cameraRevision(0, 0, 2647, WINSIZEY);
+		CAMERA.cameraRevision(2647, 0, 4013, WINSIZEY);
+		CAMERA.cameraRevision(4014, 0, 5380, 2436);
+		CAMERA.cameraRevision(5381, 1668, 6747, 2436);
+		CAMERA.cameraRevision(6748, 0, 8114, 2436);
+		CAMERA.cameraRevision(8115, 0, 10990, WINSIZEY);
+		CAMERA.cameraRevision(10991, 0, 13212, WINSIZEY);
+		CAMERA.cameraRevision(13213, 0, 14579, WINSIZEY);
+		CAMERA.cameraRevision(14580, 0, 17520, WINSIZEY);
+
+		//숨은루트
+		//절벽 위 상자가는 길
+		CAMERA.cameraRevision(5381, 0, 6747, WINSIZEY);
+
+		//배경이미지 루프
+		loopX1 = CAMERA.getCRc().left / 5;
+		loopX2 = CAMERA.getCRc().left / 2;
+		loopX3 = CAMERA.getCRc().left / 3;
+		loopX4 = CAMERA.getCRc().left / 2;
+		loopY4 = CAMERA.getCRc().top / 2;
+
+		COLLISION.playerStepEnemy();
+		COLLISION.playerCrashedEnemy();
+		COLLISION.playerCrashedEBullet();
+		COLLISION.playerChangeEnemyCrash();
+		COLLISION.playerAttackEnemy();
+		COLLISION.playerFindPets(1);
+		COLLISION.playerSavePoint();
+		COLLISION.playerFindTreasureBox();
+		COLLISION.playerGetJewel();
+		COLLISION.playerClearPoint();
+		COLLISION.playerDamegeThorn();
+		COLLISION.playerChangeTile();
+		COLLISION.playerCollisionHideTile();
+		COLLISION.playerBreakTileStage1();
 	}
-	//세이브 포인터 업데이트
-	s1SaveMPtr->update();
-	//클리어 포인터 업데이트
-	s1ClearMPtr->update();
-	
-	//보물상자 업데이트
-	for (int i = 0; i < s1TreasurePtrV.size(); i++)
+
+	if (s1SaveMPtr->getIsSave() == false && playerPtr->getPipHp() == 0)
 	{
-		s1TreasurePtrV[i]->update();
+		SOUNDMANAGER->play("플레이어사망", TXTDATA.refSFXSound());
+		playerPtr->setPipHp(TXTDATA.getCurrentPipData()->pipMaxHP);
+	
+		playerPtr->setRealX(100);
+		playerPtr->setRealY(600);
+
+		playerPtr->refResPawnFrame() = 0;
+		playerPtr->refResPawn() = true;
+		playerPtr->refCounter() = 0;
+	}
+	else if (s1SaveMPtr->getIsSave() == true && playerPtr->getPipHp() == 0)
+	{
+		SOUNDMANAGER->play("플레이어사망", TXTDATA.refSFXSound());
+		playerPtr->setPipHp(TXTDATA.getCurrentPipData()->pipMaxHP);
+		
+		playerPtr->setRealX(9393);
+		playerPtr->setRealY(365);
+
+		playerPtr->refResPawnFrame() = 0;
+		playerPtr->refResPawn() = true;
+		playerPtr->refCounter() = 0;
 	}
 
-	//카메라 앵글을 플레이어에게 줌
-	CAMERA.cameraFollow(playerPtr->getX(), playerPtr->getY());
-
-	//일반루트
-	CAMERA.cameraRevision(0, 0, 2647, WINSIZEY);
-	CAMERA.cameraRevision(2647, 0, 4013, WINSIZEY);
-	CAMERA.cameraRevision(4014, 0, 5380, 2436);
-	CAMERA.cameraRevision(5381, 1668, 6747, 2436);
-	CAMERA.cameraRevision(6748, 0, 8114, 2436);
-	CAMERA.cameraRevision(8115, 0, 10990, WINSIZEY);
-	CAMERA.cameraRevision(10991, 0, 13212, WINSIZEY);
-	CAMERA.cameraRevision(13213, 0, 14579, WINSIZEY);
-	CAMERA.cameraRevision(14580, 0, 17520, WINSIZEY);
-
-	//숨은루트
-	//절벽 위 상자가는 길
-	CAMERA.cameraRevision(5381, 0, 6747, WINSIZEY);
-
-	//배경이미지 루프
-	loopX1 = CAMERA.getCRc().left / 5;
-	loopX2 = CAMERA.getCRc().left / 2;
-	loopX3 = CAMERA.getCRc().left / 3;
-	loopX4 = CAMERA.getCRc().left / 2;
-	loopY4 = CAMERA.getCRc().top / 2;
-
-	COLLISION.playerStepEnemy();
-	COLLISION.playerCrashedEnemy();
-	COLLISION.playerCrashedEBullet();
-	COLLISION.playerChangeEnemyCrash();
-	COLLISION.playerAttackEnemy();
-	COLLISION.playerFindPets(1);
-	COLLISION.playerSavePoint();
-	COLLISION.playerFindTreasureBox();
-	COLLISION.playerGetJewel();
-	COLLISION.playerClearPoint();
-	COLLISION.playerDamegeThorn();
-	COLLISION.playerChangeTile();
-	COLLISION.playerCollisionHideTile();
 }
 
 //=============렌더=============
 void Stage1Class::render(void)
 {
+
 	//스테이지 배경 이미지 렌더
 	RECT bgRc = RectMake(0, 0, WINSIZEX, WINSIZEY);
 	IMAGEMANAGER->loopRender("나무배경1", getMemDC(), &bgRc, loopX1, loopY1);
@@ -226,37 +271,31 @@ void Stage1Class::render(void)
 	{
 		stage1CollisionImg->render(getMemDC(), 0, 0, CAMERA.getCRc().left, CAMERA.getCRc().top, WINSIZEX, WINSIZEY);
 	}
+	if (isAllStop == true)
+	{
+		//플레이어 클래스 렌더
+		playerPtr->render();
 
-	//플레이어 클래스 렌더
-	playerPtr->render();
+		//세이브 포인트 렌더
+		s1SaveMPtr->render();
+		//클리어 포인트 렌더
+		s1ClearMPtr->render();
 
+		//보물상자 렌더
+		for (int i = 0; i < s1TreasurePtrV.size(); i++)
+		{
+			s1TreasurePtrV[i]->render();
+		}
+
+		//에너미 렌더
+		s1EnemyMPtr->render();
+		//펫 렌더
+		for (int i = 0; i < s1PetPtrV.size(); i++)
+		{
+			s1PetPtrV[i]->render();
+		}
+	}
+	fieldPtr->render("Stage1");
 	//UI 클래스 렌더
 	s1UIPtr->render();
-
-	//세이브 포인트 렌더
-	s1SaveMPtr->render();
-	//클리어 포인트 렌더
-	s1ClearMPtr->render();
-	
-	//보물상자 렌더
-	for (int i = 0; i < s1TreasurePtrV.size(); i++)
-	{
-		s1TreasurePtrV[i]->render();
-	}
-
-	//에너미 렌더
-	s1EnemyMPtr->render();
-	//펫 렌더
-	for (int i = 0; i < s1PetPtrV.size(); i++)
-	{
-		s1PetPtrV[i]->render();
-	}
-
-	fieldPtr->render("Stage1");
-
-	/*좌표 확인용*/
-	SetBkMode(getMemDC(), TRANSPARENT);
-	TextOutfloat(getMemDC(), 10, 10, "마우스 X", _ptMouse.x + CAMERA.getCRc().left);
-	TextOutfloat(getMemDC(), 10, 30, "마우스 Y", _ptMouse.y + CAMERA.getCRc().top);
-	TextOutfloat(getMemDC(), 10, 50, "카메라 left", CAMERA.getCRc().left);
 }

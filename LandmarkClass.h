@@ -29,6 +29,7 @@ public:
 
 	RECT getSavePointRc() { return savePointRc; }
 
+	bool getIsSave() { return isSave; }
 	void setIsSave(bool _isSave) { isSave = _isSave; }
 	void setIsFire(bool _isFire) { isFire = _isFire; }
 
@@ -46,13 +47,13 @@ public:
 	struct tagJewel
 	{
 		image* jewelImg;			//보석이미지
-		int jewelType;				//일단 쥬얼 모양 랜덤 넣을것
 		RECT jewelRc;				//보석 렉트
+		int jewelType;				//일단 쥬얼 모양 랜덤 넣을것
+		int blockCollect;			//튀어나온 후 일정시간동안 못먹게 막는 변수
 		float jewelX, jewelY;		//보석 중심좌표
 		float jAngle;				//보석이 날아갈 앵글
 		float jGravity;				//보석 날아갔다가 떨어트릴 중력
 		float jSpeed;				//보석이 날아갈 속도
-		int jewelPrice;				//보석이 얼마인가?
 		bool jewelVisible;			//보석이 보이는가?
 		bool isJewelGet;			//보석을 주웠는가?
 	};

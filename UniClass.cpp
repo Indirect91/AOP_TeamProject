@@ -1,5 +1,7 @@
 #include "stdafx.h"
 #include "UniClass.h"
+#include "PlayerClass.h"
+
 /*******************************************************************************************
 ## BreakTileClass ##
 ********************************************************************************************/
@@ -123,47 +125,6 @@ HRESULT BreakTileClass::init(BreakTile stage)
 			tile->FrameY = 0;
 			TileListBosstwo.push_back(tile);
 		}
-		for (int i = 0; i < 9; i++)
-		{
-			tile = new Tile;
-			tile->block = IMAGEMANAGER->findImage("무너지는타일");
-			tile->point.x = 8452;
-			tile->point.y = 2310;
-			tile->rc = RectMake(tile->point.x + (i * 43), tile->point.y, 43, 37);
-			tile->isMode = true;
-			tile->isTouch = false;
-			tile->TouchCount = 4;
-			tile->Count = 1;
-			tile->FrameCount = 0;
-			tile->FrameX = 0;
-			tile->FrameY = 0;
-			TileListBossthree.push_back(tile);
-		}
-		for (int i = 0; i < 9; i++)
-		{
-			tile = new Tile;
-			tile->block = IMAGEMANAGER->findImage("무너지는타일");
-			tile->point.x = 8452;
-			tile->point.y = 2310;
-			tile->rc = RectMake(tile->point.x + (i * 43), tile->point.y, 43, 37);
-			tile->isMode = true;
-			tile->isTouch = false;
-			tile->TouchCount = 4;
-			tile->Count = 1;
-			tile->FrameCount = 0;
-			tile->FrameX = 0;
-			tile->FrameY = 0;
-			TileListBossfour.push_back(tile);
-		}
-
-		for (int i = 0; i < 1; i++)
-		{
-			TileListStage.push_back(&TileListone);
-			TileListStage.push_back(&TileListtwo);
-			TileListStage.push_back(&TileListthree);
-			TileListStage.push_back(&TileListfour);
-			TileListStage.push_back(&TileListfive);
-		}
 		break;
 	}
 
@@ -181,130 +142,12 @@ void BreakTileClass::update(void)
 	{
 	case BreakTileClass::BreakTile::Stage1:
 		//스테이지 1번 업데이트
-		for (int i = 0; i < TileListone.size(); i++)
-		{
-			TileListone[i]->FrameCount++;
-			if (TileListone[i]->FrameCount % 10 == 0)
-			{
-				TileListone[i]->FrameX++;
-			}
-
-		}
-		for (int i = 0; i < TileListtwo.size(); i++)
-		{
-			TileListtwo[i]->FrameCount++;
-			if (TileListtwo[i]->FrameCount % 10 == 0)
-			{
-				TileListtwo[i]->FrameX++;
-			}
-		}
-		for (int i = 0; i < TileListthree.size(); i++)
-		{
-			TileListthree[i]->FrameCount++;
-			if (TileListthree[i]->FrameCount % 10 == 0)
-			{
-				TileListthree[i]->FrameX++;
-			}
-		}
-		for (int i = 0; i < TileListfour.size(); i++)
-		{
-			TileListfour[i]->FrameCount++;
-			if (TileListfour[i]->FrameCount % 10 == 0)
-			{
-				TileListfour[i]->FrameX++;
-			}
-		}
-		for (int i = 0; i < TileListfive.size(); i++)
-		{
-			TileListfive[i]->FrameCount++;
-			if (TileListfive[i]->FrameCount % 10 == 0)
-			{
-				TileListfive[i]->FrameX++;
-			}
-		}
+		Stage1FrameCount();
 		break;
 	case BreakTileClass::BreakTile::BossStage:
-		for (int i = 0; i < TileListBossone.size(); i++)
-		{
-			TileListBossone[i]->FrameCount++;
-			if (TileListBossone[i]->FrameCount % 10 == 0)
-			{
-				TileListBossone[i]->FrameX++;
-			}
-		}
-		for (int i = 0; i < TileListBosstwo.size(); i++)
-		{
-			TileListBosstwo[i]->FrameCount++;
-			if (TileListBosstwo[i]->FrameCount % 10 == 0)
-			{
-				TileListBosstwo[i]->FrameX++;
-			}
-		}
-		for (int i = 0; i < TileListBossthree.size(); i++)
-		{
-			TileListBossthree[i]->FrameCount++;
-			if (TileListBossthree[i]->FrameCount % 10 == 0)
-			{
-				TileListBossthree[i]->FrameX++;
-			}
-		}
-		for (int i = 0; i < TileListBossfour.size(); i++)
-		{
-			TileListBossfour[i]->FrameCount++;
-			if (TileListBossfour[i]->FrameCount % 10 == 0)
-			{
-				TileListBossfour[i]->FrameX++;
-			}
-		}
+		BossStageFrameCount();
 		break;
 	}
-
-
-
-	//콜리전 클래스로 이동시켜야 합니다. 플레이어 충돌시 전 코드가 작동되기 때문에 여기있으면 의미없음
-
-	//for (int i = 0; i < TileList.size(); i++)
-	//{
-	//	RECT temp;
-	//	if (IntersectRect(&temp, &TileList[i].rc, &player->getRect()))
-	//	{
-	//		TileList[i].isTouch = true;
-	//	}
-	//	if (TileList[i].isTouch == true)
-	//	{
-	//		TileList[i].Count++;
-	//	}
-	//}
-	//
-	//
-	//for (int i = 0; i < TileList.size(); i++)
-	//{
-	//
-	//	if (TileList[i].Count > 50)
-	//	{
-	//
-	//		if (TileList[i].isTouch == true)
-	//		{
-	//			TileList[i].rc.top += 5;
-	//			TileList[i].rc.bottom += 5;
-	//		}
-	//	}
-	//
-	//
-	//}
-	//
-	//for (int i = 0; i < TileList.size(); i++)
-	//{
-	//	for (int j = 0; j < TileList.size(); j++)
-	//	{
-	//		if (TileList[i].rc.top > TileList[j].rc.bottom)
-	//		{
-	//			TileList[j].isTouch = true;
-	//		}
-	//
-	//	}
-	//
-	//}
 
 }
 
@@ -350,17 +193,105 @@ void BreakTileClass::render()
 			TileListBosstwo[i]->block->frameRender(getMemDC(), TileListBosstwo[i]->rc.left - CAMERA.getCRc().left,
 				TileListBosstwo[i]->rc.top - CAMERA.getCRc().top, TileListBosstwo[i]->FrameX, TileListBosstwo[i]->FrameY);
 		}
-		for (int i = 0; i < TileListBossthree.size(); i++)
-		{
-			TileListBossthree[i]->block->frameRender(getMemDC(), TileListBossthree[i]->rc.left - CAMERA.getCRc().left,
-				TileListBossthree[i]->rc.top - CAMERA.getCRc().top, TileListBossthree[i]->FrameX, TileListBossthree[i]->FrameY);
-		}
-		for (int i = 0; i < TileListBossfour.size(); i++)
-		{
-			TileListBossfour[i]->block->frameRender(getMemDC(), TileListBossfour[i]->rc.left - CAMERA.getCRc().left,
-				TileListBossfour[i]->rc.top - CAMERA.getCRc().top, TileListBossfour[i]->FrameX, TileListBossfour[i]->FrameY);
-		}
 		break;
+	}
+
+}
+
+void BreakTileClass::breakTileList(vector<Tile*> Tile)
+{
+	for (int i = 0; i < Tile.size(); i++)
+	{
+		Tile[i]->isTouch = true;
+		//트루가 된 타일은 카운트가 시작
+		if (Tile[i]->isTouch == true)
+		{
+			Tile[i]->Count++;
+			//카운트 10이 넘어가면 아래로 5씩 계속 내려감
+			if (Tile[i]->Count > 50 * i)
+			{
+				Tile[i]->rc.top++;
+				Tile[i]->rc.bottom++;
+			}
+		}
+		for (int j = 0; j < Tile.size(); j++)
+		{
+			//이떄 i의 탑이 j의 바텀보다 밑으로 내려가면 J의 터치도 트루가 되면서 같은 속도로 떨어지기 시작
+			if (Tile[i]->rc.top > Tile[j]->rc.bottom)
+			{
+				//예외로 이미 내려가고 있는 애들은 컨티뉴로 무시
+				if (Tile[j]->isTouch == true)continue;
+				//false값을 가지고 있는 애만 true
+				Tile[j]->isTouch = true;
+				//그리고 한 번 바뀌면 브레이크를 밟아서 다시 실행
+				break;
+			}
+
+		}
+	}
+}
+
+void BreakTileClass::Stage1FrameCount()
+{
+	for (int i = 0; i < TileListone.size(); i++)
+	{
+		TileListone[i]->FrameCount++;
+		if (TileListone[i]->FrameCount % 10 == 0)
+		{
+			TileListone[i]->FrameX++;
+		}
+
+	}
+	for (int i = 0; i < TileListtwo.size(); i++)
+	{
+		TileListtwo[i]->FrameCount++;
+		if (TileListtwo[i]->FrameCount % 10 == 0)
+		{
+			TileListtwo[i]->FrameX++;
+		}
+	}
+	for (int i = 0; i < TileListthree.size(); i++)
+	{
+		TileListthree[i]->FrameCount++;
+		if (TileListthree[i]->FrameCount % 10 == 0)
+		{
+			TileListthree[i]->FrameX++;
+		}
+	}
+	for (int i = 0; i < TileListfour.size(); i++)
+	{
+		TileListfour[i]->FrameCount++;
+		if (TileListfour[i]->FrameCount % 10 == 0)
+		{
+			TileListfour[i]->FrameX++;
+		}
+	}
+	for (int i = 0; i < TileListfive.size(); i++)
+	{
+		TileListfive[i]->FrameCount++;
+		if (TileListfive[i]->FrameCount % 10 == 0)
+		{
+			TileListfive[i]->FrameX++;
+		}
+	}
+}
+void BreakTileClass::BossStageFrameCount()
+{
+	for (int i = 0; i < TileListBossone.size(); i++)
+	{
+		TileListBossone[i]->FrameCount++;
+		if (TileListBossone[i]->FrameCount % 10 == 0)
+		{
+			TileListBossone[i]->FrameX++;
+		}
+	}
+	for (int i = 0; i < TileListBosstwo.size(); i++)
+	{
+		TileListBosstwo[i]->FrameCount++;
+		if (TileListBosstwo[i]->FrameCount % 10 == 0)
+		{
+			TileListBosstwo[i]->FrameX++;
+		}
 	}
 
 }
@@ -377,16 +308,19 @@ HRESULT HideTileClass::init(HideTile Stage)
 	switch (StageNumber)
 	{
 	case HideTileClass::HideTile::Stage1:
-		Grass = IMAGEMANAGER->addImage("풀밭", "상어풀밭.bmp", 170, 116, true, RGB(255, 0, 255));
-		HideBlock = IMAGEMANAGER->addImage("투명벽", "숨은 벽.bmp", 189, 350, true, RGB(255, 0, 255));
-		HideBlockTwo = IMAGEMANAGER->addImage("위쪽투명벽", "스테이지 1번 위쪽 숨은벽.bmp", 776, 635, true, RGB(255, 0, 255));
+		Grass = IMAGEMANAGER->addImage("풀밭", "image/Stage/상어풀밭.bmp", 170, 116, true, RGB(255, 0, 255));
+		HideBlock = IMAGEMANAGER->addImage("투명벽", "image/Stage/숨은 벽.bmp", 189, 350, true, RGB(255, 0, 255));
+		HideBlockTwo = IMAGEMANAGER->addImage("위쪽투명벽", "image/Stage/스테이지 1번 위쪽 숨은벽.bmp", 776, 635, true, RGB(255, 0, 255));
 		HideRc = RectMake(6833, 1072, 127, 209);
 		HideRcTwo = RectMake(6933, 248, 770, 430);
 		GrassRC = RectMake(13640, 183, 178, 116);
 		break;
 	case HideTileClass::HideTile::BossStage:
-		BossTile1 = IMAGEMANAGER->addImage("BossTile_1", "보스 스테이지 숨은타일 1번.bmp", 312, 250, true, RGB(255, 0, 255));
-		BossTile2 = IMAGEMANAGER->addImage("BommTile_2", "보스 스테이지 숨은타일 2번.bmp", 487, 357, true, RGB(255, 0, 255));
+		BossTile1 = IMAGEMANAGER->addImage("BossTile_1", "image/Stage/보스 스테이지 숨은타일 1번.bmp", 312, 250, true, RGB(255, 0, 255));
+		BossTile2 = IMAGEMANAGER->addImage("BommTile_2", "image/Stage/보스 스테이지 숨은타일 2번.bmp", 487, 357, true, RGB(255, 0, 255));
+		Vine = IMAGEMANAGER->addImage("그물", "image/Stage/그물.bmp", 134, 39, true, RGB(255, 0, 255));
+		VineRC = RectMake(6363, 983, 135, 39);
+		isVine = false;
 		BossTileRCone = RectMake(3426, 401, 312, 250);
 		BossTileRCtwo = RectMake(5048, 360, 487, 357);
 		for (int i = 0; i < 2; i++)
@@ -406,7 +340,7 @@ HRESULT HideTileClass::init(HideTile Stage)
 	Count = 0;
 	BoomFrameX = 0;
 	BoomFrameY = 0;
-	imageCount = 255;
+	imageCount = 254;
 	isBoom = true;
 	return S_OK;
 }
@@ -418,6 +352,7 @@ void HideTileClass::release(void)
 void HideTileClass::update(void)
 {
 
+		
 	switch (StageNumber)
 	{
 	case HideTileClass::HideTile::Stage1:
@@ -444,18 +379,18 @@ void HideTileClass::render(void)
 	switch (StageNumber)
 	{
 	case HideTileClass::HideTile::Stage1:
-
 		HideBlock->alphaRender(getMemDC(), HideRc.left - (58) - CAMERA.getCRc().left, HideRc.top - (50) - CAMERA.getCRc().top, imageCount);
 		Grass->alphaRender(getMemDC(), GrassRC.left - CAMERA.getCRc().left, GrassRC.top - CAMERA.getCRc().top, imageCount);
 		HideBlockTwo->alphaRender(getMemDC(), HideRcTwo.left - CAMERA.getCRc().left, HideRcTwo.top - CAMERA.getCRc().top, imageCount);
 		break;
 	case HideTileClass::HideTile::BossStage:
+
+		BossTile1->alphaRender(getMemDC(), BossTileRCone.left - CAMERA.getCRc().left, BossTileRCone.top - CAMERA.getCRc().top, imageCount);
+		BossTile2->alphaRender(getMemDC(), BossTileRCtwo.left - CAMERA.getCRc().left, BossTileRCtwo.top - CAMERA.getCRc().top, imageCount);
 		for (int i = 0; i < HideList.size(); i++)
 		{
-			Rectangle(getMemDC(), RelativeCameraRect(BossTileRCone));
-			BossTile1->alphaRender(getMemDC(), BossTileRCone.left - CAMERA.getCRc().left, BossTileRCone.top - CAMERA.getCRc().top, 255);
-			BossTile2->alphaRender(getMemDC(), BossTileRCtwo.left - CAMERA.getCRc().left, BossTileRCtwo.top - CAMERA.getCRc().top, 255);
-			//Rectangle(getMemDC(), RelativeCameraRect(HideList[i].rc));
+			
+			
 			if (HideList[i].isTouch == true)
 			{
 				light->frameRender(getMemDC(), HideList[i].rc.left - CAMERA.getCRc().left, HideList[i].rc.top - CAMERA.getCRc().top, frameImgX, frameImgY);
@@ -464,10 +399,11 @@ void HideTileClass::render(void)
 			{
 				Boom->frameRender(getMemDC(), HideList[i].rc.left - CAMERA.getCRc().left, HideList[i].rc.top - CAMERA.getCRc().top, BoomFrameX, BoomFrameY);
 			}
-			//Rectangle(getMemDC(), RelativeCameraRect(HideList[i].rc));
-
 		}
-
+		if (isVine == false)
+		{
+			Vine->render(getMemDC(), VineRC.left - CAMERA.getCRc().left, VineRC.top - CAMERA.getCRc().top);
+		}
 		break;
 	}
 
@@ -544,10 +480,11 @@ void ThorntrapClass::render(void)
 		break;
 	case ThorntrapClass::stageNumber::BossStage:
 		//보스스테이지 렌더
-		for (int i = 0; i < ThornBossList.size(); i++)
-		{
-			Rectangle(getMemDC(), RelativeCameraRect(ThornBossList[i]));
-		}
+		//for (int i = 0; i < ThornBossList.size(); i++)
+		//{
+		//	Rectangle(getMemDC(), RelativeCameraRect(ThornBossList[i]));
+		//}
+
 		break;
 	}
 
@@ -564,8 +501,8 @@ HRESULT UniClass::init(Jumpstate Stage)
 	case UniClass::Jumpstate::Stage1:
 		break;
 	case UniClass::Jumpstate::BossStage:
-		JumpOne = IMAGEMANAGER->addFrameImage("점프", "점프대.bmp", 38, 98, 1, 2, true, RGB(255, 0, 255));
-		JumpTwo = IMAGEMANAGER->addFrameImage("점프2", "점프대.bmp", 38, 98, 1, 2, true, RGB(255, 0, 255));
+		JumpOne = IMAGEMANAGER->addFrameImage("점프", "image/Stage/점프대.bmp", 38, 98, 1, 2, true, RGB(255, 0, 255));
+		JumpTwo = IMAGEMANAGER->addFrameImage("점프2", "image/Stage/점프대.bmp", 38, 98, 1, 2, true, RGB(255, 0, 255));
 		JumpRCone = RectMake(8331, 2260, 38, 24);
 		JumpRCtwo = RectMake(9443, 2260, 38, 24);
 		JumpOneX = JumpOneY = 0;

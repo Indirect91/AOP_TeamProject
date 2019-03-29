@@ -95,6 +95,17 @@ public:
 	class PlayerClass* player;
 	void setPlayer(PlayerClass* play) { player = play; }
 
+	class bullet* getFireBollPtr() { return fireBollPtr; }
+	class bullet* getFireBollLeftPtr() { return fireBollLeftPtr; }
+	class bullet* getFireBollRightPtr() { return fireBollRightPtr; }
+	class bullet* getFireBollLeftTwoPtr() { return fireBollLefttwoPtr; }
+	class bullet* getFireBollRightTwoPtr() { return fireBollRighttwoPtr; }
+	class bullet* getFireBollUpOnePtr() { return fireBollUpOnePtr; }
+	class bullet* getFireBollUpTwoPtr() { return fireBollUpTwoPtr; }
+	class bullet* getFireBollUpThreePtr() { return fireBollUpthreePtr; }
+	class bullet* getFireBollDownOnePtr() { return fireBollDownOnePtr; }
+	class bullet* getFireBollDownTwoPtr() { return fireBollDownTwoPtr; }
+
 	HRESULT init(FlowerTile Stage);
 	void release(void);
 	void update(void);

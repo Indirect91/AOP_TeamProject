@@ -101,13 +101,13 @@ HRESULT loadItem::init(string keyName, const char * fileName, bool bgm, bool loo
 HRESULT loading::init(void)
 {
 	//로딩화면 백그라운드 이미지 초기화
-	_loadingText = IMAGEMANAGER->addImage("loadingText", "LoadingText.bmp", 245, 75);
-	_pipRunning = IMAGEMANAGER->addFrameImage("pipRunning", "PipRun(73,71) 12장.bmp", 876, 71, 12, 1, true, RGB(255, 0, 255));
+	_loadingText = IMAGEMANAGER->addImage("loadingText", "image/UI/LoadingText.bmp", 245, 75);
+	_pipRunning = IMAGEMANAGER->addFrameImage("pipRunning", "image/UI/LoadingPipRun(73,71) 12장.bmp", 876, 71, 12, 1, true, RGB(255, 0, 255));
 	pipIndex = 0;
 	counter = 0;
 	//로딩바 클래스 초기화
 	_loadingBar = new progressBar;
-	_loadingBar->init("loadingBarFront", "loadingBarBack", 400, 660, 600, 20);
+	_loadingBar->init("image/UI/loadingBarFront", "image/UI/loadingBarBack", 400, 660, 600, 20);
 	_loadingBar->setGauge(0, 0);
 	//현재 게이지
 	_currentGauge = 0;

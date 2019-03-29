@@ -27,6 +27,7 @@ public: //▼겟터셋터같은 원래 하던대로 여기 퍼블릭에 함수 만들면 됨!
 	void cameraFollow(float _cX, float _cY);
 	//카메라가 외각만 보정되는 함수
 	void cameraRevision(float _bgWidth, float _bgHeight);
+	void cameraRevisionWorldMap(float _bgWidth, float _bgHeight, float zoom);
 	//카메라가 구간에 따라 보정되게 하는 함수
 	void cameraRevision(float _startCX, float _startCY, float _endCX, float _endCY);
 

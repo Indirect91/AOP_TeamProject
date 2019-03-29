@@ -2,7 +2,7 @@
 #include "PetsClass.h"
 
 //=============√ ±‚»≠=============
-HRESULT PetsClass::init(PetsTypes _whichPet, float _petX, float _petY)
+HRESULT PetsClass::init(PetsTypes _whichPet, float _petX, float _petY, bool _isFind)
 {
 	whichPet = _whichPet;
 
@@ -25,8 +25,8 @@ HRESULT PetsClass::init(PetsTypes _whichPet, float _petX, float _petY)
 	petY = _petY;
 	petSpeed = 0;
 	isPetRight = true;
-	isPetFind = false;
-	isPetCatch = false;
+	isPetFind = _isFind;
+	isPetCatch = _isFind;
 
 	petImgCount = 0;
 	frameX = 0;

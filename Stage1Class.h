@@ -31,6 +31,10 @@ private:
 
 	class treasureBox* s1TreasurePtr;			//스테이지1에 있는 보물상자 클래스 포인터
 	vector <treasureBox*> s1TreasurePtrV;		//스테이지1에 있는 보물상자 클래스 포인터를 담는 벡터
+	image * respawnImg;							
+	UINT respawnFrame;							
+
+	bool isAllStop;								//ESC를 누르면 인벤토리 열려라(하지만 주위의 모든것은 멈추게)
 
 public:
 	HRESULT init(void);

@@ -34,7 +34,7 @@ private:
 
 public:
 
-	HRESULT init(PetsTypes _whichPet, float _petX, float _petY);
+	HRESULT init(PetsTypes _whichPet, float _petX, float _petY, bool _isFind);
 	void release(void);
 	void update(void);
 	void render(void);
